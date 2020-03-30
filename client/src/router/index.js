@@ -11,7 +11,7 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: {
-      title: 'Daniel de los Reyes - Inicio'
+      title: 'Yu-Gi-Oh! TimeMachine'
     },
   },
   {
@@ -19,7 +19,7 @@ const routes = [
     name: 'Credits',
     component: Credits,
     meta: {
-      title: 'Daniel de los Reyes - Inicio'
+      title: 'Yu-Gi-Oh! TimeMachine - Credits'
     },
   },
 ]

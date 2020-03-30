@@ -60,7 +60,7 @@ export const attributes = [
 export const levels = [
   {
     id: 'level_1',
-    label: 'Nivel 1',
+    label: 'Level 1',
     value: 1,
     images: {
       active: require('@/assets/img/levels/level_1.svg'),
@@ -69,7 +69,7 @@ export const levels = [
   },
   {
     id: 'level_2',
-    label: 'Nivel 2',
+    label: 'Level 2',
     value: 2,
     images: {
       active: require('@/assets/img/levels/level_2.svg'),
@@ -78,7 +78,7 @@ export const levels = [
   },
   {
     id: 'level_3',
-    label: 'Nivel 3',
+    label: 'Level 3',
     value: 3,
     images: {
       active: require('@/assets/img/levels/level_3.svg'),
@@ -87,7 +87,7 @@ export const levels = [
   },
   {
     id: 'level_4',
-    label: 'Nivel 4',
+    label: 'Level 4',
     value: 4,
     images: {
       active: require('@/assets/img/levels/level_4.svg'),
@@ -96,7 +96,7 @@ export const levels = [
   },
   {
     id: 'level_5',
-    label: 'Nivel 5',
+    label: 'Level 5',
     value: 5,
     images: {
       active: require('@/assets/img/levels/level_5.svg'),
@@ -105,7 +105,7 @@ export const levels = [
   },
   {
     id: 'level_6',
-    label: 'Nivel 6',
+    label: 'Level 6',
     value: 6,
     images: {
       active: require('@/assets/img/levels/level_6.svg'),
@@ -114,7 +114,7 @@ export const levels = [
   },
   {
     id: 'level_7',
-    label: 'Nivel 7',
+    label: 'Level 7',
     value: 7,
     images: {
       active: require('@/assets/img/levels/level_7.svg'),
@@ -123,7 +123,7 @@ export const levels = [
   },
   {
     id: 'level_8',
-    label: 'Nivel 8',
+    label: 'Level 8',
     value: 8,
     images: {
       active: require('@/assets/img/levels/level_8.svg'),
@@ -132,7 +132,7 @@ export const levels = [
   },
   {
     id: 'level_9',
-    label: 'Nivel 9',
+    label: 'Level 9',
     value: 9,
     images: {
       active: require('@/assets/img/levels/level_9.svg'),
@@ -141,7 +141,7 @@ export const levels = [
   },
   {
     id: 'level_10',
-    label: 'Nivel 10',
+    label: 'Level 10',
     value: 10,
     images: {
       active: require('@/assets/img/levels/level_10.svg'),
@@ -150,7 +150,7 @@ export const levels = [
   },
   {
     id: 'level_11',
-    label: 'Nivel 11',
+    label: 'Level 11',
     value: 11,
     images: {
       active: require('@/assets/img/levels/level_11.svg'),
@@ -159,7 +159,7 @@ export const levels = [
   },
   {
     id: 'level_12',
-    label: 'Nivel 12',
+    label: 'Level 12',
     value: 12,
     images: {
       active: require('@/assets/img/levels/level_12.svg'),

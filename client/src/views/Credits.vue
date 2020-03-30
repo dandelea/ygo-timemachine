@@ -33,6 +33,8 @@
 <script>
 export default {
   name: 'credits',
-
+  metaInfo: {
+    title: 'YuGiOh! TimeMachine - Credits'
+  },
 }
 </script>

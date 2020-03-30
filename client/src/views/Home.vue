@@ -10,11 +10,11 @@
             {{current.name}}
             <span class="ml-2 mx-1 px-2 text-sm flex items-center text-center rounded bg-gray-200" v-if="current.level">
               <span class="mr-1">{{current.level}}</span>
-              <img class="w-5 h-5" alt="Nivel" :title="`Nivel ${current.level}`" :src="images.star" />
+              <img class="w-5 h-5" alt="Level" :title="`Level ${current.level}`" :src="images.star" />
             </span>
             <span class="ml-2 mx-1 px-2 text-sm flex items-center text-center rounded bg-gray-200" v-if="current.attribute">
               <span class="mr-1">{{current.attribute}}</span>
-              <img class="w-5 h-5" alt="Nivel" :title="`Atributo ${current.attribute}`" :src="images.attributes[current.attribute]" />
+              <img class="w-5 h-5" alt="Level" :title="`Attribute ${current.attribute}`" :src="images.attributes[current.attribute]" />
             </span>
           </div>
           <p class="text-grey-darker text-xs text-green-600 font-bold" v-if="current">
@@ -31,7 +31,7 @@
       </div>
       <div id="history" class="hidden md:block">
         <div class="py-2 px-6 bg-blue-700 w-full h-8 flex items-center">
-          <h1 class="w-11/12 text-sm text-white">Historial de cartas</h1>
+          <h1 class="w-11/12 text-sm text-white">Card history</h1>
           <span @click="clearHistory()" v-if="history.length"
             class="w-1/12 w-6 h-6 text-center text-white cursor-pointer rounded bg-red-500 duration-200 hover:bg-red-600 shadow-lg">
             <font-awesome-icon :icon="['far', 'trash-alt']" />
@@ -69,13 +69,14 @@
           <option :value="option.id" v-for="option in form.order.options" :key="option.id">{{option.label}}</option>
         </select>
       </div>
-      <div id="search" class="px-4 my-1 flex items-center">
-        <div class="mr-2 bg-gray-400 duration-200 hover:bg-gray-500 w-1/5 h-8 text-center rounded-full shadow-lg cursor-pointer"
-          @click="clearFilters" title="Clear filters">
-          <font-awesome-icon :icon="['far', 'trash-alt']" class="text-gray-600 h-8" />
-        </div>
-        <input class="w-4/5 h-8 rounded-full focus:outline-none focus:shadow-outline text-xl px-8 shadow-lg"
-          type="search" placeholder="Search..."
+      <div class="flex mx-4 my-2 bg-gray-400 text-center items-center text-white uppercase rounded-full shadow-lg cursor-pointer duration-200 hover:bg-gray-500"
+        @click="clearFilters" title="Clear filters">
+        <span class="mx-auto">Clear filters</span>
+        <font-awesome-icon icon="eraser" class="mx-auto ml-2 h-8" />
+      </div>
+      <div id="search" class="px-4 my-2 flex items-center">
+        <input class="w-full h-8 rounded-full focus:outline-none focus:shadow-outline text-xl px-8 shadow-lg"
+          type="search" placeholder="Search name..."
           v-model="form.search"
         >
       </div>
@@ -165,7 +166,7 @@
 import checkbox from '@/components/form/checkbox'
 import checkboxLg from '@/components/form/checkbox-lg'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSearch, faChevronCircleUp, faChevronCircleDown } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faChevronCircleUp, faChevronCircleDown, faEraser } from '@fortawesome/free-solid-svg-icons'
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import '@/assets/css/custom.css'
@@ -198,7 +199,7 @@ import { getArchetypes } from '@/services/client'
 const parameters = require('@/services/values')
 const initialForm = require('@/services/form').form
 
-library.add(faSearch, faChevronCircleUp, faChevronCircleDown)
+library.add(faSearch, faChevronCircleUp, faChevronCircleDown, faEraser)
 library.add(faTrashAlt)
 
 const HISTORY_SIZE = 18
@@ -206,6 +207,9 @@ const LIST_CUT = 60
 
 export default {
   name: 'Home',
+  metaInfo: {
+    title: 'YuGiOh! TimeMachine'
+  },
   components: {
     checkbox,
     checkboxLg,
