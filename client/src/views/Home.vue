@@ -62,7 +62,7 @@
     <!-- Filters -->
     <div id="filters" class="w-full md:w-1/3 bg-gray-200 flex flex-col overflow-y-auto">
       <div class="flex flex-wrap">
-        <button class="flex-auto md:w-1/6 m-2 bg-gray-300 rounded" @click="form.order.inverse = !form.order.inverse">
+        <button class="px-4 m-2 bg-gray-300 rounded" @click="form.order.inverse = !form.order.inverse">
           <font-awesome-icon :icon="form.order.inverse ? 'chevron-circle-down' : 'chevron-circle-up'" />
         </button>
         <select v-model="form.order.field" class="flex-auto m-2 appearance-none cursor-pointer bg-gray-300 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
