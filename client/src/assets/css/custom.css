@@ -1,0 +1,17 @@
+::-webkit-scrollbar {
+    @apply w-2;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    
+    @apply border-solid border-2 border-gray-400 rounded-full;
+  }
+
+::-webkit-scrollbar-thumb {
+    @apply bg-blue-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-blue-700;
+}
