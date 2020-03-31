@@ -24,7 +24,10 @@ Vue.filter('date', function (value) {
 })
 
 
-Vue.config.productionTip = false
+Vue.config.productionTip = process.env.NODE_ENV === 'production'
+Vue.config.performance = process.env.NODE_ENV === 'development';
+Vue.config.lintOnSave = process.env.NODE_ENV !== 'production'
+Vue.config.productionSourceMap = process.env.NODE_ENV === 'development';
 
 new Vue({
   router,

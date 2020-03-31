@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home'
-import Credits from '../views/Credits'
 
 Vue.use(VueRouter)
 
@@ -17,7 +16,7 @@ const routes = [
   {
     path: '/credits',
     name: 'Credits',
-    component: Credits,
+    component: () => import(/* webpackChunkName: "about" */ '../views/Credits.vue'),
     meta: {
       title: 'Yu-Gi-Oh! TimeMachine - Credits'
     },
