@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col md:flex-row" style="max-height: calc(100vh - 4rem)">
+  <div class="flex flex-col md:flex-row md:max-h-body">
     <!-- Current -->
     <div id="current" class="w-full md:w-1/3 md:overflow-y-auto">
-      <div class="rounded shadow-lg my-2 flex flex-row md:flex-col w-full">
-        <img v-if="current" class="hidden md:block w-64 mx-auto" :src="current.card_images[0].image_url" :alt="current.name">
-        <img v-if="!current" class="hidden md:block w-64 mx-auto" :src="images.card" alt="No Card">
+      <div class="rounded my-2 flex flex-row md:flex-col w-full">
+        <img v-if="current" class="ml-4 w-32 md:w-64 md:mx-auto" :src="current.card_images[0].image_url" :alt="current.name">
+        <img v-if="!current" class="ml-4 w-32 md:w-64 md:mx-auto" :src="images.card" alt="No Card">
         <div class="px-6 py-4">
           <div class="text-sm md:text-md lg:text-lg mb-2 font-thin flex flex-wrap" v-if="current">
             {{current.name}}
@@ -37,7 +37,7 @@
             <font-awesome-icon :icon="['far', 'trash-alt']" />
           </span>
         </div>
-        <div class="flex flex-wrap overflow-y-hidden" style="max-height: 28vh">
+        <div class="flex flex-wrap md:max-h-history md:overflow-y-auto">
           <div class="w-12 bg-blue-900 rounded h-16 mx-1 my-1 cursor-pointer"
             v-for="card in history" :key="card.id"
             @click="selectCard(card)"
@@ -49,10 +49,13 @@
       </div>
     </div>
     <!-- List -->
-    <div id="list" class="px-2 w-full md:w-1/3 overflow-y-auto">
-      <div class="flex flex-wrap">
+    <div id="list" class="px-2 w-full md:w-1/3">
+      <div class="p-2 bg-gray-200 text-center my-2 text-sm md:text-base">
+        Showing {{Math.min(LIST_CUT, cards.total)}} of {{cards.total}} results.
+      </div>
+      <div class="flex flex-wrap md:max-h-list md:overflow-y-auto">
         <div class="w-16 bg-blue-900 rounded h-24 m-1 mx-auto cursor-pointer"
-          v-for="card in cards" :key="card.id"
+          v-for="card in cards.data" :key="card.id"
           @click="selectCard(card)"
           :style="`background-image: url('${card.card_images[0].image_url_small}'); background-repeat: no-repeat; background-size: cover`"
           :title="card.name"
@@ -60,7 +63,7 @@
       </div>
     </div>
     <!-- Filters -->
-    <div id="filters" class="w-full md:w-1/3 bg-gray-200 flex flex-col overflow-y-auto">
+    <div id="filters" class="w-full md:w-1/3 bg-gray-200 flex flex-col md:overflow-y-auto">
       <div class="flex flex-wrap">
         <button class="px-4 m-2 bg-gray-300 rounded" @click="form.order.inverse = !form.order.inverse">
           <font-awesome-icon :icon="form.order.inverse ? 'chevron-circle-down' : 'chevron-circle-up'" />
@@ -75,8 +78,9 @@
         <font-awesome-icon icon="eraser" class="mx-auto ml-2 h-8" />
       </div>
       <vue-ctk-date-time-picker v-model="form.epoch"
-        format="YYYY-MM-DD" formatted="YYYY-MM-DD" disable-time
-        label="Select date" class="px-4 my-2"
+        format="YYYY-MM-DD" formatted="YYYY-MM-DD" 
+        disable-time onlyDate noKeyboard
+        label="Select date" minDate="2001-01-01" :maxDate="now" class="px-4 my-2"
       />
       <div id="search" class="px-4 my-2 flex items-center">
         <input class="w-full h-8 rounded-full focus:outline-none focus:shadow-outline text-xl px-8 shadow-lg"
@@ -205,6 +209,7 @@ import {
 import { getArchetypes } from '@/services/client'
 const parameters = require('@/services/values')
 const initialForm = require('@/services/form').form
+import { now } from '@/services/dates'
 
 library.add(faSearch, faChevronCircleUp, faChevronCircleDown, faEraser)
 library.add(faTrashAlt)
@@ -228,6 +233,12 @@ export default {
     VueCtkDateTimePicker,
   },
   computed: {
+    now: function() {
+      return now()
+    },
+    LIST_CUT: function() {
+      return LIST_CUT
+    },
     cards: function() {
       let result = this.data
       if (this.form.search) {
@@ -279,8 +290,10 @@ export default {
         })
       }
       
-      result = result.slice(0, LIST_CUT)
-      return result
+      return {
+        total: result.length,
+        data: result = result.slice(0, LIST_CUT)
+      }
     },
     parameters: function() {
       return parameters

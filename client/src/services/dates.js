@@ -1,4 +1,5 @@
 import sets from '@/assets/data/sets.json'
+import moment from 'moment'
 
 export function firstRelease (card) {
   let first_date = null
@@ -15,4 +16,8 @@ export function firstRelease (card) {
     }
   })
   return first_date
+}
+
+export function now() {
+  return moment().format('YYYY-MM-DD')
 }
