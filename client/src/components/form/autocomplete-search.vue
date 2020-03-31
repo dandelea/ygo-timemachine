@@ -109,7 +109,7 @@
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
       @keydown.enter="onEnter"
-      class="p-2 pl-6 bg-gray-400 rounded w-full"
+      class="p-2 pl-6 w-full text-white bg-blue-800"
       :placeholder="placeholder"
     />
     <ul
@@ -147,12 +147,12 @@
   }
 
   .autocomplete-result {
-    @apply cursor-pointer text-left p-2 list-none ;
+    @apply bg-white text-blue-700 cursor-pointer text-left p-2 list-none ;
   }
 
   .autocomplete-result.is-active,
   .autocomplete-result:hover {
-    @apply text-white bg-blue-500 ;
+    @apply bg-blue-700 text-white ;
   }
 
 </style>

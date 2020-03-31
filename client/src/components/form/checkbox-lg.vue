@@ -3,7 +3,7 @@
     <span class="relative">
       <span class="block w-10 h-6 rounded-full shadow-inner"
         :class="{
-          'bg-gray-400': !this.value,
+          'bg-blue-800': !this.value,
           [color2]: this.value,
         }"></span>
       <span class="absolute block w-4 h-4 my-1 ml-1 rounded-full shadow inset-y-0 left-0 focus-within:shadow-outline transition-transform duration-300 ease-in-out"
@@ -32,10 +32,10 @@ export default {
   },
   computed: {
     color1: function() {
-      return this.color ? `bg-${this.color}-500` : 'bg-gray-500'
+      return this.color ? `bg-${this.color}-500` : 'bg-blue-800'
     },
     color2: function() {
-      return this.color ? `bg-${this.color}-200` : 'bg-gray-200'
+      return this.color ? `bg-${this.color}-200` : 'bg-blue-700'
     },
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <checkbox-lg 
     :id="id" :value="value" color="green" v-model="internalValue"
-    class="rounded-full px-2 py-1 bg-blue-200 text-center"
+    class="rounded-full px-2 py-1 text-center"
   >
     <img :src="image" :alt="label" class="w-4 h-4 mr-1" v-if="image" />
     <span>{{label}}</span>

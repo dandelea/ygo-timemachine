@@ -3,10 +3,10 @@
     <autocomplete @input="select" :items="archetypes" placeholder="Select a monster archetype" />
     <div class="mt-2 items-center flex flex-wrap">
       <span v-for="item in selected" :key="item"
-        class="p-2 m-1 rounded duration-500 bg-gray-400 hover:bg-gray-300 text-gray-800 text-sm">
+        class="p-2 m-1 duration-500 bg-blue-800 hover:bg-blue-700 text-sm">
         {{item}}
         <font-awesome-icon :icon="['far', 'times-circle']"
-          class="cursor-pointer duration-500 text-gray-600 hover:text-black"
+          class="cursor-pointer"
           @click="remove(item)"  /> 
       </span>
     </div>

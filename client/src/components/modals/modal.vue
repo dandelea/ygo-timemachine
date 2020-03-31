@@ -99,7 +99,7 @@
   }
 
   .btn-close {
-    @apply px-2 py-1 rounded text-white bg-blue-400 shadow-lg duration-500 ;
+    @apply px-2 py-1 text-white bg-blue-400 shadow-lg duration-500 ;
 
     &:hover {
       @apply shadow-none bg-blue-500 ;
