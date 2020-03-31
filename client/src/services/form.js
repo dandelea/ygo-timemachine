@@ -1,7 +1,8 @@
 import { attackDefense } from '@/services/values'
-//import moment from 'moment'
+import moment from 'moment'
 
 export const form = {
+  epoch: moment().format('YYYY-MM-DD'),
   search: '',
   checks: {
     monsters: false,
@@ -73,10 +74,6 @@ export const form = {
     normal: false,
     continuous: false,
     counter: false,
-  },
-  epochs: {
-    min: '2002-01-01',
-    max: '2003-01-01',//moment().format('YYYY-MM-DD')
   },
   order: {
     inverse: false,

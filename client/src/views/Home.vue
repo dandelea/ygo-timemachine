@@ -74,6 +74,10 @@
         <span class="mx-auto">Clear filters</span>
         <font-awesome-icon icon="eraser" class="mx-auto ml-2 h-8" />
       </div>
+      <vue-ctk-date-time-picker v-model="form.epoch"
+        format="YYYY-MM-DD" formatted="YYYY-MM-DD" disable-time
+        label="Select date" class="px-4 my-2"
+      />
       <div id="search" class="px-4 my-2 flex items-center">
         <input class="w-full h-8 rounded-full focus:outline-none focus:shadow-outline text-xl px-8 shadow-lg"
           type="search" placeholder="Search name..."
@@ -182,6 +186,9 @@ import cards from '@/assets/data/cards.json'
 import card_image from '@/assets/img/card.jpg'
 import star_image from '@/assets/img/levels/level.svg'
 
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+
 import { 
   filterChecks,
   filterAttributes,
@@ -218,6 +225,7 @@ export default {
     starCheckbox,
     pointsSelector,
     archetypeSelector,
+    VueCtkDateTimePicker,
   },
   computed: {
     cards: function() {
@@ -241,7 +249,9 @@ export default {
       if (this.form.checks.traps || no_checks) {
         result = result.filter((card) => filterTrapFamilies(card.type, card.race, this.form.trapFamilies))
       }
-      result = result.filter((card) => filterEpoch(card, this.form.epochs.max))
+      if (this.form.epoch) {
+        result = result.filter((card) => filterEpoch(card, this.form.epoch))
+      }
 
       if (this.form.order.inverse || this.form.order.field !== 'name') {
         result.sort((a,b) => {
