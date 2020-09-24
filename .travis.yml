@@ -27,7 +27,7 @@ deploy:
   region: 'eu-west-3'
   app: 'ygo-timemachine'
   env: 'YgoTimemachine-env'
-  bucket_name: 'elasticbeanstalk-eu-west-1-710277460016'
+  bucket_name: 'elasticbeanstalk-eu-west-3-710277460016'
   bucket_path: 'ygo-timemachine'
   on:
     branch: master
