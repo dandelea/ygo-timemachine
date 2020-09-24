@@ -53,9 +53,9 @@
       </div>
     </div>
     <!-- List -->
-    <div id="list" class="px-2 w-full md:w-1/3">
+    <div v-if="stats && cards" id="list" class="px-2 w-full md:w-1/3">
       <div class="p-2 bg-blue-800 text-center my-2 text-sm md:text-base">
-        Showing {{Math.min(LIST_CUT, cards.total)}} of {{cards.total}} results
+        Showing {{Math.min(stats.pageSize, cards.total)}} of {{stats.cards}} results
       </div>
       <div class="flex flex-wrap md:max-h-list md:overflow-y-auto">
         <div class="w-16 bg-blue-900 h-24 m-1 mx-auto cursor-pointer"
@@ -195,37 +195,21 @@ import starCheckbox from '@/components/form/star-checkbox'
 import pointsSelector from '@/components/form/points-selector'
 import archetypeSelector from '@/components/form/archetype-selector'
 
-import cards from '@/assets/data/cards.json'
-
 import card_image from '@/assets/img/card.jpg'
 import star_image from '@/assets/img/levels/level.svg'
 
 import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 
-import { 
-  filterChecks,
-  filterAttributes,
-  filterStars,
-  filterAttackDefense,
-  filterMonsterTypes,
-  filterArchetypes,
-  filterSearch,
-  filterSpellFamilies,
-  filterTrapFamilies,
-  filterEpoch,
-} from '@/services/filters'
-
-import { getArchetypes } from '@/services/client'
+import { getArchetypes, getCards, getStats } from '@/services/client'
 const parameters = require('@/services/values')
 const initialForm = require('@/services/form').form
-import { now } from '@/services/dates'
+import moment from 'moment'
 
 library.add(faSearch, faChevronCircleUp, faChevronCircleDown, faEraser)
 library.add(faTrashAlt)
 
 const HISTORY_SIZE = 18
-const LIST_CUT = 60
 
 export default {
   name: 'Home',
@@ -244,66 +228,7 @@ export default {
   },
   computed: {
     now: function() {
-      return now()
-    },
-    LIST_CUT: function() {
-      return LIST_CUT
-    },
-    cards: function() {
-      let result = this.data
-      if (this.form.search) {
-        result = result.filter((card) => filterSearch(card, this.form.search))
-      }
-      let no_checks = Object.keys(this.form.checks).filter(x => this.form.checks[x]).length === 0
-      result = result.filter((card) => filterChecks(card.type, this.form.checks))
-      if (this.form.checks.monsters || no_checks) {
-        result = result.filter((card) => filterAttributes(card.attribute, this.form.attributes))
-        result = result.filter((card) => filterStars(card.level, this.form.levels))
-        result = result.filter((card) => filterAttackDefense(card.atk, this.form.attack.min, this.form.attack.max))
-        result = result.filter((card) => filterAttackDefense(card.def, this.form.defense.min, this.form.defense.max))
-        result = result.filter((card) => filterMonsterTypes(card.type, card.race, this.form.monsterTypes))
-        result = result.filter((card) => filterArchetypes(card.archetype, this.form.archetypes))
-      }
-      if (this.form.checks.spells || no_checks) {
-        result = result.filter((card) => filterSpellFamilies(card.type, card.race, this.form.spellFamilies))
-      }
-      if (this.form.checks.traps || no_checks) {
-        result = result.filter((card) => filterTrapFamilies(card.type, card.race, this.form.trapFamilies))
-      }
-      if (this.form.epoch) {
-        result = result.filter((card) => filterEpoch(card, this.form.epoch))
-      }
-
-      if (this.form.order.inverse || this.form.order.field !== 'name') {
-        result.sort((a,b) => {
-          let a_f = a[this.form.order.field]
-          let b_f = b[this.form.order.field]
-          // equal items sort equally
-          if (a_f === b_f) {
-            return 0;
-          }
-          // nulls sort after anything else
-          else if (a_f === undefined) {
-            return 1;
-          }
-          else if (b_f === undefined) {
-            return -1;
-          }
-          // otherwise, if we're ascending, lowest sorts first
-          else if (!this.form.order.inverse) {
-            return a_f < b_f ? -1 : 1;
-          }
-          // if descending, highest sorts first
-          else { 
-            return a_f < b_f ? 1 : -1;
-          }
-        })
-      }
-      
-      return {
-        total: result.length,
-        data: result = result.slice(0, LIST_CUT)
-      }
+      return moment().format('YYYY-MM-DD');
     },
     parameters: function() {
       return parameters
@@ -311,8 +236,12 @@ export default {
   },
   data: function () {
     return {
+      cards: {
+        data: [],
+        total: 0,
+      },
+      stats: {},
       current: null,
-      data: cards,
       form: JSON.parse(JSON.stringify(initialForm)),
       images: {
         card: card_image,
@@ -330,6 +259,16 @@ export default {
       archetypes: [],
       archetype: '',
     }
+  },
+  watch: {
+    form: {
+      handler () {
+        getCards(this.form).then((response) => {
+          this.cards = response;
+        })
+      },
+      deep: true,
+    },
   },
   methods: {
     clearFilters: function() {
@@ -356,9 +295,13 @@ export default {
   },
   mounted: function() {
     getArchetypes().then((archetypes) => {
-      this.archetypes = archetypes.map((row) => {
-        return row.archetype_name
-      })
+      this.archetypes = archetypes;
+    });
+    getStats().then((stats) => {
+      this.stats = stats;
+    })
+    getCards(this.form).then((cards) => {
+      this.cards = cards;
     })
   },
 }

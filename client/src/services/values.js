@@ -1,6 +1,4 @@
 
-import { getArchetypes } from '@/services/client'
-
 export const checks = [
   {
     id: 'monsters',
@@ -295,10 +293,6 @@ export const monsterTypes = [
     image: require('@/assets/img/types/sm/zombie.png'),
   },
 ]
-
-export async function archetypes () {
-  return await getArchetypes()
-}
 
 export const attackDefense = {
   min: 0,

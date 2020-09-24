@@ -1,12 +1,35 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
 before_install:
-  - pip install --user awscli
-  - export PATH=$PATH:$HOME/.local/bin
-  - cd client
-install: npm install
-script: npm run build
+  - docker build -t dandelea/ygo-timemachine -f ./client/Dockerfile.dev ./client
+
+script:
+  - #docker run dandelea/ygo-timemachine npm test -- --coverage
+
 after_success:
-  - aws configure set aws_access_key_id $AWS_ACCESS_KEY
-  - aws configure set aws_secret_access_key $AWS_SECRET_KEY
-  - aws configure set default.region eu-west-3
-  - aws s3 rm s3://ygo-timemachine.danieldelosreyesleal.com --recursive
-  - aws s3 cp dist/ s3://ygo-timemachine.danieldelosreyesleal.com --recursive
+  - docker build -t dandelea/ygo-timemachine-client ./client
+  - docker build -t dandelea/ygo-timemachine-nginx ./nginx
+  - docker build -t dandelea/ygo-timemachine-server ./server
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push dandelea/ygo-timemachine-client
+  - docker push dandelea/ygo-timemachine-nginx
+  - docker push dandelea/ygo-timemachine-server
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: 'eu-west-3'
+  app: 'ygo-timemachine'
+  env: 'YgoTimemachine-env'
+  bucket_name: 'elasticbeanstalk-eu-west-1-710277460016'
+  bucket_path: 'ygo-timemachine'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY

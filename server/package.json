@@ -1,0 +1,53 @@
+{
+  "name": "ygo-timemachine-server",
+  "description": "Explorador de cartas de Yu-Gi-Oh! filtrado por épocas",
+  "keywords": [
+    "Daniel de los Reyes",
+    "yugioh",
+    "Yu-Gi-Oh!",
+    "Timemachine",
+    "Portfolio",
+    "Vue",
+    "NodeJS",
+    "Redis",
+    "Docker"
+  ],
+  "version": "1.0.0",
+  "private": false,
+  "homepage": "http://ygotimemachine-env.eba-4fvcaaib.eu-west-3.elasticbeanstalk.com/",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules package-lock.json yarn.lock logs/*.log logs/*.json",
+    "dev": "NODE_ENV=development PORT=5000 nodemon",
+    "start": "NODE_ENV=production PORT=5000 node index.js",
+    "lint": "eslint 'src/**/*.js' --fix"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "nodemon": "^2.0.4"
+  },
+  "repository": {
+    "url": "https://github.com/dandelea/ygo-timemachine",
+    "type": "git"
+  },
+  "author": {
+    "email": "danirele10@hotmail.com",
+    "name": "Daniel de los Reyes Leal",
+    "url": "http://danieldelosreyesleal.com"
+  },
+  "license": "AGPL-3.0-only",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^4.1.1",
+    "md5": "^2.3.0",
+    "moment": "^2.29.0",
+    "redis": "^3.0.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
+  }
+}

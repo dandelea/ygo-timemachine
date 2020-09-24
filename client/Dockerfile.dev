@@ -2,9 +2,9 @@ FROM node:alpine
 WORKDIR /app
 
 COPY ./package.json .
-RUN yarn
+RUN npm run clean
+RUN npm install
 
 COPY . .
 
-EXPOSE 8080
-CMD ["yarn", "serve"]
+CMD ["npm", "run", "serve"]
