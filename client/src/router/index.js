@@ -1,17 +1,28 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home'
+
+import Decks from '../views/Decks'
+import Edit from '../views/Edit'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'Decks',
+    component: Decks,
     meta: {
       title: 'Yu-Gi-Oh! TimeMachine'
     },
+  },
+  {
+    path: '/decks/:id',
+    name: 'Deck',
+    component: Edit,
+    meta: {
+      title: 'Yu-Gi-Oh! TimeMachine - Edit deck'
+    },
+    props: true,
   },
   {
     path: '/credits',
