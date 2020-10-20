@@ -8,20 +8,16 @@ const logger = winston.createLogger({
       format: 'YYYY-MM-DD HH:mm:ss',
     }),
     winston.format.printf((info) => {
-      let splat = ' ';
-      if (info.splat !== undefined) {
-        splat = info.splat;
+      let stack = ' ';
+      if (info instanceof Error) {
+        stack = info.stack;
       }
-      return `${info.timestamp} ${info.level}: ${info.message}${splat}`;
+      return `${info.timestamp} ${info.level}: ${info.message} ${stack}`;
     }),
     winston.format.colorize(),
   ),
   handleExceptions: true,
   transports: [
-    //
-    // - Write all logs with level `error` and below to `error.log`
-    // - Write all logs with level `info` and below to `combined.log`
-    //
     new winston.transports.DailyRotateFile({
       level: 'error',
       dirname: 'logs',
@@ -48,7 +44,7 @@ const logger = winston.createLogger({
 //
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
-    format: winston.format.simple(),
+    format: winston.format.colorize(),
   }));
 }
 
