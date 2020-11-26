@@ -1,10 +1,13 @@
-const path = require('path');
 const logger = require('../logger');
 
 module.exports = {
   development: {
-    storage: path.join(__dirname, '..', '..', 'development.sqlite'),
-    dialect: 'sqlite',
+    username: process.env.PGUSER || 'postgres',
+    password: process.env.PGPASSWORD,
+    database: process.env.PGDATABASE,
+    host: process.env.PGHOST || '127.0.0.1',
+    port: process.env.PGPORT || 5432,
+    dialect: 'postgres',
     logging: true,
   },
   test: {
@@ -13,8 +16,12 @@ module.exports = {
     logging: (msg) => logger.debug(msg),
   },
   production: {
-    storage: path.join(__dirname, '..', '..', 'production.sqlite'),
-    dialect: 'sqlite',
+    username: process.env.PGUSER || 'postgres',
+    password: process.env.PGPASSWORD,
+    database: process.env.PGDATABASE,
+    host: process.env.PGHOST || '127.0.0.1',
+    port: process.env.PGPORT || 5432,
+    dialect: 'postgres',
     logging: (msg) => logger.debug(msg),
   },
 };

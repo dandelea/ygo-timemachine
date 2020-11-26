@@ -39,7 +39,7 @@ Card.init({
   attribute: DataTypes.STRING,
   first_release: DataTypes.DATEONLY,
   archetype_id: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING,
     references: {
       model: 'archetypes',
       key: 'id',
