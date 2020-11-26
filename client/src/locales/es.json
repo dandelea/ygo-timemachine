@@ -1,0 +1,55 @@
+{
+    "credits": {
+        "legal": {
+            "3": "Este sitio web no está producido, respaldado, respaldado ni afiliado a 4k Media o Konami Digital Entertainment",
+            "general": "La información literal y gráfica que se presenta en este sitio sobre {0}, incluidas las imágenes, atributos, niveles, rangos, tipos y textos de las cartas tienen derechos de autor {1}, una subsidiaria de {2}. {3}."
+        },
+        "Made by": "Desarrollado por",
+        "Powered by": "Alimentado por",
+        "Visit": "Visitar"
+    },
+    "decks": {
+        "New deck": "Nuevo mazo"
+    },
+    "edit": {
+        "Attribute": "Atributo",
+        "Back": "Volver",
+        "Card history": "Historial de cartas",
+        "Change color": "Cambiar de color",
+        "Clear deck": "Limpiar mazo",
+        "Clear filters": "Limpiar filtros",
+        "Clear history": "Limpiar historial de cartas",
+        "Deck name": "Nombre de mazo",
+        "Extra": "Extra",
+        "Extra deck": "Extra deck",
+        "First release": "Primer lanzamiento",
+        "Level": "Nivel",
+        "Main deck": "Main deck",
+        "Monsters": "Monstruos",
+        "Next image": "Siguiente imagen",
+        "No card": "No carta",
+        "Order": "Orden",
+        "Previous image": "Anterior imagen",
+        "Result": "Resultado",
+        "Search": "Búsqueda",
+        "Search name or description": "Buscar por nombre o descripción",
+        "Select date": "Seleccionar fecha",
+        "Showing {0} of {1} results": "Mostrando {0} de {1} resultados",
+        "Sort by": "Ordenar por",
+        "Spells": "Magias",
+        "Time travel": "Viaje en el tiempo",
+        "Traps": "Trampas"
+    },
+    "form": {
+        "archetype-selector": {
+            "Remove archetype": "Eliminar arquetipo",
+            "Select an archetype": "Seleccionar un arquetipo"
+        },
+        "autocomplete-search": {
+            "Loading results...": "Cargando resultados..."
+        }
+    },
+    "header": {
+        "credits": "Créditos"
+    }
+}

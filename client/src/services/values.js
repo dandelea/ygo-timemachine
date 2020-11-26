@@ -1,22 +1,22 @@
 
 export const checks = [
   {
-    id: 'monsters',
+    id: 'MONSTER',
     label: 'Monsters',
     color: 'orange',
   },
   {
-    id: 'spells',
+    id: 'SPELL',
     label: 'Spells',
     color: 'green',
   },
   {
-    id: 'traps',
+    id: 'TRAP',
     label: 'Traps',
     color: 'pink',
   },
   {
-    id: 'extra',
+    id: 'EXTRA',
     label: 'Extra',
     color: 'purple',
   },
@@ -24,32 +24,32 @@ export const checks = [
 
 export const attributes = [
   {
-    id: 'earth',
+    id: 'EARTH',
     label: 'Earth',
     image: require('@/assets/img/attributes/earth.png'),
   },
   {
-    id: 'wind',
+    id: 'WIND',
     label: 'Wind',
     image: require('@/assets/img/attributes/wind.png'),
   },
   {
-    id: 'water',
+    id: 'WATER',
     label: 'Water',
     image: require('@/assets/img/attributes/water.png'),
   },
   {
-    id: 'fire',
+    id: 'FIRE',
     label: 'Fire',
     image: require('@/assets/img/attributes/fire.png'),
   },
   {
-    id: 'dark',
+    id: 'DARK',
     label: 'Dark',
     image: require('@/assets/img/attributes/dark.png'),
   },
   {
-    id: 'light',
+    id: 'LIGHT',
     label: 'Light',
     image: require('@/assets/img/attributes/light.png'),
   }

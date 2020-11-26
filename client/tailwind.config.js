@@ -271,10 +271,12 @@ module.exports = {
       ...theme('spacing'),
       full: '100%',
       screen: '100vh',
+      '18': '4.5rem',
     }),
     inset: {
       '0': '0',
       auto: 'auto',
+      '50': '50%',
     },
     letterSpacing: {
       tighter: '-0.05em',
@@ -309,6 +311,7 @@ module.exports = {
       auto: 'auto',
       ...theme('spacing'),
       ...negative(theme('spacing')),
+      '1/2': '0.16rem',
     }),
     maxHeight: {
       full: '100%',
