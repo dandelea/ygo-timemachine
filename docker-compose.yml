@@ -21,7 +21,7 @@ services:
       - redis
       - postgres
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: ./server
     volumes:
       - /app/node_modules
@@ -37,7 +37,7 @@ services:
   client:
     stdin_open: true
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: ./client
     volumes:
       - /app/node_modules
