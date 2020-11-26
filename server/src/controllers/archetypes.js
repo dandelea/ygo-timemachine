@@ -1,5 +1,7 @@
-const archetypes = require('../../data/archetypes.json');
+const ArchetypeService = require('../services/archetypes');
 
-exports.archetypes = (req, res) => {
-  res.send(archetypes);
+exports.archetypes = async (req, res) => {
+  let result = await ArchetypeService.getAll();
+  result = result.map((x) => x.id);
+  res.send(result);
 };

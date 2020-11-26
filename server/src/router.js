@@ -17,4 +17,10 @@ const cards = require('./controllers/cards');
 router.post('/cards', cards.cards);
 router.get('/cards/:id', cards.card);
 
+const decks = require('./controllers/decks');
+
+router.get('/decks', decks.getAll);
+router.get('/decks/:id', decks.get);
+router.post('/decks/:id', decks.edit);
+
 module.exports = router;

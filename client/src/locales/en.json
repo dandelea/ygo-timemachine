@@ -1,0 +1,55 @@
+{
+    "credits": {
+        "legal": {
+            "3": "This website is not produced by, endorsed by, supported by, or affiliated with 4k Media or Konami Digital Entertainment",
+            "general": "The literal and graphical information presented on this site about {0}, including card images, the attribute, level/rank and type symbols, and card text, is copyright {1}, a subsidiary of {2}. {3}."
+        },
+        "Made by": "Made by",
+        "Powered by": "Powered by",
+        "Visit": "Visit"
+    },
+    "decks": {
+        "New deck": "New deck"
+    },
+    "edit": {
+        "Attribute": "Attribute",
+        "Back": "Back",
+        "Card history": "Card history",
+        "Change color": "Change color",
+        "Clear deck": "Clear deck",
+        "Clear filters": "Clear filters",
+        "Clear history": "Clear history",
+        "Deck name": "Deck name",
+        "Extra": "Extra",
+        "Extra deck": "Extra deck",
+        "First release": "First release",
+        "Level": "Level",
+        "Main deck": "Main deck",
+        "Monsters": "Monsters",
+        "Next image": "Next image",
+        "No card": "No card",
+        "Order": "Order",
+        "Previous image": "Previous image",
+        "Result": "Result",
+        "Search": "Search",
+        "Search name or description": "Search name or description",
+        "Select date": "Select date",
+        "Showing {0} of {1} results": "Showing {0} of {1} results",
+        "Sort by": "Sort by",
+        "Spells": "Spells",
+        "Time travel": "Time travel",
+        "Traps": "Traps"
+    },
+    "form": {
+        "archetype-selector": {
+            "Remove archetype": "Remove archetype",
+            "Select an archetype": "Select an archetype"
+        },
+        "autocomplete-search": {
+            "Loading results...": "Loading results..."
+        }
+    },
+    "header": {
+        "credits": "Credits"
+    }
+}

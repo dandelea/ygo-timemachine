@@ -19,3 +19,18 @@ export async function getCards(form) {
     let response = await axios.post('/api/cards', form)
     return response.data
 }
+
+export async function getDecks() {
+    let response = await axios.get('/api/decks')
+    return response.data
+}
+
+export async function getDeck(id) {
+    let response = await axios.get(`/api/decks/${id}`)
+    return response.data
+}
+
+export async function editDeck(id, form) {
+    let response = await axios.post(`/api/decks/${id}`, form)
+    return response.data
+}

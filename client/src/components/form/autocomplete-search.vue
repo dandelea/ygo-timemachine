@@ -121,7 +121,7 @@
         class="loading"
         v-if="isLoading"
       >
-        Loading results...
+        {{$t('form.autocomplete-search.Loading results...')}}
       </li>
       <li
         v-else

@@ -1,4 +1,4 @@
-const redis = require('redis');
+const redis = require('async-redis');
 const config = require('./config');
 const logger = require('./logger');
 
@@ -9,19 +9,17 @@ const redisClient = redis.createClient({
 });
 exports.redis = redisClient;
 
-exports.get = async (key, callback = (value) => {}) => {
-  redisClient.get(key, (err, value) => {
-    if (err) {
-      logger.error(err);
-    } else {
-      callback(value);
-    }
-  });
+exports.get = async (key) => {
+  let result = await redisClient.get(key);
+  result = JSON.parse(result);
+  return result;
 };
 
-exports.set = (key, value, callback = () => {}) => {
-  redisClient.set(key, JSON.stringify(value), () => {
-    logger.info(`Adding new entry "${key}"`);
-    callback();
-  });
+exports.set = async (key, value) => {
+  logger.info(`Adding new entry "${key}"`);
+  await redisClient.set(key, JSON.stringify(value));
+};
+
+exports.clean = async () => {
+  await redisClient.flushall();
 };
