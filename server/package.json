@@ -17,10 +17,9 @@
   "homepage": "http://ygotimemachine-env.eba-4fvcaaib.eu-west-3.elasticbeanstalk.com/",
   "main": "index.js",
   "scripts": {
-    "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all --debug",
     "dev": "npm run seed && NODE_ENV=development PORT=5000 nodemon",
-    "start": "NODE_ENV=production PORT=5000 node index.js",
+    "start": "npm run seed && NODE_ENV=production PORT=5000 node index.js",
     "lint": "eslint 'src/**/*.js' --fix"
   },
   "devDependencies": {
