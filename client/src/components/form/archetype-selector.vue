@@ -1,13 +1,15 @@
 <template>
   <div class="p-2 w-full">
-    <autocomplete @input="select" :items="archetypes" placeholder="Select a monster archetype" />
+    <autocomplete @input="select" :items="archetypes" :placeholder="$t('form.archetype-selector.Select an archetype')" />
     <div class="mt-2 items-center flex flex-wrap">
       <span v-for="item in selected" :key="item"
         class="p-2 m-1 duration-500 bg-blue-800 hover:bg-blue-700 text-sm">
         {{item}}
         <font-awesome-icon :icon="['far', 'times-circle']"
           class="cursor-pointer"
-          @click="remove(item)"  /> 
+          @click="remove(item)"
+          :title="$t('form.archetype-selector.Remove archetype')"
+        /> 
       </span>
     </div>
   </div>

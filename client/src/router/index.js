@@ -9,7 +9,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Decks',
+    name: 'Home',
     component: Decks,
     meta: {
       title: 'Yu-Gi-Oh! TimeMachine'

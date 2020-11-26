@@ -10,6 +10,7 @@
               invisible: current_image_showing <= 0,
             }"
             class="flex-shrink p-2 bg-blue-800 duration-200 hover:bg-blue-700"
+            :title="$t('edit.Previous image')"
           >
             <font-awesome-icon icon="chevron-left" />
           </button>
@@ -34,6 +35,7 @@
             :class="{
               invisible: current_image_showing >= current.images.length - 1,
             }"
+            :title="$t('edit.Next image')"
           >
             <font-awesome-icon icon="chevron-right" />
           </button>
@@ -42,7 +44,8 @@
           v-if="!current"
           class="ml-4 w-32 md:w-64 md:mx-auto"
           :src="images.card"
-          alt="No Card"
+          alt="No card"
+          :title="$t('edit.No card')"
         />
         <div class="px-6 py-4" v-if="current">
           <div
@@ -58,7 +61,7 @@
               <img
                 class="w-5 h-5"
                 alt="Level"
-                :title="`Level ${current.level}`"
+                :title="`${$t('edit.Level')} ${current.level}`"
                 :src="images.star"
               />
             </span>
@@ -70,7 +73,7 @@
               <img
                 class="w-5 h-5"
                 alt="Level"
-                :title="`Attribute ${current.attribute}`"
+                :title="`${$t('edit.Attribute')} ${current.attribute}`"
                 :src="images.attributes[current.attribute]"
               />
             </span>
@@ -78,7 +81,7 @@
               class="w-full p-1 text-sm items-center text-center italic"
               v-if="current.first_release"
             >
-              First release: {{ current.first_release | date }}
+              {{$t('edit.First release')}}: {{ current.first_release | date }}
             </span>
           </div>
           <div class="bg-blue-800 p-2 mb-2 text-justify">
@@ -111,11 +114,11 @@
       </div>
       <div id="history" class="hidden md:block" v-if="history.length">
         <div class="py-2 pl-6 bg-blue-800 w-full h-10 flex items-center">
-          <h1 class="flex-1 text-sm text-white">Card history</h1>
+          <h1 class="flex-1 text-sm text-white">{{$t('edit.Card history')}}</h1>
           <span
             @click="clearHistory()"
             class="w-10 h-10 flex items-center text-white cursor-pointer bg-red-500 duration-200 hover:bg-red-600 shadow-lg"
-            title="Clear history"
+            :title="$t('edit.Clear history')"
           >
             <font-awesome-icon :icon="['far', 'trash-alt']" class="mx-auto" />
           </span>
@@ -141,16 +144,17 @@
             <router-link
               to="/"
               class="w-10 h-10 flex items-center bg-blue-800 duration-200 hover:bg-blue-700"
+              :title="$t('edit.Back')"
             >
               <font-awesome-icon icon="arrow-left" class="mx-auto" />
             </router-link>
             <input
               class="flex-1 p-2 text-white bg-blue-800"
               type="search"
-              placeholder="Deck name..."
+              :placeholder="$t('edit.Deck name')"
               v-model="deck.name"
             />
-            <color-selector v-model="deck.color" />
+            <color-selector v-model="deck.color" :title="$t('edit.Change color')" />
             <button
               @click="saveDeck"
               class="w-10 h-10 bg-blue-800 duration-200 hover:bg-blue-700"
@@ -164,19 +168,19 @@
           </div>
           <div class="flex relative">
             <div class="flex-1 flex items-center">
-              <div class="flex-1 text-center">Main deck:</div>
+              <div class="flex-1 text-center">{{$t('edit.Main deck')}}:</div>
               <div class="w-10 h-10 flex items-center bg-blue-800">
                 <span class="mx-auto">{{ deck.main.length }}</span>
               </div>
             </div>
             <div class="flex-1 flex items-center">
-              <div class="flex-1 text-center">Extra deck:</div>
+              <div class="flex-1 text-center">{{$t('edit.Extra deck')}}:</div>
               <div class="w-10 h-10 flex items-center bg-blue-800">
                 <span class="mx-auto">{{ deck.extra.length }}</span>
               </div>
             </div>
             <div
-              title="Clear deck"
+              :title="$t('edit.Clear deck')"
               class="w-10 h-10 flex items-center text-white cursor-pointer bg-red-500 duration-200 hover:bg-red-600 shadow-lg"
               @click="clearDeck()"
             >
@@ -189,7 +193,7 @@
           @drop="handleDrop"
         >
           <div
-            class="flex flex-wrap transition-colors duration-500 rounded"
+            class="flex flex-wrap transition-colors duration-500 rounded max-h-1/2 overflow-y-auto"
             :class="{
               'bg-gray-900': dragging && dragging.group === 'adding',
             }"
@@ -202,7 +206,7 @@
               :class="{
                 'cursor-pointer': deck_main[j],
               }"
-              v-for="(i, j) in 40"
+              v-for="(i, j) in deckSize(deck_main)"
               :key="`main-deck-${j}`"
               v-on:click.native="deck_main[j] ? selectCard(deck_main[j]) : null"
               :style="`background-image: url('${
@@ -227,7 +231,7 @@
               :class="{
                 'cursor-pointer': deck_extra[j],
               }"
-              v-for="(i, j) in 12"
+              v-for="(i, j) in 15"
               :key="`extra-deck-${j}`"
               v-on:click.native="
                 deck_extra[j] ? selectCard(deck_extra[j]) : null
@@ -261,7 +265,7 @@
             }"
             href="#"
           >
-            Form
+            {{$t('edit.Search')}}
           </a>
         </li>
         <li class="flex-1">
@@ -276,15 +280,14 @@
             }"
             href="#"
           >
-            Cards
+            {{$t('edit.Result')}}
           </a>
         </li>
       </ul>
       <!-- Search results -->
       <div id="list" v-if="stats && cards && activeTab === 'cards'">
         <div class="p-2 bg-blue-800 text-center mb-2 text-sm md:text-base">
-          Showing {{ Math.min(stats.pageSize, cards.total) }} of
-          {{ stats.cards }} results
+          {{$t('edit.Showing {0} of {1} results', [ Math.min(stats.pageSize, cards.total), stats.cards ])}}
         </div>
         <drop
           @dragover="handleDragover('removing', ...arguments)"
@@ -309,23 +312,24 @@
       </div>
       <!-- Filters -->
       <div id="filters" v-if="activeTab === 'form'">
-        <div class="px-4 m-2 text-center">
-          <span>Time travel</span>
+        <div class="px-4 m-2 text-center flex">
+          <span class="flex-1 p-2">{{$t('edit.Time travel')}}</span>
           <vue-ctk-date-time-picker
             v-model="form.epoch"
+            class="flex-1"
             format="YYYY-MM-DD"
             formatted="YYYY-MM-DD"
             disable-time
             onlyDate
             noKeyboard
             dark
-            label="Select date"
+            noLabel
             minDate="2001-01-01"
             :maxDate="now"
           />
         </div>
         <div class="flex flex-wrap items-center px-2">
-          <label class="flex-1 p-2" for="order">Sort by:</label>
+          <label class="flex-1 p-2" for="order">{{$t('edit.Order')}}:</label>
           <select
             id="order"
             v-model="form.order.field"
@@ -343,6 +347,7 @@
           <button
             class="flex-1 p-2 m-2 bg-blue-800 duration-200 hover:bg-blue-700"
             @click="form.order.inverse = !form.order.inverse"
+            :title="form.order.inverse ? 'DESC' : 'ASC'"
           >
             <font-awesome-icon
               :icon="
@@ -354,9 +359,9 @@
         <div
           class="flex mx-4 my-2 bg-blue-800 text-center items-center text-white uppercase shadow-lg cursor-pointer duration-200 hover:bg-blue-700"
           @click="clearFilters"
-          title="Clear filters"
+          :title="$t('edit.Clear filters')"
         >
-          <span class="mx-auto">Clear filters</span>
+          <span class="mx-auto">{{$t('edit.Clear filters')}}</span>
           <font-awesome-icon icon="eraser" class="mx-auto ml-2 h-8" />
         </div>
         <div id="checks" class="my-1 flex flex-wrap">
@@ -375,7 +380,7 @@
           <input
             class="w-full p-2 text-white bg-blue-800"
             type="search"
-            placeholder="Search name..."
+            :placeholder="$t('edit.Search name or description')"
             v-model="form.search"
           />
         </div>
@@ -388,7 +393,7 @@
           "
         >
           <div class="py-2 px-6 bg-blue-800 text-sm h-6 flex items-center">
-            <h1 class="w-11/12 text-white">Monsters / Extra</h1>
+            <h1 class="w-11/12 text-white">{{$t('edit.Monsters')}} / {{$t('edit.Extra')}}</h1>
           </div>
           <div>
             <div id="attribute" class="p-2 flex items-center" v-if="parameters">
@@ -478,7 +483,7 @@
           "
         >
           <div class="py-2 px-6 bg-blue-800 text-sm h-6 flex items-center">
-            <h1 class="w-11/12 text-white">Spells</h1>
+            <h1 class="w-11/12 text-white">{{$t('edit.Spells')}}</h1>
           </div>
           <div>
             <div
@@ -506,7 +511,7 @@
           "
         >
           <div class="py-2 px-6 bg-blue-800 text-sm h-6 flex items-center">
-            <h1 class="w-11/12 text-white">Traps</h1>
+            <h1 class="w-11/12 text-white">{{$t('edit.Traps')}}</h1>
           </div>
           <div>
             <div
@@ -688,10 +693,6 @@ export default {
         }, {}),
       },
       history: [],
-      modals: {
-        type: false,
-        archetype: false,
-      },
       archetypes: [],
       archetype: "",
       activeTab: "cards",
@@ -822,6 +823,13 @@ export default {
         }
       }
       this.dragging = null;
+    },
+    deckSize: function (deck) {
+      let result = 40;
+      if (deck.length >= 40) {
+        result = (Math.floor(deck.length / 10) * 10) + 10;
+      }
+      return result;
     },
   },
   mounted: function () {

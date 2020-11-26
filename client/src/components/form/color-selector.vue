@@ -6,7 +6,7 @@
       :value="value"
       @click="isOpen = !isOpen"
       :class="[
-        `w-10 h-10 text-white bg-${value} focus:outline-none focus:shadow-outline inline-flex p-2 shadow-lg duration-200 hover:bg-red-600`,
+        `w-10 h-10 text-white bg-${value} focus:outline-none focus:shadow-outline inline-flex p-2 shadow-lg`,
       ]"
     >
       <svg

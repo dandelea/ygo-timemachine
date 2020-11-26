@@ -12,6 +12,8 @@ Vue.use(vmodal)
 import vClickOutside from 'v-click-outside'
 Vue.use(vClickOutside)
 
+import i18n from './i18n'
+
 Vue.use(VueMeta, {
   // optional pluginOptions
   refreshOnceOnNavigation: true
@@ -35,6 +37,7 @@ Vue.config.productionSourceMap = process.env.NODE_ENV === 'development';
 
 new Vue({
   router,
-  render: h => h(App),
+  i18n,
+  render: h => h(App)
 }).$mount('#app')
 

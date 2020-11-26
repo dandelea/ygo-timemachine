@@ -2,6 +2,7 @@
   <section class="flex flex-wrap">
     <router-link
       to="/decks/new"
+      :title="$t('decks.New deck')"
       class="w-full m-4 p-4 text-center bg-blue-800 duration-200 hover:bg-blue-700 cursor-pointer"
     >
       <font-awesome-icon icon="plus" size="2x" />

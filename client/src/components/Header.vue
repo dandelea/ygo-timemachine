@@ -14,7 +14,7 @@
         to="/credits"
         class="duration-300 no-underline cursor-pointer sm:inline-block text-blue-200 hover:text-white"
       >
-        Credits
+        {{$t('header.credits')}}
       </router-link>
     </nav>
   </div>
