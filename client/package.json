@@ -1,72 +1,31 @@
 {
   "name": "ygo-timemachine-client",
+  "description": "Explorador de cartas de Yu-Gi-Oh! filtrado por épocas",
   "version": "1.0.0",
   "private": false,
-  "description": "Explorador de cartas de Yu-Gi-Oh! filtrado por épocas",
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --build && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc --build",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
   "author": {
     "email": "danirele10@hotmail.com",
     "name": "Daniel de los Reyes Leal",
     "url": "http://danieldelosreyesleal.com"
   },
-  "scripts": {
-    "serve": "vue-cli-service serve --host=0.0.0.0 --port=3000",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "url": "https://github.com/dandelea/ygo-timemachine",
+    "type": "git"
   },
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.32",
-    "@fortawesome/free-brands-svg-icons": "^5.15.1",
-    "@fortawesome/free-regular-svg-icons": "^5.15.1",
-    "@fortawesome/free-solid-svg-icons": "^5.15.1",
-    "@fortawesome/vue-fontawesome": "^2.0.0",
-    "axios": "^0.21.0",
-    "core-js": "^3.8.0",
-    "moment": "^2.29.1",
-    "node-sass": "^4.14.1",
-    "sass-loader": "^10.1.0",
-    "tailwindcss": "^2.0.1",
-    "vue": "^2.6.12",
-    "vue-click-outside": "^1.1.0",
-    "vue-ctk-date-time-picker": "^2.5.0",
-    "vue-drag-drop": "^1.1.4",
-    "vue-i18n": "^8.22.2",
-    "vue-js-modal": "^1.3.35",
-    "vue-meta": "^2.4.0",
-    "vue-router": "^3.4.9",
-    "vue-slider-component": "^3.2.11"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.2.3",
-    "@vue/cli-plugin-eslint": "~4.2.3",
-    "@vue/cli-service": "~4.5.9",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.8.0",
-    "eslint-plugin-vue": "^6.2.2",
-    "vue-cli-plugin-i18n": "~1.0.1",
-    "vue-template-compiler": "^2.6.11"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {
-      "no-console": "off"
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ],
-  "homepage": "http://ygotimemachine-env.eba-4fvcaaib.eu-west-3.elasticbeanstalk.com/",
   "keywords": [
     "Daniel de los Reyes",
     "Portfolio",
@@ -80,9 +39,39 @@
     "Yu-Gi-Oh!",
     "Timemachine"
   ],
-  "license": "AGPL-3.0-only",
-  "repository": {
-    "url": "https://github.com/dandelea/ygo-timemachine",
-    "type": "git"
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "7.3.1",
+    "@fortawesome/free-regular-svg-icons": "7.3.1",
+    "@fortawesome/free-solid-svg-icons": "7.3.1",
+    "@fortawesome/vue-fontawesome": "3.3.3",
+    "@vuepic/vue-datepicker": "14.0.0",
+    "@vueuse/core": "15.0.0",
+    "axios": "1.20.0",
+    "date-fns": "4.4.0",
+    "pinia": "4.0.3",
+    "reka-ui": "2.11.0",
+    "vue": "3.5.43",
+    "vue-easy-dnd": "3.0.0",
+    "vue-i18n": "11.4.13",
+    "vue-router": "5.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "24.19.1",
+    "@vitejs/plugin-vue": "6.0.9",
+    "@vue/eslint-config-typescript": "14.9.0",
+    "eslint": "10.12.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-vue": "10.11.1",
+    "prettier": "3.9.9",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
+    "vite": "8.3.4",
+    "vue-tsc": "3.3.12"
+  },
+  "allowScripts": {
+    "vue-demi": false
   }
 }
