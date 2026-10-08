@@ -1,0 +1,20 @@
+import { Sequelize, type Options } from 'sequelize'
+import { config } from '../config.ts'
+import { logger } from '../logger.ts'
+
+const logging: Options['logging'] = (sql) => {
+  logger.trace({ sql }, 'sql')
+}
+
+export const sequelize =
+  config.database.dialect === 'sqlite'
+    ? new Sequelize({ dialect: 'sqlite', storage: config.database.storage, logging })
+    : new Sequelize({
+        dialect: 'postgres',
+        host: config.database.host,
+        port: config.database.port,
+        username: config.database.username,
+        password: config.database.password,
+        database: config.database.database,
+        logging,
+      })
