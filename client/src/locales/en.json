@@ -60,9 +60,7 @@
       "search": "Search"
     },
     "Sections": "Editor sections",
-    "Select date": "Select date",
     "Showing {0} of {1} results": "Showing {0} of {1} results",
-    "Sort by": "Sort by",
     "Spells": "Spells",
     "Time travel": "Time travel",
     "Traps": "Traps"
@@ -71,9 +69,6 @@
     "archetype-selector": {
       "Remove archetype": "Remove archetype",
       "Select an archetype": "Select an archetype"
-    },
-    "autocomplete-search": {
-      "Loading results...": "Loading results..."
     }
   },
   "header": {

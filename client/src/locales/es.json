@@ -60,9 +60,7 @@
       "search": "Búsqueda"
     },
     "Sections": "Secciones del editor",
-    "Select date": "Seleccionar fecha",
     "Showing {0} of {1} results": "Mostrando {0} de {1} resultados",
-    "Sort by": "Ordenar por",
     "Spells": "Magias",
     "Time travel": "Viaje en el tiempo",
     "Traps": "Trampas"
@@ -71,9 +69,6 @@
     "archetype-selector": {
       "Remove archetype": "Eliminar arquetipo",
       "Select an archetype": "Seleccionar un arquetipo"
-    },
-    "autocomplete-search": {
-      "Loading results...": "Cargando resultados..."
     }
   },
   "header": {

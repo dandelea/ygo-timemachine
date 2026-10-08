@@ -1,44 +1,55 @@
-version: "3"
+# Production-like stack: built images, PostgreSQL and Redis behind nginx.
+#   cp .env.example .env   # then set POSTGRES_PASSWORD
+#   docker compose up --build
+# The app is served on http://localhost:3050
+
 services:
   postgres:
-    image: "postgres:latest"
+    image: postgres:18-alpine
+    restart: unless-stopped
     environment:
-      - POSTGRES_PASSWORD=postgres_password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   redis:
-    image: "redis:latest"
+    image: redis:8-alpine
+    restart: unless-stopped
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    init: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      NODE_ENV: production
+      PGHOST: postgres
+      PGUSER: postgres
+      PGPASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      PGDATABASE: postgres
+      REDIS_URL: redis://redis:6379
+
+  client:
+    build: ./client
+    restart: unless-stopped
+
   nginx:
+    build: ./nginx
+    restart: unless-stopped
     depends_on:
       - api
       - client
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
     ports:
-      - "3050:80"
-  api:
-    depends_on:
-      - redis
-      - postgres
-    build:
-      dockerfile: Dockerfile
-      context: ./server
-    volumes:
-      - /app/node_modules
-      - ./server:/app
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - PGUSER=postgres
-      - PGPASSWORD=postgres_password
-      - PGDATABASE=postgres
-      - PGHOST=postgres
-      - PGPORT=5432
-  client:
-    stdin_open: true
-    build:
-      dockerfile: Dockerfile
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
+      - "${HTTP_PORT:-3050}:80"
+
+volumes:
+  postgres-data:

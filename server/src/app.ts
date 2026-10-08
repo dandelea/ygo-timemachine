@@ -15,7 +15,16 @@ export interface AppOptions {
 export function createApp({ cache, corsOrigins }: AppOptions): Express {
   const app = express()
   app.disable('x-powered-by')
-  app.use(pinoHttp({ logger }))
+  app.use(
+    pinoHttp({
+      logger,
+      // One compact line per request; headers would add noise and client data.
+      serializers: {
+        req: (req: { method: string; url: string }) => ({ method: req.method, url: req.url }),
+        res: (res: { statusCode: number }) => ({ statusCode: res.statusCode }),
+      },
+    }),
+  )
   app.use(helmet())
   // Only listed origins may call the API cross-origin; same-origin requests
   // through the nginx proxy carry no Origin header and are unaffected.

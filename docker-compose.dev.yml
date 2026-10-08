@@ -1,44 +1,45 @@
-version: "3"
+# Development stack: Vite and the API in watch mode with the sources mounted,
+# SQLite for storage and Redis as cache, behind the same nginx gateway.
+#   docker compose -f docker-compose.dev.yml up --build
+# The app is served on http://localhost:3050
+
 services:
-  postgres:
-    image: "postgres:latest"
-    environment:
-      - POSTGRES_PASSWORD=postgres_password
   redis:
-    image: "redis:latest"
+    image: redis:8-alpine
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    init: true
+    depends_on:
+      - redis
+    environment:
+      NODE_ENV: development
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./server/src:/app/src
+      - api-db:/app/db
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    init: true
+    environment:
+      API_PROXY_TARGET: http://api:5000
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+      - ./client/index.html:/app/index.html
+
   nginx:
+    build: ./nginx
     depends_on:
       - api
       - client
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
     ports:
-      - "3050:80"
-  api:
-    depends_on:
-      - redis
-      - postgres
-    build:
-      dockerfile: Dockerfile
-      context: ./server
-    volumes:
-      - /app/node_modules
-      - ./server:/app
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - PGUSER=postgres
-      - PGPASSWORD=postgres_password
-      - PGDATABASE=postgres
-      - PGHOST=postgres
-      - PGPORT=5432
-  client:
-    stdin_open: true
-    build:
-      dockerfile: Dockerfile
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
+      - "${HTTP_PORT:-3050}:80"
+
+volumes:
+  api-db:
