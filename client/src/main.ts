@@ -2,6 +2,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 import {
   faArrowLeft,
+  faCheck,
   faChevronCircleDown,
   faChevronCircleUp,
   faChevronLeft,
@@ -9,6 +10,9 @@ import {
   faEraser,
   faPlus,
   faSave,
+  faSpinner,
+  faTriangleExclamation,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { createPinia } from 'pinia'
@@ -20,6 +24,7 @@ import { router } from './router'
 
 library.add(
   faArrowLeft,
+  faCheck,
   faChevronCircleDown,
   faChevronCircleUp,
   faChevronLeft,
@@ -27,7 +32,10 @@ library.add(
   faEraser,
   faPlus,
   faSave,
+  faSpinner,
   faTimesCircle,
+  faTriangleExclamation,
+  faXmark,
   faTrashAlt,
 )
 

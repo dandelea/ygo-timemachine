@@ -4,7 +4,8 @@
 export type CardType = 'MONSTER' | 'SPELL' | 'TRAP' | 'EXTRA'
 
 export interface CardImage {
-  id?: number
+  id: number
+  card_id: number
   image: string
   image_small: string
 }
@@ -32,7 +33,7 @@ export interface DeckSummary {
   color: string
   createdAt: string
   updatedAt: string
-  cards: Pick<Card, 'id' | 'images'>[]
+  cards: { id: number; images: Pick<CardImage, 'image' | 'image_small'>[] }[]
 }
 
 /** `GET /decks/:id`: cards split into main and extra deck, duplicates included. */

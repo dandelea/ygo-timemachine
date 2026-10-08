@@ -1,0 +1,415 @@
+{
+  "id": "f6a626e3-2ad9-4cbd-be57-25f6e0c1570c",
+  "name": "Forbidden Bandit",
+  "color": "teal-500",
+  "createdAt": "2026-10-08T16:52:54.243Z",
+  "updatedAt": "2026-10-08T16:52:54.243Z",
+  "main": [
+    {
+      "id": 5053103,
+      "type": "MONSTER",
+      "name": "Battle Ox",
+      "description": "A monster with tremendous power, it destroys enemies with a swing of its axe.",
+      "subtype": "Normal Monster",
+      "race": "Beast-Warrior",
+      "atk": 1700,
+      "def": 1000,
+      "level": 4,
+      "attribute": "EARTH",
+      "first_release": "2002-03-29",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/5053103.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/5053103.jpg",
+          "card_id": 5053103,
+          "id": 660
+        }
+      ]
+    },
+    {
+      "id": 5053103,
+      "type": "MONSTER",
+      "name": "Battle Ox",
+      "description": "A monster with tremendous power, it destroys enemies with a swing of its axe.",
+      "subtype": "Normal Monster",
+      "race": "Beast-Warrior",
+      "atk": 1700,
+      "def": 1000,
+      "level": 4,
+      "attribute": "EARTH",
+      "first_release": "2002-03-29",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/5053103.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/5053103.jpg",
+          "card_id": 5053103,
+          "id": 660
+        }
+      ]
+    },
+    {
+      "id": 5053103,
+      "type": "MONSTER",
+      "name": "Battle Ox",
+      "description": "A monster with tremendous power, it destroys enemies with a swing of its axe.",
+      "subtype": "Normal Monster",
+      "race": "Beast-Warrior",
+      "atk": 1700,
+      "def": 1000,
+      "level": 4,
+      "attribute": "EARTH",
+      "first_release": "2002-03-29",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/5053103.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/5053103.jpg",
+          "card_id": 5053103,
+          "id": 660
+        }
+      ]
+    },
+    {
+      "id": 76812113,
+      "type": "MONSTER",
+      "name": "Harpie Lady",
+      "description": "This human-shaped animal with wings is beautiful to watch but deadly in battle.",
+      "subtype": "Normal Monster",
+      "race": "Winged Beast",
+      "atk": 1300,
+      "def": 1400,
+      "level": 4,
+      "attribute": "WIND",
+      "first_release": "2002-06-26",
+      "archetype_id": "Harpie",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/76812113.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/76812113.jpg",
+          "card_id": 76812113,
+          "id": 4131
+        }
+      ]
+    },
+    {
+      "id": 76812113,
+      "type": "MONSTER",
+      "name": "Harpie Lady",
+      "description": "This human-shaped animal with wings is beautiful to watch but deadly in battle.",
+      "subtype": "Normal Monster",
+      "race": "Winged Beast",
+      "atk": 1300,
+      "def": 1400,
+      "level": 4,
+      "attribute": "WIND",
+      "first_release": "2002-06-26",
+      "archetype_id": "Harpie",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/76812113.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/76812113.jpg",
+          "card_id": 76812113,
+          "id": 4131
+        }
+      ]
+    },
+    {
+      "id": 76812113,
+      "type": "MONSTER",
+      "name": "Harpie Lady",
+      "description": "This human-shaped animal with wings is beautiful to watch but deadly in battle.",
+      "subtype": "Normal Monster",
+      "race": "Winged Beast",
+      "atk": 1300,
+      "def": 1400,
+      "level": 4,
+      "attribute": "WIND",
+      "first_release": "2002-06-26",
+      "archetype_id": "Harpie",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/76812113.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/76812113.jpg",
+          "card_id": 76812113,
+          "id": 4131
+        }
+      ]
+    },
+    {
+      "id": 50705071,
+      "type": "MONSTER",
+      "name": "Metalzoa",
+      "description": "Cannot be Normal Summoned/Set. Must first be Special Summoned (from your Deck) by Tributing \"Zoa\" equipped with \"Metalmorph\".",
+      "subtype": "Effect Monster",
+      "race": "Machine",
+      "atk": 3000,
+      "def": 2300,
+      "level": 8,
+      "attribute": "DARK",
+      "first_release": "2003-11-04",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/50705071.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/50705071.jpg",
+          "card_id": 50705071,
+          "id": 5648
+        }
+      ]
+    },
+    {
+      "id": 24311372,
+      "type": "MONSTER",
+      "name": "Zoa",
+      "description": "A monster whose full potential can be achieved when outfitted with \"Metalmorph\".",
+      "subtype": "Normal Monster",
+      "race": "Fiend",
+      "atk": 2600,
+      "def": 1900,
+      "level": 7,
+      "attribute": "DARK",
+      "first_release": "2003-11-04",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/24311372.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/24311372.jpg",
+          "card_id": 24311372,
+          "id": 10007
+        }
+      ]
+    },
+    {
+      "id": 24311372,
+      "type": "MONSTER",
+      "name": "Zoa",
+      "description": "A monster whose full potential can be achieved when outfitted with \"Metalmorph\".",
+      "subtype": "Normal Monster",
+      "race": "Fiend",
+      "atk": 2600,
+      "def": 1900,
+      "level": 7,
+      "attribute": "DARK",
+      "first_release": "2003-11-04",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/24311372.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/24311372.jpg",
+          "card_id": 24311372,
+          "id": 10007
+        }
+      ]
+    },
+    {
+      "id": 69140098,
+      "type": "MONSTER",
+      "name": "Gemini Elf",
+      "description": "Elf twins that alternate their attacks.",
+      "subtype": "Normal Monster",
+      "race": "Spellcaster",
+      "atk": 1900,
+      "def": 900,
+      "level": 4,
+      "attribute": "EARTH",
+      "first_release": "2003-03-01",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/69140098.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/69140098.jpg",
+          "card_id": 69140098,
+          "id": 3575
+        },
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/69140099.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/69140099.jpg",
+          "card_id": 69140098,
+          "id": 3576
+        }
+      ]
+    },
+    {
+      "id": 69140098,
+      "type": "MONSTER",
+      "name": "Gemini Elf",
+      "description": "Elf twins that alternate their attacks.",
+      "subtype": "Normal Monster",
+      "race": "Spellcaster",
+      "atk": 1900,
+      "def": 900,
+      "level": 4,
+      "attribute": "EARTH",
+      "first_release": "2003-03-01",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/69140098.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/69140098.jpg",
+          "card_id": 69140098,
+          "id": 3575
+        },
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/69140099.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/69140099.jpg",
+          "card_id": 69140098,
+          "id": 3576
+        }
+      ]
+    },
+    {
+      "id": 69140098,
+      "type": "MONSTER",
+      "name": "Gemini Elf",
+      "description": "Elf twins that alternate their attacks.",
+      "subtype": "Normal Monster",
+      "race": "Spellcaster",
+      "atk": 1900,
+      "def": 900,
+      "level": 4,
+      "attribute": "EARTH",
+      "first_release": "2003-03-01",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/69140098.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/69140098.jpg",
+          "card_id": 69140098,
+          "id": 3575
+        },
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/69140099.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/69140099.jpg",
+          "card_id": 69140098,
+          "id": 3576
+        }
+      ]
+    },
+    {
+      "id": 43352213,
+      "type": "MONSTER",
+      "name": "Nekogal #2",
+      "description": "A fast and lethal creature with very dangerous claws.",
+      "subtype": "Normal Monster",
+      "race": "Beast-Warrior",
+      "atk": 1900,
+      "def": 2000,
+      "level": 6,
+      "attribute": "EARTH",
+      "first_release": "2005-11-01",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/43352213.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/43352213.jpg",
+          "card_id": 43352213,
+          "id": 6012
+        }
+      ]
+    },
+    {
+      "id": 68540059,
+      "type": "TRAP",
+      "name": "Metalmorph",
+      "description": "Target 1 face-up monster on the field; equip this card to that target. It gains 300 ATK and DEF. If it attacks, it gains ATK equal to half the ATK of the attack target, during damage calculation only.",
+      "subtype": "Trap Card",
+      "race": "Normal",
+      "atk": null,
+      "def": null,
+      "level": null,
+      "attribute": null,
+      "first_release": "2002-11-25",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/68540058.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/68540058.jpg",
+          "card_id": 68540059,
+          "id": 5644
+        },
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/68540059.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/68540059.jpg",
+          "card_id": 68540059,
+          "id": 5643
+        }
+      ]
+    },
+    {
+      "id": 68540059,
+      "type": "TRAP",
+      "name": "Metalmorph",
+      "description": "Target 1 face-up monster on the field; equip this card to that target. It gains 300 ATK and DEF. If it attacks, it gains ATK equal to half the ATK of the attack target, during damage calculation only.",
+      "subtype": "Trap Card",
+      "race": "Normal",
+      "atk": null,
+      "def": null,
+      "level": null,
+      "attribute": null,
+      "first_release": "2002-11-25",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/68540058.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/68540058.jpg",
+          "card_id": 68540059,
+          "id": 5644
+        },
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/68540059.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/68540059.jpg",
+          "card_id": 68540059,
+          "id": 5643
+        }
+      ]
+    }
+  ],
+  "extra": [
+    {
+      "id": 46696593,
+      "type": "EXTRA",
+      "name": "Crimson Sunbird",
+      "description": "\"Faith Bird\" + \"Skull Red Bird\"",
+      "subtype": "Fusion Monster",
+      "race": "Winged Beast",
+      "atk": 2300,
+      "def": 1800,
+      "level": 6,
+      "attribute": "FIRE",
+      "first_release": "2013-01-25",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/46696593.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/46696593.jpg",
+          "card_id": 46696593,
+          "id": 1584
+        }
+      ]
+    },
+    {
+      "id": 54752875,
+      "type": "EXTRA",
+      "name": "Twin-Headed Thunder Dragon",
+      "description": "\"Thunder Dragon\" + \"Thunder Dragon\"",
+      "subtype": "Fusion Monster",
+      "race": "Thunder",
+      "atk": 2800,
+      "def": 2100,
+      "level": 7,
+      "attribute": "LIGHT",
+      "first_release": "2002-06-26",
+      "archetype_id": "Thunder Dragon",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/54752875.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/54752875.jpg",
+          "card_id": 54752875,
+          "id": 9242
+        }
+      ]
+    }
+  ]
+}

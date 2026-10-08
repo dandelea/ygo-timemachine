@@ -13,7 +13,7 @@ import { cardBackImage } from '@/services/values'
 import type { Card } from '@/types/api'
 import { DRAG_FROM_DECK, DRAG_FROM_RESULTS } from './drag-types'
 
-const props = defineProps<{ deck: EditableDeck; canSave: boolean }>()
+const props = defineProps<{ deck: EditableDeck; canSave: boolean; saving?: boolean }>()
 const emit = defineEmits<{
   'update:name': [name: string]
   'update:color': [color: string]
@@ -83,7 +83,7 @@ function onDrop(event: DnDEventPayload) {
         :aria-label="$t('edit.Save deck')"
         @click="emit('save')"
       >
-        <FontAwesomeIcon icon="save" />
+        <FontAwesomeIcon :icon="saving ? 'spinner' : 'save'" :spin="saving" />
       </button>
     </div>
     <div class="flex relative">

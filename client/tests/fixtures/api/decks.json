@@ -1,0 +1,74 @@
+[
+  {
+    "id": "98f2c7d0-8f6f-4288-afae-a6235f27db48",
+    "name": "Yosenju",
+    "color": "red-500",
+    "createdAt": "2026-10-08T16:52:54.238Z",
+    "updatedAt": "2026-10-08T16:52:54.238Z",
+    "cards": [
+      {
+        "id": 10045474,
+        "images": [
+          {
+            "image": "https://images.ygoprodeck.com/images/cards/10045474.jpg",
+            "image_small": "https://images.ygoprodeck.com/images/cards_small/10045474.jpg"
+          }
+        ]
+      },
+      {
+        "id": 10813327,
+        "images": [
+          {
+            "image": "https://images.ygoprodeck.com/images/cards/10813327.jpg",
+            "image_small": "https://images.ygoprodeck.com/images/cards_small/10813327.jpg"
+          }
+        ]
+      },
+      {
+        "id": 12014404,
+        "images": [
+          {
+            "image": "https://images.ygoprodeck.com/images/cards/12014404.jpg",
+            "image_small": "https://images.ygoprodeck.com/images/cards_small/12014404.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "f6a626e3-2ad9-4cbd-be57-25f6e0c1570c",
+    "name": "Forbidden Bandit",
+    "color": "teal-500",
+    "createdAt": "2026-10-08T16:52:54.243Z",
+    "updatedAt": "2026-10-08T16:52:54.243Z",
+    "cards": [
+      {
+        "id": 5053103,
+        "images": [
+          {
+            "image": "https://images.ygoprodeck.com/images/cards/5053103.jpg",
+            "image_small": "https://images.ygoprodeck.com/images/cards_small/5053103.jpg"
+          }
+        ]
+      },
+      {
+        "id": 24311372,
+        "images": [
+          {
+            "image": "https://images.ygoprodeck.com/images/cards/24311372.jpg",
+            "image_small": "https://images.ygoprodeck.com/images/cards_small/24311372.jpg"
+          }
+        ]
+      },
+      {
+        "id": 43352213,
+        "images": [
+          {
+            "image": "https://images.ygoprodeck.com/images/cards/43352213.jpg",
+            "image_small": "https://images.ygoprodeck.com/images/cards_small/43352213.jpg"
+          }
+        ]
+      }
+    ]
+  }
+]

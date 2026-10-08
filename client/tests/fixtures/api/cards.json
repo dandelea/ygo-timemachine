@@ -1,0 +1,269 @@
+{
+  "total": 12,
+  "data": [
+    {
+      "id": 38517737,
+      "type": "MONSTER",
+      "name": "Blue-Eyes Alternative White Dragon",
+      "description": "Cannot be Normal Summoned/Set. Must first be Special Summoned (from your hand) by revealing \"Blue-Eyes White Dragon\" in your hand. You can only Special Summon \"Blue-Eyes Alternative White Dragon\" once per turn this way. This card's name becomes \"Blue-Eyes White Dragon\" while it is on the field or in the Graveyard. Once per turn: You can target 1 monster your opponent controls; destroy it. This card cannot attack the turn this effect is activated.",
+      "subtype": "Effect Monster",
+      "race": "Dragon",
+      "atk": 3000,
+      "def": 2500,
+      "level": 8,
+      "attribute": "LIGHT",
+      "first_release": "2016-07-21",
+      "archetype_id": "Blue-Eyes",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/38517737.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/38517737.jpg",
+          "card_id": 38517737,
+          "id": 940
+        }
+      ]
+    },
+    {
+      "id": 20654247,
+      "type": "MONSTER",
+      "name": "Blue-Eyes Chaos Dragon",
+      "description": "You can Ritual Summon this card with \"Chaos Form\". Must be Ritual Summoned. Cannot be destroyed by your opponent's card effects. Your opponent cannot target this card with card effects. When this card Ritual Summoned using \"Blue-Eyes White Dragon\" declares an attack: You can change the battle position of as many monsters your opponent controls as possible, and if you do, the ATK/DEF of the ones changed by this effect become 0, also if this card attacks a Defense Position monster this turn, inflict piercing battle damage.",
+      "subtype": "Ritual Effect Monster",
+      "race": "Dragon",
+      "atk": 3000,
+      "def": 0,
+      "level": 8,
+      "attribute": "DARK",
+      "first_release": "2018-09-27",
+      "archetype_id": "Blue-Eyes",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/20654247.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/20654247.jpg",
+          "card_id": 20654247,
+          "id": 941
+        }
+      ]
+    },
+    {
+      "id": 55410871,
+      "type": "MONSTER",
+      "name": "Blue-Eyes Chaos MAX Dragon",
+      "description": "You can Ritual Summon this card with \"Chaos Form\". Must be Ritual Summoned, and cannot be Special Summoned by other ways. Cannot be targeted, or destroyed by, your opponent's card effects. If this card attacks a Defense Position monster, inflict double piercing battle damage to your opponent.",
+      "subtype": "Ritual Effect Monster",
+      "race": "Dragon",
+      "atk": 4000,
+      "def": 0,
+      "level": 8,
+      "attribute": "DARK",
+      "first_release": "2016-07-21",
+      "archetype_id": "Blue-Eyes",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/55410871.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/55410871.jpg",
+          "card_id": 55410871,
+          "id": 942
+        }
+      ]
+    },
+    {
+      "id": 33784505,
+      "type": "SPELL",
+      "name": "Jar Robber",
+      "description": "You can only activate this card when \"Pot of Greed\" is activated. Negate the effect of the \"Pot of Greed\" and draw 1 card from your Deck.",
+      "subtype": "Spell Card",
+      "race": "Quick-Play",
+      "atk": null,
+      "def": null,
+      "level": null,
+      "attribute": null,
+      "first_release": "2003-10-10",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/33784505.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/33784505.jpg",
+          "card_id": 33784505,
+          "id": 4613
+        }
+      ]
+    },
+    {
+      "id": 64014615,
+      "type": "SPELL",
+      "name": "Pot of Acquisitiveness",
+      "description": "Target 3 banished monsters; shuffle all 3 into the Deck, then draw 1 card. You can only activate 1 \"Pot of Acquisitiveness\" per turn.",
+      "subtype": "Spell Card",
+      "race": "Quick-Play",
+      "atk": null,
+      "def": null,
+      "level": null,
+      "attribute": null,
+      "first_release": "2016-11-03",
+      "archetype_id": "Greed",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/64014615.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/64014615.jpg",
+          "card_id": 64014615,
+          "id": 6784
+        }
+      ]
+    },
+    {
+      "id": 67169062,
+      "type": "SPELL",
+      "name": "Pot of Avarice",
+      "description": "Target 5 monsters in your Graveyard; shuffle all 5 into the Deck, then draw 2 cards.",
+      "subtype": "Spell Card",
+      "race": "Normal",
+      "atk": null,
+      "def": null,
+      "level": null,
+      "attribute": null,
+      "first_release": "2005-11-16",
+      "archetype_id": "Greed",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/67169062.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/67169062.jpg",
+          "card_id": 67169062,
+          "id": 6785
+        }
+      ]
+    },
+    {
+      "id": 78910579,
+      "type": "TRAP",
+      "name": "Aquamirror Cycle",
+      "description": "Target 1 WATER monster you control and 2 WATER monsters in your Graveyard; shuffle the first target into the Deck, and if you do, add the second targets to your hand.",
+      "subtype": "Trap Card",
+      "race": "Normal",
+      "atk": null,
+      "def": null,
+      "level": null,
+      "attribute": null,
+      "first_release": "2012-05-08",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/78910579.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/78910579.jpg",
+          "card_id": 78910579,
+          "id": 368
+        }
+      ]
+    },
+    {
+      "id": 64437633,
+      "type": "TRAP",
+      "name": "Aquamirror Illusion",
+      "description": "Special Summon 1 \"Gishki\" Ritual Monster from your hand. It cannot attack, and is returned to the hand during the End Phase.",
+      "subtype": "Trap Card",
+      "race": "Normal",
+      "atk": null,
+      "def": null,
+      "level": null,
+      "attribute": null,
+      "first_release": "2012-05-25",
+      "archetype_id": "Gishki",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/64437633.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/64437633.jpg",
+          "card_id": 64437633,
+          "id": 369
+        }
+      ]
+    },
+    {
+      "id": 46337945,
+      "type": "TRAP",
+      "name": "Aquamirror Meditation",
+      "description": "Reveal 1 Ritual Spell Card in your hand to target 2 \"Gishki\" monsters in your Graveyard; return them to the hand.",
+      "subtype": "Trap Card",
+      "race": "Normal",
+      "atk": null,
+      "def": null,
+      "level": null,
+      "attribute": null,
+      "first_release": "2011-09-29",
+      "archetype_id": "Gishki",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/46337945.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/46337945.jpg",
+          "card_id": 46337945,
+          "id": 370
+        }
+      ]
+    },
+    {
+      "id": 65172015,
+      "type": "EXTRA",
+      "name": "A-to-Z-Dragon Buster Cannon",
+      "description": "\"ABC-Dragon Buster\" + \"XYZ-Dragon Cannon\"\nMust be Special Summoned (from your Extra Deck) by banishing cards you control with the above original names, and cannot be Special Summoned by other ways. (You do not use \"Polymerization\".) During either player's turn, when your opponent activates a Spell/Trap Card, or monster effect: You can discard 1 card; negate the activation, and if you do, destroy that card. During either player's turn: You can banish this card, then target 1 each of your banished \"ABC-Dragon Buster\", and \"XYZ-Dragon Cannon\"; Special Summon them.",
+      "subtype": "Fusion Monster",
+      "race": "Machine",
+      "atk": 4000,
+      "def": 4000,
+      "level": 10,
+      "attribute": "LIGHT",
+      "first_release": "2016-10-20",
+      "archetype_id": "ABC",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/65172015.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/65172015.jpg",
+          "card_id": 65172015,
+          "id": 26
+        }
+      ]
+    },
+    {
+      "id": 1561110,
+      "type": "EXTRA",
+      "name": "ABC-Dragon Buster",
+      "description": "\"A-Assault Core\" + \"B-Buster Drake\" + \"C-Crush Wyvern\"\nMust first be Special Summoned (from your Extra Deck) by banishing the above cards you control and/or from your Graveyard. (You do not use \"Polymerization\".) Once per turn, during either player's turn: You can discard 1 card, then target 1 card on the field; banish it. During your opponent's turn: You can Tribute this card, then target 3 of your banished LIGHT Machine-Type Union monsters with different names; Special Summon them (this is a Quick Effect).",
+      "subtype": "Fusion Monster",
+      "race": "Machine",
+      "atk": 3000,
+      "def": 2800,
+      "level": 8,
+      "attribute": "LIGHT",
+      "first_release": "2016-10-20",
+      "archetype_id": "ABC",
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/1561110.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/1561110.jpg",
+          "card_id": 1561110,
+          "id": 34
+        }
+      ]
+    },
+    {
+      "id": 2411269,
+      "type": "EXTRA",
+      "name": "Agave Dragon",
+      "description": "2+ monsters, except Tokens\r\nIf this card is Link Summoned: You can apply these effects in sequence, depending on the Types of monsters in the GYs (skip over any that do not apply). You can only use this effect of \"Agave Dragon\" once per turn.\r\n●Inflict 100 damage to your opponent for each Dragon.\r\n●This card gains 200 ATK for each Dinosaur.\r\n●All monsters your opponent currently controls lose 300 ATK for each Sea Serpent.\r\n●You gain 400 LP for each Wyrm.",
+      "subtype": "Link Monster",
+      "race": "Wyrm",
+      "atk": 3000,
+      "def": null,
+      "level": null,
+      "attribute": "EARTH",
+      "first_release": "2018-10-18",
+      "archetype_id": null,
+      "images": [
+        {
+          "image": "https://images.ygoprodeck.com/images/cards/2411269.jpg",
+          "image_small": "https://images.ygoprodeck.com/images/cards_small/2411269.jpg",
+          "card_id": 2411269,
+          "id": 113
+        }
+      ]
+    }
+  ]
+}

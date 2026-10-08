@@ -1,14 +1,21 @@
 {
+  "common": {
+    "Dismiss": "Cerrar",
+    "Retry": "Reintentar"
+  },
   "credits": {
     "legal": {
-      "general": "La información literal y gráfica que se presenta en este sitio sobre {game}, incluidas las imágenes, atributos, niveles, rangos, tipos y textos de las cartas tienen derechos de autor {owner}, una subsidiaria de {parent}. {disclaimer}.",
-      "disclaimer": "Este sitio web no está producido, respaldado, respaldado ni afiliado a 4k Media o Konami Digital Entertainment"
+      "disclaimer": "Este sitio web no está producido, respaldado, respaldado ni afiliado a 4k Media o Konami Digital Entertainment",
+      "general": "La información literal y gráfica que se presenta en este sitio sobre {game}, incluidas las imágenes, atributos, niveles, rangos, tipos y textos de las cartas tienen derechos de autor {owner}, una subsidiaria de {parent}. {disclaimer}."
     },
     "Made by": "Desarrollado por",
     "Powered by": "Alimentado por",
     "Visit": "Visitar"
   },
   "decks": {
+    "Empty": "Todavía no hay mazos. Crea uno con el botón +.",
+    "Load error": "No se han podido cargar los mazos.",
+    "Loading": "Cargando mazos...",
     "New deck": "Nuevo mazo"
   },
   "edit": {
@@ -16,6 +23,7 @@
     "Add card": "Añadir carta",
     "Attribute": "Atributo",
     "Back": "Volver",
+    "Back to decks": "Volver a los mazos",
     "Card history": "Historial de cartas",
     "Change color": "Cambiar de color",
     "Clear deck": "Limpiar mazo",
@@ -26,18 +34,32 @@
     "Extra deck": "Extra deck",
     "First release": "Primer lanzamiento",
     "Level": "Nivel",
+    "Load error": "No se ha podido cargar este mazo.",
+    "Loading": "Cargando mazo...",
     "Main deck": "Main deck",
     "Monsters": "Monstruos",
     "Next image": "Siguiente imagen",
     "No card": "No carta",
+    "No results": "Ninguna carta coincide con estos filtros.",
+    "Not found": "Este mazo no existe.",
     "Order": "Orden",
     "Previous image": "Anterior imagen",
     "Remove {card}": "Quitar {card} del mazo",
     "Remove card": "Quitar carta",
     "Result": "Resultado",
     "Save deck": "Guardar mazo",
+    "Save error": "No se ha podido guardar el mazo. Inténtalo de nuevo.",
+    "Saved": "Mazo guardado",
+    "Saving": "Guardando mazo...",
     "Search": "Búsqueda",
+    "Search error": "No se han podido buscar cartas.",
     "Search name or description": "Buscar por nombre o descripción",
+    "sections": {
+      "card": "Carta",
+      "deck": "Mazo",
+      "search": "Búsqueda"
+    },
+    "Sections": "Secciones del editor",
     "Select date": "Seleccionar fecha",
     "Showing {0} of {1} results": "Mostrando {0} de {1} resultados",
     "Sort by": "Ordenar por",

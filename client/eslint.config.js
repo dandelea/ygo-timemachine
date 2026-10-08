@@ -15,5 +15,10 @@ export default defineConfigWithVueTs(
       'vue/multi-word-component-names': 'off',
     },
   },
+  {
+    // Fixtures are known data; asserting their presence keeps tests readable.
+    files: ['tests/**/*.ts', 'e2e/**/*.ts'],
+    rules: { '@typescript-eslint/no-non-null-assertion': 'off' },
+  },
   prettier,
 )

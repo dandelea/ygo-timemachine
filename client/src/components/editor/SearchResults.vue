@@ -1,15 +1,23 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Drag, Drop, useDragAware, type DnDEventPayload } from 'vue-easy-dnd'
+import StatusMessage from '@/components/ui/StatusMessage.vue'
+import type { LoadStatus } from '@/stores/decks'
 import type { Card, CardSearchResult, DbStats } from '@/types/api'
 import { DRAG_FROM_DECK, DRAG_FROM_RESULTS } from './drag-types'
 
 const props = defineProps<{
   results: CardSearchResult
   stats: DbStats
+  status: LoadStatus
   canAdd: (card: Card) => boolean
 }>()
-const emit = defineEmits<{ add: [card: Card]; remove: [card: Card]; select: [card: Card] }>()
+const emit = defineEmits<{
+  add: [card: Card]
+  remove: [card: Card]
+  select: [card: Card]
+  retry: []
+}>()
 
 const { dragInProgress, dragType } = useDragAware()
 const receiving = computed(() => dragInProgress.value && dragType.value === DRAG_FROM_DECK)
@@ -24,13 +32,27 @@ function onDrop(event: DnDEventPayload) {
 
 <template>
   <div>
-    <div class="p-2 bg-blue-800 text-center mb-2 text-sm md:text-base">
+    <div class="p-2 bg-blue-800 text-center mb-2 text-sm md:text-base" aria-live="polite">
+      <FontAwesomeIcon v-if="status === 'loading'" icon="spinner" spin class="mr-2" />
       {{ $t('edit.Showing {0} of {1} results', [shown, results.total]) }}
     </div>
+    <StatusMessage
+      v-if="status === 'error'"
+      kind="error"
+      :message="$t('edit.Search error')"
+      retry
+      @retry="emit('retry')"
+    />
+    <StatusMessage
+      v-else-if="status === 'ready' && !results.data.length"
+      kind="empty"
+      :message="$t('edit.No results')"
+    />
     <Drop
       :accepts-type="DRAG_FROM_DECK"
-      class="flex flex-wrap transition-colors duration-500"
-      :class="{ 'bg-gray-900': receiving }"
+      class="flex flex-wrap min-h-24 transition duration-500"
+      :class="{ 'bg-gray-900': receiving, 'opacity-50': status === 'loading' }"
+      :aria-busy="status === 'loading'"
       data-testid="search-results"
       @drop="onDrop"
     >

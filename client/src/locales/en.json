@@ -1,14 +1,21 @@
 {
+  "common": {
+    "Dismiss": "Dismiss",
+    "Retry": "Retry"
+  },
   "credits": {
     "legal": {
-      "general": "The literal and graphical information presented on this site about {game}, including card images, the attribute, level/rank and type symbols, and card text, is copyright {owner}, a subsidiary of {parent}. {disclaimer}.",
-      "disclaimer": "This website is not produced by, endorsed by, supported by, or affiliated with 4k Media or Konami Digital Entertainment"
+      "disclaimer": "This website is not produced by, endorsed by, supported by, or affiliated with 4k Media or Konami Digital Entertainment",
+      "general": "The literal and graphical information presented on this site about {game}, including card images, the attribute, level/rank and type symbols, and card text, is copyright {owner}, a subsidiary of {parent}. {disclaimer}."
     },
     "Made by": "Made by",
     "Powered by": "Powered by",
     "Visit": "Visit"
   },
   "decks": {
+    "Empty": "There are no decks yet. Create one with the + button.",
+    "Load error": "Could not load the decks.",
+    "Loading": "Loading decks...",
     "New deck": "New deck"
   },
   "edit": {
@@ -16,6 +23,7 @@
     "Add card": "Add card",
     "Attribute": "Attribute",
     "Back": "Back",
+    "Back to decks": "Back to decks",
     "Card history": "Card history",
     "Change color": "Change color",
     "Clear deck": "Clear deck",
@@ -26,18 +34,32 @@
     "Extra deck": "Extra deck",
     "First release": "First release",
     "Level": "Level",
+    "Load error": "Could not load this deck.",
+    "Loading": "Loading deck...",
     "Main deck": "Main deck",
     "Monsters": "Monsters",
     "Next image": "Next image",
     "No card": "No card",
+    "No results": "No cards match these filters.",
+    "Not found": "This deck does not exist.",
     "Order": "Order",
     "Previous image": "Previous image",
     "Remove {card}": "Remove {card} from the deck",
     "Remove card": "Remove card",
     "Result": "Result",
     "Save deck": "Save deck",
+    "Save error": "Could not save the deck. Try again.",
+    "Saved": "Deck saved",
+    "Saving": "Saving deck...",
     "Search": "Search",
+    "Search error": "Could not search cards.",
     "Search name or description": "Search name or description",
+    "sections": {
+      "card": "Card",
+      "deck": "Deck",
+      "search": "Search"
+    },
+    "Sections": "Editor sections",
     "Select date": "Select date",
     "Showing {0} of {1} results": "Showing {0} of {1} results",
     "Sort by": "Sort by",
