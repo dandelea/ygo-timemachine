@@ -1,3 +1,4 @@
+import pg from 'pg'
 import { Sequelize, type Options } from 'sequelize'
 import { config } from '../config.ts'
 import { logger } from '../logger.ts'
@@ -22,5 +23,9 @@ export const sequelize =
         username: config.database.username,
         password: config.database.password,
         database: config.database.database,
+        // Passed explicitly so serverless bundlers (Vercel) include the driver.
+        dialectModule: pg,
+        // Hosted PostgreSQL (Neon) only accepts encrypted connections.
+        dialectOptions: config.database.ssl ? { ssl: { rejectUnauthorized: true } } : {},
         logging,
       })

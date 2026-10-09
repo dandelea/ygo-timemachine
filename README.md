@@ -70,6 +70,32 @@ docker compose up --build
 Both serve the app on http://localhost:3050 (change it with `HTTP_PORT`). The API
 seeds the database on start-up; seeding is idempotent.
 
+## Deploying to Vercel
+
+The repository is ready to deploy on [Vercel](https://vercel.com) (Hobby plan)
+with a [Neon](https://neon.com) PostgreSQL database, both free. `vercel.json`
+builds the client as static files and serves the API as one function under
+`/api` ([`api/index.js`](api/index.js), using
+[`server/src/serverless.ts`](server/src/serverless.ts)); only pushes to `master`
+are deployed.
+
+1. Create a Neon project in the Frankfurt region (`fra1` is where the function
+   runs) and copy its pooled connection string.
+2. Create the schema and load the data once, from your machine:
+
+   ```sh
+   cd server
+   DATABASE_URL='postgresql://…?sslmode=require' npm run seed
+   ```
+
+   Run it again after adding a migration.
+3. Import the repository in Vercel, keeping the settings from `vercel.json`, and
+   add `DATABASE_URL` as an environment variable for Production.
+4. Add the custom domain in the Vercel project and create the `CNAME` record it
+   asks for in the domain's DNS provider.
+
+Redis is not used there; card searches go straight to the database.
+
 ## Database migrations
 
 The API applies pending migrations on start-up (and the seed script does too),
@@ -88,6 +114,8 @@ A test checks that the migrations create the same schema as the models.
 | `DB_DIALECT`                                           | `sqlite`, or `postgres` in production       | Database engine                                 |
 | `SQLITE_STORAGE`                                       | `db/dev.sqlite` (`:memory:` in tests)       | SQLite file                                     |
 | `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` | `localhost`, `5432`, `postgres`, –, `postgres` | PostgreSQL connection                           |
+| `PGSSLMODE`                                            | –                                           | `require` or `verify-full` to connect over SSL  |
+| `DATABASE_URL`                                         | –                                           | Connection string; overrides the `PG*` variables |
 | `REDIS_URL`                                            | –                                           | Redis cache; without it searches are not cached |
 | `CORS_ORIGINS`                                         | Vite dev origins in development, none otherwise | Comma-separated origins allowed cross-origin |
 
