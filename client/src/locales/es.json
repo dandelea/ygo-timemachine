@@ -1,55 +1,77 @@
 {
-    "credits": {
-        "legal": {
-            "3": "Este sitio web no está producido, respaldado, respaldado ni afiliado a 4k Media o Konami Digital Entertainment",
-            "general": "La información literal y gráfica que se presenta en este sitio sobre {0}, incluidas las imágenes, atributos, niveles, rangos, tipos y textos de las cartas tienen derechos de autor {1}, una subsidiaria de {2}. {3}."
-        },
-        "Made by": "Desarrollado por",
-        "Powered by": "Alimentado por",
-        "Visit": "Visitar"
+  "common": {
+    "Dismiss": "Cerrar",
+    "Retry": "Reintentar"
+  },
+  "credits": {
+    "legal": {
+      "disclaimer": "Este sitio web no está producido, respaldado, respaldado ni afiliado a 4k Media o Konami Digital Entertainment",
+      "general": "La información literal y gráfica que se presenta en este sitio sobre {game}, incluidas las imágenes, atributos, niveles, rangos, tipos y textos de las cartas tienen derechos de autor {owner}, una subsidiaria de {parent}. {disclaimer}."
     },
-    "decks": {
-        "New deck": "Nuevo mazo"
+    "Made by": "Desarrollado por",
+    "Powered by": "Alimentado por",
+    "Visit": "Visitar"
+  },
+  "decks": {
+    "Empty": "Todavía no hay mazos. Crea uno con el botón +.",
+    "Load error": "No se han podido cargar los mazos.",
+    "Loading": "Cargando mazos...",
+    "New deck": "Nuevo mazo"
+  },
+  "edit": {
+    "Add {card}": "Añadir {card} al mazo",
+    "Add card": "Añadir carta",
+    "Attribute": "Atributo",
+    "Back": "Volver",
+    "Back to decks": "Volver a los mazos",
+    "Card history": "Historial de cartas",
+    "Change color": "Cambiar de color",
+    "Clear deck": "Limpiar mazo",
+    "Clear filters": "Limpiar filtros",
+    "Clear history": "Limpiar historial de cartas",
+    "Deck name": "Nombre de mazo",
+    "Extra": "Extra",
+    "Extra deck": "Extra deck",
+    "First release": "Primer lanzamiento",
+    "Level": "Nivel",
+    "Load error": "No se ha podido cargar este mazo.",
+    "Loading": "Cargando mazo...",
+    "Main deck": "Main deck",
+    "Monsters": "Monstruos",
+    "Next image": "Siguiente imagen",
+    "No card": "No carta",
+    "No results": "Ninguna carta coincide con estos filtros.",
+    "Not found": "Este mazo no existe.",
+    "Order": "Orden",
+    "Previous image": "Anterior imagen",
+    "Remove {card}": "Quitar {card} del mazo",
+    "Remove card": "Quitar carta",
+    "Result": "Resultado",
+    "Save deck": "Guardar mazo",
+    "Save error": "No se ha podido guardar el mazo. Inténtalo de nuevo.",
+    "Saved": "Mazo guardado",
+    "Saving": "Guardando mazo...",
+    "Search": "Búsqueda",
+    "Search error": "No se han podido buscar cartas.",
+    "Search name or description": "Buscar por nombre o descripción",
+    "sections": {
+      "card": "Carta",
+      "deck": "Mazo",
+      "search": "Búsqueda"
     },
-    "edit": {
-        "Attribute": "Atributo",
-        "Back": "Volver",
-        "Card history": "Historial de cartas",
-        "Change color": "Cambiar de color",
-        "Clear deck": "Limpiar mazo",
-        "Clear filters": "Limpiar filtros",
-        "Clear history": "Limpiar historial de cartas",
-        "Deck name": "Nombre de mazo",
-        "Extra": "Extra",
-        "Extra deck": "Extra deck",
-        "First release": "Primer lanzamiento",
-        "Level": "Nivel",
-        "Main deck": "Main deck",
-        "Monsters": "Monstruos",
-        "Next image": "Siguiente imagen",
-        "No card": "No carta",
-        "Order": "Orden",
-        "Previous image": "Anterior imagen",
-        "Result": "Resultado",
-        "Search": "Búsqueda",
-        "Search name or description": "Buscar por nombre o descripción",
-        "Select date": "Seleccionar fecha",
-        "Showing {0} of {1} results": "Mostrando {0} de {1} resultados",
-        "Sort by": "Ordenar por",
-        "Spells": "Magias",
-        "Time travel": "Viaje en el tiempo",
-        "Traps": "Trampas"
-    },
-    "form": {
-        "archetype-selector": {
-            "Remove archetype": "Eliminar arquetipo",
-            "Select an archetype": "Seleccionar un arquetipo"
-        },
-        "autocomplete-search": {
-            "Loading results...": "Cargando resultados..."
-        }
-    },
-    "header": {
-        "credits": "Créditos"
+    "Sections": "Secciones del editor",
+    "Showing {0} of {1} results": "Mostrando {0} de {1} resultados",
+    "Spells": "Magias",
+    "Time travel": "Viaje en el tiempo",
+    "Traps": "Trampas"
+  },
+  "form": {
+    "archetype-selector": {
+      "Remove archetype": "Eliminar arquetipo",
+      "Select an archetype": "Seleccionar un arquetipo"
     }
+  },
+  "header": {
+    "credits": "Créditos"
+  }
 }

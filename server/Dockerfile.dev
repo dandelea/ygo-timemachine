@@ -1,6 +1,7 @@
-FROM node:alpine
-WORKDIR "/app"
-COPY ./package.json ./
-RUN npm install
+FROM node:24-trixie-slim
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
-CMD ["npm", "run", "dev"]
+EXPOSE 5000
+CMD ["sh", "-c", "npm run seed && npm run dev"]
