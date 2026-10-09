@@ -1,44 +1,65 @@
-version: "3"
+# Development stack: Vite and the API in watch mode with the sources mounted,
+# SQLite for storage and Redis as cache, behind the same nginx gateway.
+#   docker compose -f docker-compose.dev.yml up --build
+# The app is served on http://localhost:3050
+
 services:
-  postgres:
-    image: "postgres:latest"
-    environment:
-      - POSTGRES_PASSWORD=postgres_password
   redis:
-    image: "redis:latest"
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
-    ports:
-      - "3050:80"
+    image: redis:8-alpine
+
   api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    init: true
     depends_on:
       - redis
-      - postgres
-    build:
-      dockerfile: Dockerfile
-      context: ./server
-    volumes:
-      - /app/node_modules
-      - ./server:/app
     environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - PGUSER=postgres
-      - PGPASSWORD=postgres_password
-      - PGDATABASE=postgres
-      - PGHOST=postgres
-      - PGPORT=5432
-  client:
-    stdin_open: true
-    build:
-      dockerfile: Dockerfile
-      context: ./client
+      NODE_ENV: development
+      REDIS_URL: redis://redis:6379
     volumes:
-      - /app/node_modules
-      - ./client:/app
+      - ./server/src:/app/src
+      - api-db:/app/db
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:5000/ping').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 5s
+      timeout: 5s
+      start_period: 2m
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    init: true
+    environment:
+      API_PROXY_TARGET: http://api:5000
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+      - ./client/index.html:/app/index.html
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:3000/').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 5s
+      timeout: 5s
+      start_period: 1m
+
+  nginx:
+    build: ./nginx
+    depends_on:
+      api:
+        condition: service_healthy
+      client:
+        condition: service_healthy
+    ports:
+      - "${HTTP_PORT:-3050}:80"
+
+volumes:
+  api-db:
