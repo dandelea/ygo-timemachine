@@ -26,6 +26,31 @@ describe('loadConfig', () => {
     })
   })
 
+  it('connects with a DATABASE_URL, enabling SSL when sslmode requires it', () => {
+    const config = loadConfig({
+      DATABASE_URL: 'postgresql://app%40user:p%40ss@ep-x-pooler.neon.tech/ygo?sslmode=require',
+    })
+    expect(config.database).toEqual({
+      dialect: 'postgres',
+      host: 'ep-x-pooler.neon.tech',
+      port: 5432,
+      username: 'app@user',
+      password: 'p@ss',
+      database: 'ygo',
+      ssl: true,
+    })
+  })
+
+  it('takes SSL from PGSSLMODE and keeps it off by default', () => {
+    const base = { NODE_ENV: 'production' }
+    expect(loadConfig(base).database).toMatchObject({ ssl: false })
+    expect(loadConfig({ ...base, PGSSLMODE: 'verify-full' }).database).toMatchObject({ ssl: true })
+    expect(
+      loadConfig({ DATABASE_URL: 'postgres://u@db:6543/app', PGSSLMODE: 'require' }).database,
+    ).toMatchObject({ port: 6543, ssl: true })
+    expect(() => loadConfig({ DATABASE_URL: 'mysql://db/app' })).toThrow(/DATABASE_URL/)
+  })
+
   it('builds the Redis URL from host and port and parses CORS origins', () => {
     const config = loadConfig({
       REDIS_HOST: 'redis',

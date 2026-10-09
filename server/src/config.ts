@@ -23,6 +23,10 @@ const envSchema = z.object({
   PGUSER: z.string().min(1).default('postgres'),
   PGPASSWORD: z.string().optional(),
   PGDATABASE: z.string().min(1).default('postgres'),
+  PGSSLMODE: z.enum(['disable', 'prefer', 'require', 'verify-ca', 'verify-full']).optional(),
+  // A full connection string (as given by Neon and most hosted PostgreSQL
+  // services) takes precedence over the individual PG* variables.
+  DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }).optional(),
   REDIS_URL: z.url().optional(),
   REDIS_HOST: z.string().min(1).optional(),
   REDIS_PORT: z.coerce.number().int().min(1).max(65535).default(6379),
@@ -38,6 +42,7 @@ export type DatabaseConfig =
       username: string
       password: string | undefined
       database: string
+      ssl: boolean
     }
 
 export interface Config {
@@ -60,6 +65,34 @@ export class ConfigError extends Error {
   override name = 'ConfigError'
 }
 
+// sslmode values that require an encrypted connection, as in libpq.
+const SSL_MODES = new Set(['require', 'verify-ca', 'verify-full'])
+
+function postgresConfig(values: z.infer<typeof envSchema>): DatabaseConfig {
+  if (values.DATABASE_URL) {
+    const url = new URL(values.DATABASE_URL)
+    const sslMode = url.searchParams.get('sslmode') ?? values.PGSSLMODE
+    return {
+      dialect: 'postgres',
+      host: url.hostname,
+      port: url.port ? Number(url.port) : 5432,
+      username: decodeURIComponent(url.username),
+      password: url.password ? decodeURIComponent(url.password) : undefined,
+      database: decodeURIComponent(url.pathname.slice(1)) || 'postgres',
+      ssl: sslMode !== undefined && SSL_MODES.has(sslMode),
+    }
+  }
+  return {
+    dialect: 'postgres',
+    host: values.PGHOST,
+    port: values.PGPORT,
+    username: values.PGUSER,
+    password: values.PGPASSWORD,
+    database: values.PGDATABASE,
+    ssl: values.PGSSLMODE !== undefined && SSL_MODES.has(values.PGSSLMODE),
+  }
+}
+
 /** Parses and validates the environment, failing fast with a readable message. */
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const parsed = envSchema.safeParse(env)
@@ -70,7 +103,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     throw new ConfigError(`Invalid environment configuration:\n${details}`)
   }
   const values = parsed.data
-  const dialect = values.DB_DIALECT ?? (values.NODE_ENV === 'production' ? 'postgres' : 'sqlite')
+  const dialect =
+    values.DB_DIALECT ??
+    (values.DATABASE_URL || values.NODE_ENV === 'production' ? 'postgres' : 'sqlite')
 
   const database: DatabaseConfig =
     dialect === 'sqlite'
@@ -79,14 +114,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
           storage:
             values.SQLITE_STORAGE ?? (values.NODE_ENV === 'test' ? ':memory:' : 'db/dev.sqlite'),
         }
-      : {
-          dialect,
-          host: values.PGHOST,
-          port: values.PGPORT,
-          username: values.PGUSER,
-          password: values.PGPASSWORD,
-          database: values.PGDATABASE,
-        }
+      : postgresConfig(values)
 
   const redisUrl =
     values.REDIS_URL ??
