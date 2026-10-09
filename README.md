@@ -74,10 +74,10 @@ seeds the database on start-up; seeding is idempotent.
 
 The repository is ready to deploy on [Vercel](https://vercel.com) (Hobby plan)
 with a [Neon](https://neon.com) PostgreSQL database, both free. `vercel.json`
-builds the client as static files and serves the API as one function under
-`/api` ([`api/index.js`](api/index.js), using
-[`server/src/serverless.ts`](server/src/serverless.ts)); only pushes to `master`
-are deployed.
+defines two [services](https://vercel.com/docs/services) in one project: `web`
+serves the client as static files and `api` serves the API as one function
+under `/api` (from [`server/src/serverless.ts`](server/src/serverless.ts)).
+Pushes to `develop` are not deployed.
 
 1. Create a Neon project in the Frankfurt region (`fra1` is where the function
    runs) and copy its pooled connection string.
@@ -89,8 +89,9 @@ are deployed.
    ```
 
    Run it again after adding a migration.
-3. Import the repository in Vercel, keeping the settings from `vercel.json`, and
-   add `DATABASE_URL` as an environment variable for Production.
+3. Import the repository in Vercel (it is detected as a multi-service project
+   and configured from `vercel.json`) and add `DATABASE_URL` as an environment
+   variable for Production.
 4. Add the custom domain in the Vercel project and create the `CNAME` record it
    asks for in the domain's DNS provider.
 
