@@ -1,11 +1,11 @@
 import { createApp } from './app.ts'
 import { createRedisCache, noopCache } from './cache.ts'
 import { config } from './config.ts'
-import { syncDatabase } from './db/models.ts'
+import { migrateDatabase } from './db/migrate.ts'
 import { sequelize } from './db/sequelize.ts'
 import { logger } from './logger.ts'
 
-await syncDatabase()
+await migrateDatabase()
 logger.info({ dialect: config.database.dialect }, 'Database ready')
 
 const cache = config.redisUrl ? createRedisCache(config.redisUrl) : noopCache

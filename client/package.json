@@ -2,7 +2,7 @@
   "name": "ygo-timemachine-client",
   "description": "Explorador de cartas de Yu-Gi-Oh! filtrado por épocas",
   "version": "1.0.0",
-  "private": false,
+  "private": true,
   "type": "module",
   "engines": {
     "node": ">=24 <25"

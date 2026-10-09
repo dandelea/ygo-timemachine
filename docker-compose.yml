@@ -37,17 +37,33 @@ services:
       PGPASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
       PGDATABASE: postgres
       REDIS_URL: redis://redis:6379
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:5000/ping').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 5s
+      timeout: 5s
+      start_period: 2m
 
   client:
     build: ./client
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000/"]
+      interval: 5s
+      timeout: 5s
+      start_period: 1m
 
   nginx:
     build: ./nginx
     restart: unless-stopped
     depends_on:
-      - api
-      - client
+      api:
+        condition: service_healthy
+      client:
+        condition: service_healthy
     ports:
       - "${HTTP_PORT:-3050}:80"
 

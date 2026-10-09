@@ -8,7 +8,13 @@ const logging: Options['logging'] = (sql) => {
 
 export const sequelize =
   config.database.dialect === 'sqlite'
-    ? new Sequelize({ dialect: 'sqlite', storage: config.database.storage, logging })
+    ? new Sequelize({
+        dialect: 'sqlite',
+        storage: config.database.storage,
+        logging,
+        // SQLite allows one writer at a time; wait for it instead of failing.
+        retry: { match: [/SQLITE_BUSY/], max: 20, backoffBase: 100, backoffExponent: 1.1 },
+      })
     : new Sequelize({
         dialect: 'postgres',
         host: config.database.host,

@@ -70,6 +70,14 @@ docker compose up --build
 Both serve the app on http://localhost:3050 (change it with `HTTP_PORT`). The API
 seeds the database on start-up; seeding is idempotent.
 
+## Database migrations
+
+The API applies pending migrations on start-up (and the seed script does too),
+recording them in the `SequelizeMeta` table. To change the schema, add a file to
+`server/src/db/migrations/` and append it to the list in
+`server/src/db/migrate.ts`; never edit a migration that has already been released.
+A test checks that the migrations create the same schema as the models.
+
 ## Configuration
 
 | Variable                                               | Default                                     | Description                                     |

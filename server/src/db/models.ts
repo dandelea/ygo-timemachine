@@ -1,5 +1,3 @@
-import { mkdirSync } from 'node:fs'
-import path from 'node:path'
 import {
   DataTypes,
   Model,
@@ -9,7 +7,6 @@ import {
   type InferCreationAttributes,
   type NonAttribute,
 } from 'sequelize'
-import { config } from '../config.ts'
 import { cardTypeOf, type CardType } from '../domain/card-types.ts'
 import { currentImageUrl } from '../domain/images.ts'
 import { sequelize } from './sequelize.ts'
@@ -225,11 +222,3 @@ DeckCard.belongsTo(Card, { as: 'card', foreignKey: 'card_id' })
 Card.hasMany(DeckCard, { as: 'decks_cards', foreignKey: 'card_id' })
 DeckCard.belongsTo(Deck, { as: 'deck', foreignKey: 'deck_id' })
 Deck.hasMany(DeckCard, { as: 'decks_cards', foreignKey: 'deck_id' })
-
-/** Creates missing tables (the project has no migrations; this mirrors the original setup). */
-export async function syncDatabase(): Promise<void> {
-  if (config.database.dialect === 'sqlite' && config.database.storage !== ':memory:') {
-    mkdirSync(path.dirname(path.resolve(config.database.storage)), { recursive: true })
-  }
-  await sequelize.sync()
-}

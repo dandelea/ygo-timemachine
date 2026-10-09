@@ -2,7 +2,7 @@ import request from 'supertest'
 import { describe, expect, it } from 'vitest'
 import { testApp } from './helpers.ts'
 
-const ALLOWED = 'http://localhost:5173'
+const ALLOWED = 'http://localhost:3000'
 const app = testApp(undefined, [ALLOWED])
 
 describe('HTTP surface', () => {

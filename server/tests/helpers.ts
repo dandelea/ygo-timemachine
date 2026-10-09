@@ -1,6 +1,7 @@
 import type { Express } from 'express'
 import { createApp } from '../src/app.ts'
 import { noopCache, type Cache } from '../src/cache.ts'
+import { migrateDatabase } from '../src/db/migrate.ts'
 import { sequelize } from '../src/db/sequelize.ts'
 import { seedCards, seedDecks, type SourceCard, type SourceSet } from '../src/seed/seed.ts'
 
@@ -127,7 +128,8 @@ export const SEEDED_CARDS = CARDS.length - 2
 
 /** Recreates the schema and loads the fixtures into the in-memory database. */
 export async function resetDatabase(): Promise<void> {
-  await sequelize.sync({ force: true })
+  await sequelize.getQueryInterface().dropAllTables()
+  await migrateDatabase()
   await seedCards(CARDS, SETS, new Date('2026-01-01T00:00:00Z'))
   await seedDecks([
     {

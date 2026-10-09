@@ -51,7 +51,7 @@ export interface Config {
 
 const defaultLogLevel = { development: 'debug', test: 'silent', production: 'info' } as const
 const defaultCorsOrigins = {
-  development: ['http://localhost:5173', 'http://localhost:3000'],
+  development: ['http://localhost:3000'],
   test: [],
   production: [],
 }
