@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "vue.volar",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "vitest.explorer",
+    "ms-playwright.playwright",
+    "lokalise.i18n-ally",
+    "ms-azuretools.vscode-containers",
+    "mikestead.dotenv",
+    "redhat.vscode-yaml"
+  ]
+}

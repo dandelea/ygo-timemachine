@@ -111,6 +111,25 @@ The client keeps its own copy of the API types. Its tests check them against the
 fixtures in `client/tests/fixtures/api`, and the server tests check that those
 fixtures still match the real API responses.
 
+### Git hooks
+
+Run `npm install` once at the repository root to enable the pre-commit hook
+(Husky + lint-staged). It runs ESLint with `--fix` and Prettier on the staged
+files of each package, with that package's own configuration, and blocks the
+commit if a problem cannot be fixed automatically.
+
+### VS Code
+
+The `.vscode` folder recommends the extensions used in the project and sets up
+format on save with Prettier and ESLint fixes. The debug configurations are:
+
+- **API: dev**: the API in watch mode, with breakpoints in the TypeScript sources.
+- **API: seed database**.
+- **Client: Chrome**: starts Vite and opens Chrome, with breakpoints in the Vue and
+  TypeScript sources.
+- **Full stack**: the API and the client together.
+- **API/Client: tests (current file)**: debugs the open Vitest test file.
+
 ## License
 
 [AGPL-3.0-only](https://www.gnu.org/licenses/agpl-3.0.html). Yu-Gi-Oh! is a

@@ -1,0 +1,29 @@
+{
+  // Prettier formats on save and ESLint fixes what it can, using each
+  // package's own config and binaries (the same checks the pre-commit hook runs).
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.workingDirectories": ["./client", "./server"],
+  "eslint.validate": ["javascript", "typescript", "vue"],
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.experimental.configFile": "client/src/assets/main.css",
+  "i18n-ally.localesPaths": ["client/src/locales"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.sourceLanguage": "en",
+  "i18n-ally.enabledFrameworks": ["vue"],
+  "search.exclude": {
+    "**/dist": true,
+    "**/coverage": true,
+    "**/test-results": true,
+    "**/playwright-report": true,
+    "server/data": true
+  }
+}
