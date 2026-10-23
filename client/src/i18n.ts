@@ -11,6 +11,8 @@ export function languageOf(code: string): 'en' | 'es' {
 }
 
 export const i18n = createI18n<[MessageSchema], 'en' | 'es'>({
+  // Still required in v11 (legacy is the default); drop when upgrading to v12.
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   legacy: false,
   locale: languageOf(navigator.language),
   fallbackLocale: 'en',
