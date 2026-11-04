@@ -6,7 +6,7 @@ have been played at that time.
 
 - Search cards by name or text, type, attribute, level, ATK/DEF, monster type,
   archetype and spell/trap family, as of any date.
-- Build decks with drag & drop or the add/remove buttons, respecting the copy and
+- Build decks with the add/remove buttons, respecting the copy and
   deck size limits.
 - English and Spanish interface. Works on desktop and mobile.
 
