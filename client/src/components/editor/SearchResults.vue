@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Drag, Drop, useDragAware, type DnDEventPayload } from 'vue-easy-dnd'
 import StatusMessage from '@/components/ui/StatusMessage.vue'
 import type { LoadStatus } from '@/stores/decks'
 import type { Card, CardSearchResult, DbStats } from '@/types/api'
-import { DRAG_FROM_DECK, DRAG_FROM_RESULTS } from './drag-types'
 
 const props = defineProps<{
   results: CardSearchResult
@@ -14,20 +12,12 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{
   add: [card: Card]
-  remove: [card: Card]
   select: [card: Card]
   retry: []
 }>()
 
-const { dragInProgress, dragType } = useDragAware()
-const receiving = computed(() => dragInProgress.value && dragType.value === DRAG_FROM_DECK)
-
 // Shown count is bounded by the page size; the total is the number of matches.
 const shown = computed(() => Math.min(props.stats.pageSize, props.results.total))
-
-function onDrop(event: DnDEventPayload) {
-  emit('remove', event.data as Card)
-}
 </script>
 
 <template>
@@ -48,19 +38,15 @@ function onDrop(event: DnDEventPayload) {
       kind="empty"
       :message="$t('edit.No results')"
     />
-    <Drop
-      :accepts-type="DRAG_FROM_DECK"
+    <div
       class="flex flex-wrap min-h-24 transition duration-500"
-      :class="{ 'bg-gray-900': receiving, 'opacity-50': status === 'loading' }"
+      :class="{ 'opacity-50': status === 'loading' }"
       :aria-busy="status === 'loading'"
       data-testid="search-results"
-      @drop="onDrop"
     >
-      <Drag
+      <div
         v-for="card in results.data"
         :key="card.id"
-        :type="DRAG_FROM_RESULTS"
-        :data="card"
         class="group relative w-16 bg-blue-900 h-24 m-1/2 mx-auto cursor-pointer bg-no-repeat bg-cover"
         :style="{ backgroundImage: `url('${card.images[0]?.image_small ?? ''}')` }"
         :title="card.name"
@@ -76,7 +62,7 @@ function onDrop(event: DnDEventPayload) {
         >
           <FontAwesomeIcon icon="plus" />
         </button>
-      </Drag>
-    </Drop>
+      </div>
+    </div>
   </div>
 </template>

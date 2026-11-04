@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { cardsFixture, deckFixture, dragTo, mockApi, savedDeckFixture } from './support'
+import { cardsFixture, deckFixture, mockApi, savedDeckFixture } from './support'
 
 const spell = cardsFixture.data.find((card) => card.type === 'SPELL')!
 const extra = cardsFixture.data.find((card) => card.type === 'EXTRA')!
@@ -30,17 +30,6 @@ test('adds and removes cards with buttons, respecting the copy limit', async ({ 
     .first()
     .click()
   await expect(mainCount(page)).toHaveText('2')
-})
-
-test('adds and removes cards by dragging', async ({ page }) => {
-  await mockApi(page)
-  await openNewDeck(page)
-
-  await dragTo(page, resultCard(page, spell.name), page.getByTestId('main-deck'))
-  await expect(mainCount(page)).toHaveText('1')
-
-  await dragTo(page, page.getByTestId('main-deck').getByTitle(spell.name), results(page))
-  await expect(mainCount(page)).toHaveText('0')
 })
 
 test('shows the details of a selected card and keeps a history', async ({ page }) => {

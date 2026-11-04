@@ -122,7 +122,6 @@ function selectCard(card: Card) {
         :saving="saveStatus === 'saving'"
         @update:name="deck.name = $event"
         @update:color="deck.color = $event"
-        @add="store.addCard"
         @remove="store.removeCard"
         @select="selectCard"
         @clear="store.clearDeck"
@@ -153,7 +152,6 @@ function selectCard(card: Card) {
         :status="searchStatus"
         :can-add="store.canAdd"
         @add="store.addCard"
-        @remove="store.removeCard"
         @select="selectCard"
         @retry="store.search"
       />
