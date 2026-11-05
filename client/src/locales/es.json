@@ -142,5 +142,45 @@
     },
     "topArchetypes": "los 4 con más cartas",
     "view": "Vista del mazo"
+  },
+  "card": {
+    "link": "LINK-{value}",
+    "linkMarkers": "Punteros Link: {markers}",
+    "printings": "Ediciones",
+    "printingsError": "No se han podido cargar las ediciones de esta carta.",
+    "printingsTotal": "{total} en total | {total} en total",
+    "printingsUntil": "{count} hasta el {date} · {total} en total",
+    "scale": "Escala Péndulo {value}",
+    "showAll": "Ver las {count} ediciones",
+    "showFewer": "Ver menos"
+  },
+  "filters": {
+    "anyMarker": "Cartas con cualquiera de los punteros marcados",
+    "linkMarkers": "Punteros Link",
+    "linkValue": "Valor Link",
+    "markers": {
+      "Top-Left": "Flecha arriba a la izquierda",
+      "Top": "Flecha arriba",
+      "Top-Right": "Flecha arriba a la derecha",
+      "Left": "Flecha izquierda",
+      "Right": "Flecha derecha",
+      "Bottom-Left": "Flecha abajo a la izquierda",
+      "Bottom": "Flecha abajo",
+      "Bottom-Right": "Flecha abajo a la derecha"
+    },
+    "scale": "Escala Péndulo"
+  },
+  "formats": {
+    "copiesIn": "Ya tienes la copia que permite el formato {format} | Ya tienes las {count} copias que permite el formato {format}",
+    "forbidden": "Prohibida",
+    "forbiddenIn": "Prohibida en el formato {format}",
+    "free": "Libre",
+    "hint": "Formato {format}: solo sus {cards} cartas legales, con su lista de prohibidas y limitadas. La fecha no se aplica.",
+    "instead": "— formato {format} —",
+    "label": "Formato del mazo",
+    "legend": "Limitaciones del formato",
+    "limited": "Limitada",
+    "limitedIn": "Limitada a 1 copia en el formato {format} | Semilimitada a {count} copias en el formato {format}",
+    "semiLimited": "Semilimitada"
   }
 }

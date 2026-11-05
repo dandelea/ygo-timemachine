@@ -1,19 +1,30 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import CardPrintings from '@/components/editor/CardPrintings.vue'
 import SectionHint from '@/components/help/SectionHint.vue'
 import { vTooltip } from '@/directives/tooltip'
 import { attributes, cardBackImage, levelStarImage } from '@/services/values'
-import type { Card } from '@/types/api'
+import { LINK_MARKERS, type Card } from '@/types/api'
 import { formatCalendarDate } from '@/utils/date'
 
-const props = defineProps<{ card: Card | null }>()
+const props = defineProps<{
+  card: Card | null
+  /** Show only the printings released up to this date (null: all of them). */
+  until?: string | null
+}>()
 const { t, locale } = useI18n()
 
 const imageIndex = ref(0)
 watch(
   () => props.card,
   () => (imageIndex.value = 0),
+)
+
+// 3x3 grid of Link arrows in reading order; the middle cell is the card itself.
+const markerCells = [...LINK_MARKERS.slice(0, 4), null, ...LINK_MARKERS.slice(4)]
+const markersLabel = computed(() =>
+  (props.card?.link_markers ?? []).map((marker) => t(`filters.markers.${marker}`)).join(', '),
 )
 
 const attributeImages = Object.fromEntries(attributes.map(({ id, image }) => [id, image]))
@@ -89,6 +100,34 @@ const firstRelease = computed(() =>
             :src="attributeImages[card.attribute]"
           />
         </span>
+        <span
+          v-if="card.link_value"
+          class="mx-auto p-1 text-sm flex flex-row items-center gap-1.5 font-semibold"
+          data-testid="card-link"
+        >
+          {{ t('card.link', { value: card.link_value }) }}
+          <span
+            class="inline-grid grid-cols-3 gap-px"
+            role="img"
+            :aria-label="t('card.linkMarkers', { markers: markersLabel })"
+          >
+            <span
+              v-for="(marker, index) in markerCells"
+              :key="marker ?? index"
+              class="w-2 h-2"
+              :class="
+                !marker ? '' : card.link_markers?.includes(marker) ? 'bg-red-500' : 'bg-gray-600'
+              "
+            />
+          </span>
+        </span>
+        <span
+          v-if="card.pendulum_scale !== null && card.pendulum_scale !== undefined"
+          class="mx-auto p-1 text-sm font-semibold"
+          data-testid="card-scale"
+        >
+          {{ t('card.scale', { value: card.pendulum_scale }) }}
+        </span>
         <span v-if="card.first_release" class="w-full p-1 text-sm items-center text-center italic">
           {{ t('edit.First release') }}: {{ firstRelease }}
         </span>
@@ -105,6 +144,7 @@ const firstRelease = computed(() =>
           <span v-if="card.def !== null" class="flex-1">DEF {{ card.def }}</span>
         </div>
       </div>
+      <CardPrintings :card-id="card.id" :until="until ?? null" />
     </div>
   </div>
 </template>

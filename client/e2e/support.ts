@@ -20,6 +20,8 @@ export async function mockApi(page: Page, overrides: Record<string, Handler> = {
   const defaults: Record<string, Handler> = {
     'GET /stats': (route) => route.fulfill({ json: fixtures.stats() }),
     'GET /archetypes': (route) => route.fulfill({ json: fixtures.archetypes() }),
+    'GET /formats': (route) => route.fulfill({ json: fixtures.formats() }),
+    'GET /cards/:id/printings': (route) => route.fulfill({ json: fixtures.printings() }),
     'GET /decks': (route) => route.fulfill({ json: fixtures.decks() }),
     [`GET /decks/${deck.id}`]: (route) => route.fulfill({ json: deck }),
     'POST /cards': (route) => route.fulfill({ json: fixtures.cards() }),
@@ -29,7 +31,8 @@ export async function mockApi(page: Page, overrides: Record<string, Handler> = {
   await page.route('**/api/**', async (route) => {
     const request = route.request()
     const path = new URL(request.url()).pathname.replace(/^\/api/, '')
-    const key = `${request.method()} ${path}`
+    // Card ids in the path share one handler: "GET /cards/:id/printings".
+    const key = `${request.method()} ${path.replace(/^\/cards\/\d+\/printings$/, '/cards/:id/printings')}`
     calls.push({ method: request.method(), path, body: request.postDataJSON() as unknown })
     const notFound = () => route.fulfill({ status: 404, json: { error: 'Not found' } })
     const useDefault = async () => {

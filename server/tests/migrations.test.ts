@@ -50,7 +50,7 @@ describe('migrations', () => {
     await sequelize.sync()
     await Deck.create({ name: 'Legacy', color: 'red-500' })
 
-    expect(await migrateDatabase()).toEqual(['0001-initial-schema'])
+    expect(await migrateDatabase()).toEqual(migrations.map((migration) => migration.name))
     expect(await Deck.count()).toBe(1)
   })
 })

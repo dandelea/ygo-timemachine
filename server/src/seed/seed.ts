@@ -1,4 +1,14 @@
-import { Archetype, Card, CardImage, CardPrice, Deck, DeckCard } from '../db/models.ts'
+import {
+  Archetype,
+  Card,
+  CardImage,
+  CardPrice,
+  CardPrinting,
+  CardSet,
+  Deck,
+  DeckCard,
+  FormatCard,
+} from '../db/models.ts'
 import { sequelize } from '../db/sequelize.ts'
 
 /** Shape of a card in `data/cards.json` (YGOPRODeck API dump). */
@@ -13,15 +23,29 @@ export interface SourceCard {
   level?: number
   attribute?: string
   archetype?: string
-  card_sets?: { set_name: string }[]
+  linkval?: number
+  linkmarkers?: string[]
+  scale?: number
+  card_sets?: { set_name: string; set_code?: string; set_rarity?: string }[]
   card_images: { image_url: string; image_url_small: string }[]
   card_prices?: Record<string, string>[]
 }
 
 export interface SourceSet {
   set_name: string
+  set_code?: string
   tcg_date?: string
 }
+
+/** Shape of a format in `data/formats.json`. */
+export interface SourceFormat {
+  id: string
+  cards: number[]
+  limits: Record<string, number>
+}
+
+/** Copies of a card allowed in a deck when its format does not restrict it. */
+const UNRESTRICTED_COPIES = 3
 
 export interface SourceDeck {
   name: string
@@ -99,6 +123,68 @@ export async function seedCards(
     }
   })
   return cards.length
+}
+
+/**
+ * Inserts what came after the first release of the data model: sets, card
+ * printings, Link and Pendulum values, and the cards of each format. Only
+ * touches cards already in the database, so it also fills older databases.
+ */
+export async function seedCardDetails(
+  sourceCards: SourceCard[],
+  sets: SourceSet[],
+  formats: SourceFormat[],
+): Promise<{ printings: number; formatCards: number }> {
+  const knownIds = new Set((await Card.findAll({ attributes: ['id'] })).map((card) => card.id))
+  const cards = sourceCards.filter((card) => knownIds.has(card.id))
+  const uniqueSets = [...new Map(sets.map((set) => [set.set_name, set])).values()]
+
+  const printings = cards.flatMap((card) =>
+    (card.card_sets ?? []).map((printing) => ({
+      card_id: card.id,
+      set_name: printing.set_name || null,
+      set_code: printing.set_code ?? null,
+      rarity: printing.set_rarity ?? null,
+    })),
+  )
+  const formatCards = formats.flatMap((format) =>
+    format.cards
+      .filter((id) => knownIds.has(id))
+      .map((id) => ({
+        format: format.id,
+        card_id: id,
+        max_copies: format.limits[String(id)] ?? UNRESTRICTED_COPIES,
+      })),
+  )
+
+  await sequelize.transaction(async (transaction) => {
+    await CardSet.bulkCreate(
+      uniqueSets.map((set) => ({
+        name: set.set_name,
+        code: set.set_code ?? null,
+        release_date: set.tcg_date ?? null,
+      })),
+      { transaction },
+    )
+    for (let start = 0; start < printings.length; start += BATCH_SIZE) {
+      await CardPrinting.bulkCreate(printings.slice(start, start + BATCH_SIZE), { transaction })
+    }
+    for (let start = 0; start < formatCards.length; start += BATCH_SIZE) {
+      await FormatCard.bulkCreate(formatCards.slice(start, start + BATCH_SIZE), { transaction })
+    }
+    for (const card of cards) {
+      if (card.linkval === undefined && card.scale === undefined) continue
+      await Card.update(
+        {
+          link_value: card.linkval ?? null,
+          link_markers: card.linkmarkers ?? null,
+          pendulum_scale: card.scale ?? null,
+        },
+        { where: { id: card.id }, transaction },
+      )
+    }
+  })
+  return { printings: printings.length, formatCards: formatCards.length }
 }
 
 /** Inserts the sample decks, skipping cards that were not seeded. */

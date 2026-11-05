@@ -4,6 +4,7 @@ import { DataTypes, Transaction, type QueryInterface } from 'sequelize'
 import { config } from '../config.ts'
 import { logger } from '../logger.ts'
 import * as initialSchema from './migrations/0001-initial-schema.ts'
+import * as printingsLinkFormats from './migrations/0002-printings-link-formats.ts'
 import { sequelize } from './sequelize.ts'
 
 interface Migration {
@@ -15,7 +16,10 @@ interface Migration {
  * Every schema change, in order. Append new migrations at the end and never
  * edit one that has already been released: databases record which ones ran.
  */
-export const migrations: Migration[] = [{ name: '0001-initial-schema', ...initialSchema }]
+export const migrations: Migration[] = [
+  { name: '0001-initial-schema', ...initialSchema },
+  { name: '0002-printings-link-formats', ...printingsLinkFormats },
+]
 
 // Same table and column as sequelize-cli and Umzug, so either can take over.
 const AppliedMigration = sequelize.define(

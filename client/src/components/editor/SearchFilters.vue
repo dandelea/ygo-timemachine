@@ -12,19 +12,26 @@ import ToggleSwitch from '@/components/form/ToggleSwitch.vue'
 import SectionHint from '@/components/help/SectionHint.vue'
 import { vTooltip } from '@/directives/tooltip'
 import { latestPickableDate, today, type SearchForm } from '@/services/search-form'
+import type { Format, FormatId, LinkMarker } from '@/types/api'
 import {
   attackDefense,
   attributes,
   checks,
   levels,
+  linkValues,
   monsterTypes,
+  pendulumScale,
   orderOptions,
   spellTypes,
   trapTypes,
 } from '@/services/values'
 import { dateLocale, formatLongDate } from '@/utils/date'
 
-const props = defineProps<{ archetypes: string[]; dataEnd?: string | null }>()
+const props = defineProps<{
+  archetypes: string[]
+  dataEnd?: string | null
+  formats?: Format[]
+}>()
 defineEmits<{ clear: [] }>()
 const form = defineModel<SearchForm>({ required: true })
 const { t, locale } = useI18n()
@@ -44,13 +51,58 @@ const orderLabel = computed(() =>
   form.value.order.inverse ? t('help.tooltips.descending') : t('help.tooltips.ascending'),
 )
 const epochLabel = computed(() => formatLongDate(form.value.epoch, locale.value))
+
+const formatOptions = computed<{ id: FormatId | null; name: string }[]>(() => [
+  { id: null, name: t('formats.free') },
+  ...(props.formats ?? []).map(({ id, name }) => ({ id, name })),
+])
+const currentFormat = computed(
+  () => props.formats?.find((format) => format.id === form.value.format) ?? null,
+)
+
+// 3x3 grid of Link arrows; the middle cell is the card itself.
+const markerGrid: ({ id: LinkMarker; arrow: string } | null)[] = [
+  { id: 'Top-Left', arrow: '↖' },
+  { id: 'Top', arrow: '↑' },
+  { id: 'Top-Right', arrow: '↗' },
+  { id: 'Left', arrow: '←' },
+  null,
+  { id: 'Right', arrow: '→' },
+  { id: 'Bottom-Left', arrow: '↙' },
+  { id: 'Bottom', arrow: '↓' },
+  { id: 'Bottom-Right', arrow: '↘' },
+]
 </script>
 
 <template>
   <div>
+    <div
+      v-if="formatOptions.length > 1"
+      class="flex mx-4 mt-2"
+      role="radiogroup"
+      :aria-label="t('formats.label')"
+    >
+      <button
+        v-for="option in formatOptions"
+        :key="option.id ?? 'free'"
+        type="button"
+        role="radio"
+        :aria-checked="form.format === option.id"
+        class="flex-1 py-1.5 text-sm duration-200"
+        :class="form.format === option.id ? 'bg-blue-500' : 'bg-blue-800 hover:bg-blue-700'"
+        @click="form.format = option.id"
+      >
+        {{ option.name }}
+      </button>
+    </div>
     <div class="px-4 m-2 text-center flex">
-      <label class="flex-1 p-2" for="epoch">{{ t('edit.Time travel') }}</label>
-      <div class="flex-1 epoch-picker">
+      <label class="flex-1 p-2" :class="{ 'text-gray-500': currentFormat }" for="epoch">
+        {{ t('edit.Time travel') }}
+      </label>
+      <div v-if="currentFormat" class="flex-1 p-2 border border-gray-700 text-gray-500">
+        {{ t('formats.instead', { format: currentFormat.name }) }}
+      </div>
+      <div v-else class="flex-1 epoch-picker">
         <VueDatePicker
           v-model="form.epoch"
           dark
@@ -65,14 +117,53 @@ const epochLabel = computed(() => formatLongDate(form.value.epoch, locale.value)
         />
       </div>
     </div>
-    <SectionHint highlight data-testid="epoch-hint">
+    <template v-if="currentFormat">
+      <SectionHint highlight data-testid="format-hint">
+        <i18n-t keypath="formats.hint" scope="global">
+          <template #format>
+            <strong class="text-white">{{ currentFormat.name }}</strong>
+          </template>
+          <template #cards>{{ currentFormat.cards.toLocaleString(locale) }}</template>
+        </i18n-t>
+      </SectionHint>
+      <ul
+        class="mx-4 my-1 flex flex-wrap gap-x-3 gap-y-1 text-xs"
+        :aria-label="t('formats.legend')"
+      >
+        <li class="flex items-center gap-1">
+          <span
+            class="w-4 h-4 grid place-items-center rounded-full bg-red-700 font-extrabold"
+            aria-hidden="true"
+            >✕</span
+          >
+          {{ t('formats.forbidden') }}
+        </li>
+        <li class="flex items-center gap-1">
+          <span
+            class="w-4 h-4 grid place-items-center rounded-full bg-orange-600 font-extrabold"
+            aria-hidden="true"
+            >1</span
+          >
+          {{ t('formats.limited') }}
+        </li>
+        <li class="flex items-center gap-1">
+          <span
+            class="w-4 h-4 grid place-items-center rounded-full bg-yellow-500 text-gray-900 font-extrabold"
+            aria-hidden="true"
+            >2</span
+          >
+          {{ t('formats.semiLimited') }}
+        </li>
+      </ul>
+    </template>
+    <SectionHint v-else highlight data-testid="epoch-hint">
       <i18n-t keypath="help.hints.epoch" scope="global">
         <template #date>
           <strong class="text-white">{{ epochLabel }}</strong>
         </template>
       </i18n-t>
     </SectionHint>
-    <SectionHint v-if="dataEndLabel" data-testid="data-end-hint">
+    <SectionHint v-if="dataEndLabel && !currentFormat" data-testid="data-end-hint">
       {{ t('help.hints.dataEnd', { date: dataEndLabel }) }}
     </SectionHint>
     <div class="flex flex-wrap items-center px-2">
@@ -172,6 +263,54 @@ const epochLabel = computed(() => formatLongDate(form.value.epoch, locale.value)
           label="DEF"
           :min="attackDefense.min"
           :max="attackDefense.max"
+        />
+      </div>
+      <div
+        class="px-4 py-1 flex flex-wrap items-center gap-1"
+        role="group"
+        :aria-label="t('filters.linkValue')"
+      >
+        <span class="w-28 text-sm" aria-hidden="true">{{ t('filters.linkValue') }}</span>
+        <button
+          v-for="value in linkValues"
+          :key="value"
+          type="button"
+          class="min-w-8 h-8 px-2 font-bold text-sm duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+          :class="form.linkValues[value] ? 'bg-blue-500' : 'bg-blue-800 hover:bg-blue-700'"
+          :aria-pressed="form.linkValues[value]"
+          @click="form.linkValues[value] = !form.linkValues[value]"
+        >
+          {{ value }}
+        </button>
+      </div>
+      <div class="px-4 py-1 flex items-center gap-3">
+        <span class="w-28 text-sm">{{ t('filters.linkMarkers') }}</span>
+        <div class="grid grid-cols-3 gap-0.5" role="group" :aria-label="t('filters.linkMarkers')">
+          <template v-for="(cell, index) in markerGrid" :key="cell?.id ?? index">
+            <span v-if="!cell" aria-hidden="true" />
+            <button
+              v-else
+              v-tooltip="t(`filters.markers.${cell.id}`)"
+              type="button"
+              class="w-7 h-7 text-sm duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+              :class="form.linkMarkers[cell.id] ? 'bg-red-600' : 'bg-blue-800 hover:bg-blue-700'"
+              :aria-label="t(`filters.markers.${cell.id}`)"
+              :aria-pressed="form.linkMarkers[cell.id]"
+              @click="form.linkMarkers[cell.id] = !form.linkMarkers[cell.id]"
+            >
+              <span aria-hidden="true">{{ cell.arrow }}</span>
+            </button>
+          </template>
+        </div>
+        <span class="flex-1 text-xs text-gray-400">{{ t('filters.anyMarker') }}</span>
+      </div>
+      <div class="py-1 px-4 pb-2 flex items-center">
+        <PointsSelector
+          v-model="form.scale"
+          :label="t('filters.scale')"
+          :min="pendulumScale.min"
+          :max="pendulumScale.max"
+          :step="1"
         />
       </div>
       <div class="p-2 flex flex-wrap items-center">

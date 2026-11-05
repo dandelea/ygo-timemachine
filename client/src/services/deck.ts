@@ -1,4 +1,4 @@
-import { DECK_LIMITS, type Card, type CardType } from '@/types/api'
+import { DECK_LIMITS, type Card, type CardType, type FormatId } from '@/types/api'
 
 /** Colors a deck can be tagged with (Tailwind color names). */
 export const DECK_COLORS = [
@@ -17,29 +17,49 @@ export interface EditableDeck {
   id: string | null
   name: string
   color: string
+  format: FormatId | null
   main: Card[]
   extra: Card[]
 }
+
+/** Copies allowed of each restricted card (0 = forbidden) in the deck's format. */
+export type FormatLimits = Record<string, number>
 
 export const isExtraDeckCard = (card: Pick<Card, 'type'>) => card.type === 'EXTRA'
 
 const copiesOf = (cards: Card[], card: Card) => cards.filter((item) => item.id === card.id).length
 
-export type AddBlockReason = 'copies' | 'main-full' | 'extra-full'
+export type AddBlockReason = 'copies' | 'main-full' | 'extra-full' | 'forbidden' | 'format-copies'
+
+/** Copies the format allows of a card: 0 = forbidden, null = not restricted. */
+export const formatLimitOf = (card: Card, limits: FormatLimits = {}): number | null =>
+  limits[String(card.id)] ?? null
 
 /** Why `card` cannot be added to the deck, or null when it can. */
-export function addBlockReason(deck: EditableDeck, card: Card): AddBlockReason | null {
-  if (copiesOf([...deck.main, ...deck.extra], card) >= DECK_LIMITS.copies) return 'copies'
+export function addBlockReason(
+  deck: Pick<EditableDeck, 'main' | 'extra'>,
+  card: Card,
+  limits: FormatLimits = {},
+): AddBlockReason | null {
+  const limit = formatLimitOf(card, limits)
+  if (limit === 0) return 'forbidden'
+  const copies = copiesOf([...deck.main, ...deck.extra], card)
+  if (limit !== null && copies >= limit) return 'format-copies'
+  if (copies >= DECK_LIMITS.copies) return 'copies'
   if (isExtraDeckCard(card)) return deck.extra.length < DECK_LIMITS.extra ? null : 'extra-full'
   return deck.main.length < DECK_LIMITS.main ? null : 'main-full'
 }
 
-/** Whether `card` can be added without breaking the copy or deck-size limits. */
-export const canAddCard = (deck: EditableDeck, card: Card) => addBlockReason(deck, card) === null
+/** Whether `card` can be added without breaking the copy, deck-size or format limits. */
+export const canAddCard = (
+  deck: Pick<EditableDeck, 'main' | 'extra'>,
+  card: Card,
+  limits: FormatLimits = {},
+) => addBlockReason(deck, card, limits) === null
 
 /** Returns a new deck with the card added to the right section, or the same deck. */
-export function addCard(deck: EditableDeck, card: Card): EditableDeck {
-  if (!canAddCard(deck, card)) return deck
+export function addCard(deck: EditableDeck, card: Card, limits: FormatLimits = {}): EditableDeck {
+  if (!canAddCard(deck, card, limits)) return deck
   return isExtraDeckCard(card)
     ? { ...deck, extra: [...deck.extra, card] }
     : { ...deck, main: [...deck.main, card] }
@@ -81,6 +101,7 @@ export function toPayload(deck: EditableDeck) {
   return {
     name: deck.name.trim(),
     color: deck.color,
+    format: deck.format,
     cards: [...deck.main, ...deck.extra].map((card) => card.id),
   }
 }

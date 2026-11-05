@@ -3,7 +3,10 @@ import { SliderRange, SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { computed } from 'vue'
 import type { PointsRange } from '@/types/api'
 
-const props = defineProps<{ label: string; min: number; max: number }>()
+const props = withDefaults(
+  defineProps<{ label: string; min: number; max: number; step?: number }>(),
+  { step: 100 },
+)
 const range = defineModel<PointsRange>({ required: true })
 
 const values = computed({
@@ -21,7 +24,7 @@ const values = computed({
       v-model="values"
       :min="min"
       :max="max"
-      :step="100"
+      :step="step"
       :min-steps-between-thumbs="0"
       class="relative flex items-center select-none touch-none w-full h-6 px-1.5"
     >

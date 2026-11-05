@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { Op, Sequelize, type Order, type WhereOptions } from 'sequelize'
 import type { Cache } from '../cache.ts'
 import { Archetype, Card, CardImage } from '../db/models.ts'
+import { sequelize } from '../db/sequelize.ts'
 import { CARD_TYPES, subtypesByType, type CardType } from '../domain/card-types.ts'
 import type { CardSearch } from '../http/schemas.ts'
 
@@ -23,6 +24,8 @@ const orderColumns: Record<CardSearch['order']['field'], string> = {
   attribute: 'attribute',
   atk: 'atk',
   def: 'def',
+  link: 'link_value',
+  scale: 'pendulum_scale',
 }
 
 /** Matches the list, or cards without a value (e.g. spells have no attribute). */
@@ -44,6 +47,12 @@ function typeCondition(type: CardType, form: CardSearch): WhereOptions {
     if (form.attack) condition.atk = inRangeOrNull(form.attack)
     if (form.defense) condition.def = inRangeOrNull(form.defense)
     if (form.monsterTypes.length) condition.race = { [Op.in]: form.monsterTypes }
+    if (form.linkValues.length) condition.link_value = { [Op.in]: form.linkValues }
+    if (form.linkMarkers.length) {
+      // Stored as ",Top,Bottom-Left,": the commas keep "Top" from matching "Top-Left".
+      condition.link_markers = { [Op.or]: form.linkMarkers.map((m) => ({ [Op.like]: `%,${m},%` })) }
+    }
+    if (form.scale) condition.pendulum_scale = { [Op.between]: [form.scale.min, form.scale.max] }
   }
   if (type === 'SPELL' && form.spellFamilies.length) {
     condition.race = { [Op.in]: form.spellFamilies }
@@ -69,7 +78,17 @@ function buildWhere(form: CardSearch): WhereOptions {
     })
   }
   if (form.archetypes.length) conditions.push({ archetype_id: { [Op.in]: form.archetypes } })
-  if (form.epoch) conditions.push({ first_release: { [Op.lte]: form.epoch } })
+  if (form.format) {
+    // The format sets the card pool, so the date does not apply.
+    const format = sequelize.escape(form.format)
+    conditions.push({
+      id: {
+        [Op.in]: Sequelize.literal(`(SELECT card_id FROM formats_cards WHERE format = ${format})`),
+      },
+    })
+  } else if (form.epoch) {
+    conditions.push({ first_release: { [Op.lte]: form.epoch } })
+  }
   return { [Op.and]: conditions }
 }
 
