@@ -8,9 +8,12 @@ import { useDecksStore } from '@/stores/decks'
 import type { DeckSummary } from '@/types/api'
 
 const store = useDecksStore()
-const { decks, status } = storeToRefs(store)
+const { decks, status, dataEnd } = storeToRefs(store)
 
-onMounted(() => void store.load())
+onMounted(() => {
+  void store.load()
+  void store.loadDataEnd()
+})
 
 function background(deck: DeckSummary) {
   const image = deck.cards[0]?.images[0]?.image
@@ -22,7 +25,7 @@ function background(deck: DeckSummary) {
 <template>
   <!-- The body does not scroll on desktop (see index.html): scroll this view instead. -->
   <div class="md:max-h-body md:overflow-y-auto">
-    <HomeIntro />
+    <HomeIntro :data-end="dataEnd" />
     <section class="flex flex-wrap">
       <RouterLink
         v-tooltip="$t('decks.New deck')"

@@ -85,7 +85,7 @@ describe('API fixtures match the client types', () => {
 
   it('saved deck, stats and archetypes', () => {
     expect(keysOf(fixtures.savedDeck())).toEqual(sorted(savedDeckKeys))
-    expect(keysOf(fixtures.stats())).toEqual(['cards', 'pageSize'])
+    expect(keysOf(fixtures.stats())).toEqual(['cards', 'latestRelease', 'pageSize'])
     expect(fixtures.archetypes().every((name) => typeof name === 'string')).toBe(true)
   })
 })

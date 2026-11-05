@@ -9,6 +9,9 @@ test('lists the decks and opens one in the editor', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: 'Build decks as they were played in another era' }),
   ).toBeVisible()
+  await expect(
+    page.getByText('Choose a date up to June 2nd, 2020 in the deck editor.'),
+  ).toBeVisible()
   await page.getByRole('link', { name: deckFixture.name }).click()
 
   await expect(page).toHaveURL(`/decks/${deckFixture.id}`)

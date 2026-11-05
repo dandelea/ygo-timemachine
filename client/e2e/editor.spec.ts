@@ -213,3 +213,35 @@ test('filters by attribute, level and monster type with the keyboard only', asyn
     .poll(() => calls.filter((call) => call.path === '/cards').at(-1)?.body)
     .toMatchObject({ attributes: ['WIND'], levels: [4] })
 })
+
+test('stops the time machine at the last day of the data', async ({ page }) => {
+  const calls = await mockApi(page)
+  await openNewDeck(page)
+
+  // Only one search on load, already with the last day of the data.
+  const epochs = () =>
+    calls
+      .filter((call) => call.path === '/cards')
+      .map((call) => (call.body as { epoch: string }).epoch)
+  await expect.poll(epochs).toEqual(['2020-06-02'])
+  await page.getByRole('tab', { name: 'Search', exact: true }).click()
+  await expect(page.locator('#epoch')).toHaveValue('2020-06-02')
+  expect(epochs()).toEqual(['2020-06-02'])
+  await expect(page.getByTestId('data-end-hint')).toHaveText(
+    'The data goes up to June 2nd, 2020, so later dates cannot be chosen.',
+  )
+})
+
+test('shows the deck statistics in their own tab', async ({ page }) => {
+  await mockApi(page)
+  await page.goto(`/decks/${deckFixture.id}`)
+
+  await page.getByRole('tab', { name: 'Statistics' }).click()
+  const stats = page.getByTestId('deck-stats')
+  await expect(stats).toContainText(
+    `Main ${deckFixture.main.length} · Extra ${deckFixture.extra.length}`,
+  )
+  await expect(page.getByTestId('main-deck')).toBeHidden()
+  await page.getByRole('tab', { name: 'Cards' }).click()
+  await expect(page.getByTestId('main-deck')).toBeVisible()
+})

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import DeckStats from '@/components/editor/DeckStats.vue'
 import ColorSelector from '@/components/form/ColorSelector.vue'
 import DeckLimits from '@/components/help/DeckLimits.vue'
 import InfoPopover from '@/components/help/InfoPopover.vue'
@@ -31,6 +32,10 @@ const { t } = useI18n()
 const saveTooltip = computed(() =>
   props.deck.name.trim() ? t('edit.Save deck') : t('help.tooltips.nameToSave'),
 )
+
+type DeckView = 'cards' | 'stats'
+const deckViews: DeckView[] = ['cards', 'stats']
+const view = ref<DeckView>('cards')
 
 const color = computed({
   get: () => props.deck.color,
@@ -122,8 +127,24 @@ function slotStyle(card: Card | undefined) {
       </button>
     </div>
     <DeckLimits :main="deck.main.length" :extra="deck.extra.length" />
+    <div class="flex mt-1" role="tablist" :aria-label="$t('stats.view')">
+      <button
+        v-for="option in deckViews"
+        :key="option"
+        type="button"
+        role="tab"
+        :aria-selected="view === option"
+        class="flex-1 py-1 text-sm duration-200"
+        :class="view === option ? 'bg-blue-500' : 'bg-blue-800 hover:bg-blue-700'"
+        @click="view = option"
+      >
+        {{ $t(`stats.tabs.${option}`) }}
+      </button>
+    </div>
+    <DeckStats v-if="view === 'stats'" :deck="deck" class="mt-2" />
     <div
       v-for="section in sections"
+      v-else
       :key="section.key"
       class="flex flex-wrap"
       :class="section.wrapper"

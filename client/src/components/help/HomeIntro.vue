@@ -1,6 +1,19 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { MAIN_DECK_MIN } from '@/services/deck'
+import { latestPickableDate, today } from '@/services/search-form'
 import { DECK_LIMITS } from '@/types/api'
+import { formatLongDate } from '@/utils/date'
+
+const props = defineProps<{ dataEnd?: string | null }>()
+const { t, locale } = useI18n()
+const travelText = computed(() => {
+  const end = latestPickableDate(props.dataEnd ?? null)
+  return end < today()
+    ? t('help.intro.steps.travel.until', { date: formatLongDate(end, locale.value) })
+    : t('help.intro.steps.travel.text')
+})
 
 const limits = { min: MAIN_DECK_MIN, max: DECK_LIMITS.main, copies: DECK_LIMITS.copies }
 </script>
@@ -18,7 +31,7 @@ const limits = { min: MAIN_DECK_MIN, max: DECK_LIMITS.main, copies: DECK_LIMITS.
         <span class="block text-xs font-semibold uppercase tracking-wide text-orange-400">
           1 · {{ $t('help.intro.steps.travel.title') }}
         </span>
-        {{ $t('help.intro.steps.travel.text') }}
+        {{ travelText }}
       </li>
       <li class="p-3 bg-blue-800 text-sm">
         <span class="block text-xs font-semibold uppercase tracking-wide text-orange-400">
