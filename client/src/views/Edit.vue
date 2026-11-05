@@ -164,7 +164,7 @@ function selectCard(card: Card) {
         :results="results"
         :stats="stats"
         :status="searchStatus"
-        :can-add="store.canAdd"
+        :block-reason="store.blockReason"
         @add="store.addCard"
         @select="selectCard"
         @retry="store.search"

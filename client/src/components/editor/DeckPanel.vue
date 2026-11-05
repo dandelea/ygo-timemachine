@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ColorSelector from '@/components/form/ColorSelector.vue'
+import DeckLimits from '@/components/help/DeckLimits.vue'
 import InfoPopover from '@/components/help/InfoPopover.vue'
 import {
   EXTRA_DECK_SLOTS,
@@ -108,6 +109,7 @@ function slotStyle(card: Card | undefined) {
         <FontAwesomeIcon :icon="['far', 'trash-alt']" class="mx-auto" />
       </button>
     </div>
+    <DeckLimits :main="deck.main.length" :extra="deck.extra.length" />
     <div
       v-for="section in sections"
       :key="section.key"

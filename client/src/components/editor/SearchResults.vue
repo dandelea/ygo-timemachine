@@ -1,21 +1,34 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import SectionHint from '@/components/help/SectionHint.vue'
 import StatusMessage from '@/components/ui/StatusMessage.vue'
+import type { AddBlockReason } from '@/services/deck'
 import type { LoadStatus } from '@/stores/decks'
-import type { Card, CardSearchResult, DbStats } from '@/types/api'
+import { DECK_LIMITS, type Card, type CardSearchResult, type DbStats } from '@/types/api'
 
 const props = defineProps<{
   results: CardSearchResult
   stats: DbStats
   status: LoadStatus
-  canAdd: (card: Card) => boolean
+  blockReason: (card: Card) => AddBlockReason | null
 }>()
 const emit = defineEmits<{
   add: [card: Card]
   select: [card: Card]
   retry: []
 }>()
+
+const { t } = useI18n()
+
+const blockMessage = (reason: AddBlockReason) =>
+  ({
+    copies: t('help.blocked.copies', { copies: DECK_LIMITS.copies }),
+    'main-full': t('help.blocked.mainFull', { max: DECK_LIMITS.main }),
+    'extra-full': t('help.blocked.extraFull', { max: DECK_LIMITS.extra }),
+  })[reason]
+const blockLabel = (reason: AddBlockReason) =>
+  reason === 'copies' ? `${DECK_LIMITS.copies}/${DECK_LIMITS.copies}` : t('help.blocked.full')
 
 // Shown count is bounded by the page size; the total is the number of matches.
 const shown = computed(() => Math.min(props.stats.pageSize, props.results.total))
@@ -53,11 +66,12 @@ const shown = computed(() => Math.min(props.stats.pageSize, props.results.total)
         :key="card.id"
         class="group relative w-16 bg-blue-900 h-24 m-1/2 mx-auto cursor-pointer bg-no-repeat bg-cover"
         :style="{ backgroundImage: `url('${card.images[0]?.image_small ?? ''}')` }"
+        :class="{ 'opacity-60': blockReason(card) }"
         :title="card.name"
         @click="emit('select', card)"
       >
         <button
-          v-if="canAdd(card)"
+          v-if="!blockReason(card)"
           type="button"
           class="absolute bottom-0 inset-x-0 text-xs bg-green-600 opacity-100 [@media(hover:hover)]:opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
           :title="$t('edit.Add card')"
@@ -66,6 +80,15 @@ const shown = computed(() => Math.min(props.stats.pageSize, props.results.total)
         >
           <FontAwesomeIcon icon="plus" />
         </button>
+        <span
+          v-else
+          :title="blockMessage(blockReason(card)!)"
+          class="absolute bottom-0 inset-x-0 text-[10px] leading-4 text-center bg-gray-700/90"
+          data-testid="add-blocked"
+        >
+          <span aria-hidden="true">{{ blockLabel(blockReason(card)!) }}</span>
+          <span class="sr-only">{{ blockMessage(blockReason(card)!) }}</span>
+        </span>
       </div>
     </div>
   </div>

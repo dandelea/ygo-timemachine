@@ -73,6 +73,12 @@
     }
   },
   "help": {
+    "blocked": {
+      "copies": "You already have {copies} copies of this card",
+      "extraFull": "The Extra deck is full ({max} cards)",
+      "full": "Full",
+      "mainFull": "The Main deck is full ({max} cards)"
+    },
     "deckRules": {
       "copies": "Up to {copies} copies of each card.",
       "extra": "Extra deck: up to {max} cards (Fusion, Synchro, Xyz…).",
@@ -102,6 +108,10 @@
         }
       },
       "title": "Build decks as they were played in another era"
+    },
+    "limits": {
+      "draft": "Draft: {missing} card missing for a legal Main deck. You can still save it. | Draft: {missing} cards missing for a legal Main deck. You can still save it.",
+      "legal": "Legal Main deck ({min}–{max} cards)."
     }
   },
   "header": {

@@ -73,6 +73,12 @@
     }
   },
   "help": {
+    "blocked": {
+      "copies": "Ya tienes {copies} copias de esta carta",
+      "extraFull": "El Extra deck está lleno ({max} cartas)",
+      "full": "Lleno",
+      "mainFull": "El Main deck está lleno ({max} cartas)"
+    },
     "deckRules": {
       "copies": "Máximo {copies} copias de cada carta.",
       "extra": "Extra deck: hasta {max} cartas (Fusión, Sincronía, Xyz…).",
@@ -102,6 +108,10 @@
         }
       },
       "title": "Monta mazos como se jugaban en otra época"
+    },
+    "limits": {
+      "draft": "Borrador: falta {missing} carta para un Main deck legal. Puedes guardarlo igualmente. | Borrador: faltan {missing} cartas para un Main deck legal. Puedes guardarlo igualmente.",
+      "legal": "Main deck legal ({min}–{max} cartas)."
     }
   },
   "header": {

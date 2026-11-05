@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   addCard,
+  addBlockReason,
   canAddCard,
   mainDeckSlots,
   removeCard,
@@ -57,6 +58,18 @@ describe('deck rules', () => {
     const full = { ...emptyDeck(), main, extra: extraCards }
     expect(addCard(full, card(999, 'MONSTER'))).toBe(full)
     expect(addCard(full, card(998, 'EXTRA'))).toBe(full)
+  })
+
+  it('explains why a card cannot be added', () => {
+    const full = {
+      ...emptyDeck(),
+      main: Array.from({ length: 60 }, (_, i) => card(i + 1, 'SPELL')),
+      extra: Array.from({ length: 15 }, (_, i) => card(i + 100, 'EXTRA')),
+    }
+    expect(addBlockReason(emptyDeck(), spell)).toBeNull()
+    expect(addBlockReason({ ...emptyDeck(), main: [spell, spell, spell] }, spell)).toBe('copies')
+    expect(addBlockReason(full, card(999, 'MONSTER'))).toBe('main-full')
+    expect(addBlockReason(full, card(998, 'EXTRA'))).toBe('extra-full')
   })
 
   it('removes a single copy', () => {

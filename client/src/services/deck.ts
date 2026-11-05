@@ -25,14 +25,17 @@ export const isExtraDeckCard = (card: Pick<Card, 'type'>) => card.type === 'EXTR
 
 const copiesOf = (cards: Card[], card: Card) => cards.filter((item) => item.id === card.id).length
 
-/** Whether `card` can be added without breaking the copy or deck-size limits. */
-export function canAddCard(deck: EditableDeck, card: Card): boolean {
-  const all = [...deck.main, ...deck.extra]
-  if (copiesOf(all, card) >= DECK_LIMITS.copies) return false
-  return isExtraDeckCard(card)
-    ? deck.extra.length < DECK_LIMITS.extra
-    : deck.main.length < DECK_LIMITS.main
+export type AddBlockReason = 'copies' | 'main-full' | 'extra-full'
+
+/** Why `card` cannot be added to the deck, or null when it can. */
+export function addBlockReason(deck: EditableDeck, card: Card): AddBlockReason | null {
+  if (copiesOf([...deck.main, ...deck.extra], card) >= DECK_LIMITS.copies) return 'copies'
+  if (isExtraDeckCard(card)) return deck.extra.length < DECK_LIMITS.extra ? null : 'extra-full'
+  return deck.main.length < DECK_LIMITS.main ? null : 'main-full'
 }
+
+/** Whether `card` can be added without breaking the copy or deck-size limits. */
+export const canAddCard = (deck: EditableDeck, card: Card) => addBlockReason(deck, card) === null
 
 /** Returns a new deck with the card added to the right section, or the same deck. */
 export function addCard(deck: EditableDeck, card: Card): EditableDeck {

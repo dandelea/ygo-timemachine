@@ -4,6 +4,7 @@ import CardDetail from '@/components/editor/CardDetail.vue'
 import DeckPanel from '@/components/editor/DeckPanel.vue'
 import SaveFeedback from '@/components/editor/SaveFeedback.vue'
 import SearchResults from '@/components/editor/SearchResults.vue'
+import DeckLimits from '@/components/help/DeckLimits.vue'
 import type { EditableDeck } from '@/services/deck'
 import { useDecksStore } from '@/stores/decks'
 import DecksView from '@/views/Decks.vue'
@@ -62,7 +63,7 @@ describe('SearchResults', () => {
     results: fixtures.cards(),
     stats: fixtures.stats(),
     status: 'ready' as const,
-    canAdd: () => true,
+    blockReason: () => null,
   })
 
   it('shows the counter and lets the user add or select cards', async () => {
@@ -78,9 +79,22 @@ describe('SearchResults', () => {
 
   it('hides the add button for cards that cannot be added', () => {
     const wrapper = mountWithApp(SearchResults, {
-      props: { ...props(), canAdd: () => false },
+      props: { ...props(), blockReason: () => 'copies' as const },
     })
     expect(wrapper.find('[aria-label^="Add "]').exists()).toBe(false)
+    const blocked = wrapper.findAll('[data-testid="add-blocked"]')
+    expect(blocked).toHaveLength(fixtures.cards().data.length)
+    expect(blocked[0]!.text()).toContain('3/3')
+    expect(blocked[0]!.text()).toContain('You already have 3 copies of this card')
+  })
+
+  it('says when the deck is full', () => {
+    const wrapper = mountWithApp(SearchResults, {
+      props: { ...props(), blockReason: () => 'main-full' as const },
+    })
+    const blocked = wrapper.get('[data-testid="add-blocked"]')
+    expect(blocked.text()).toContain('Full')
+    expect(blocked.text()).toContain('The Main deck is full (60 cards)')
   })
 
   it('shows empty, loading and error states', async () => {
@@ -144,6 +158,18 @@ describe('DeckPanel', () => {
   it('disables saving when not allowed', () => {
     const wrapper = mountWithApp(DeckPanel, { props: { deck: deck(), canSave: false } })
     expect(wrapper.get('[aria-label="Save deck"]').attributes('disabled')).toBeDefined()
+  })
+})
+
+describe('DeckLimits', () => {
+  it.each([
+    [0, 'Draft: 40 cards missing for a legal Main deck. You can still save it.'],
+    [39, 'Draft: 1 card missing for a legal Main deck. You can still save it.'],
+    [40, 'Legal Main deck (40–60 cards).'],
+    [60, 'Legal Main deck (40–60 cards).'],
+  ])('with %i Main deck cards says "%s"', (main, message) => {
+    const wrapper = mountWithApp(DeckLimits, { props: { main, extra: 0 } })
+    expect(wrapper.text()).toContain(message)
   })
 })
 
