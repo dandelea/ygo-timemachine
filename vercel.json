@@ -38,7 +38,7 @@
       "functions": {
         "src/serverless.ts": {
           "maxDuration": 10,
-          "includeFiles": "server/{package.json,data/card-types.json}"
+          "includeFiles": "server/{package.json,data/card-types.json,data/formats.json}"
         }
       }
     }
