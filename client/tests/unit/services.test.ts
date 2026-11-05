@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import {
   addCard,
+  addBlockReason,
   canAddCard,
   mainDeckSlots,
   removeCard,
@@ -13,7 +14,7 @@ import { HISTORY_SIZE, pushHistory } from '@/services/history'
 import { createSearchForm, toSearchRequest } from '@/services/search-form'
 import { attributes, levels, monsterTypes } from '@/services/values'
 import type { Card } from '@/types/api'
-import { formatCalendarDate } from '@/utils/date'
+import { formatCalendarDate, formatLongDate } from '@/utils/date'
 import { fixtures } from './helpers'
 
 const cards = fixtures.cards().data
@@ -57,6 +58,18 @@ describe('deck rules', () => {
     const full = { ...emptyDeck(), main, extra: extraCards }
     expect(addCard(full, card(999, 'MONSTER'))).toBe(full)
     expect(addCard(full, card(998, 'EXTRA'))).toBe(full)
+  })
+
+  it('explains why a card cannot be added', () => {
+    const full = {
+      ...emptyDeck(),
+      main: Array.from({ length: 60 }, (_, i) => card(i + 1, 'SPELL')),
+      extra: Array.from({ length: 15 }, (_, i) => card(i + 100, 'EXTRA')),
+    }
+    expect(addBlockReason(emptyDeck(), spell)).toBeNull()
+    expect(addBlockReason({ ...emptyDeck(), main: [spell, spell, spell] }, spell)).toBe('copies')
+    expect(addBlockReason(full, card(999, 'MONSTER'))).toBe('main-full')
+    expect(addBlockReason(full, card(998, 'EXTRA'))).toBe('extra-full')
   })
 
   it('removes a single copy', () => {
@@ -185,5 +198,17 @@ describe('formatCalendarDate', () => {
   it('handles missing and invalid values', () => {
     expect(formatCalendarDate(null, 'en')).toBe('')
     expect(formatCalendarDate('not a date', 'en')).toBe('not a date')
+  })
+})
+
+describe('formatLongDate', () => {
+  it('writes the date out in the given language', () => {
+    expect(formatLongDate('2004-03-01', 'en')).toBe('March 1st, 2004')
+    expect(formatLongDate('2004-03-01', 'es')).toBe('1 de marzo de 2004')
+  })
+
+  it('handles missing and invalid dates', () => {
+    expect(formatLongDate(null, 'en')).toBe('')
+    expect(formatLongDate('not a date', 'en')).toBe('not a date')
   })
 })

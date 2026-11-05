@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ColorSelector from '@/components/form/ColorSelector.vue'
+import DeckLimits from '@/components/help/DeckLimits.vue'
+import InfoPopover from '@/components/help/InfoPopover.vue'
 import {
   EXTRA_DECK_SLOTS,
+  MAIN_DECK_MIN,
   mainDeckSlots,
   sortExtraDeck,
   sortMainDeck,
   type EditableDeck,
 } from '@/services/deck'
 import { cardBackImage } from '@/services/values'
-import type { Card } from '@/types/api'
+import { DECK_LIMITS, type Card } from '@/types/api'
+import { vTooltip } from '@/directives/tooltip'
 
 const props = defineProps<{ deck: EditableDeck; canSave: boolean; saving?: boolean }>()
 const emit = defineEmits<{
@@ -20,6 +25,12 @@ const emit = defineEmits<{
   save: []
   clear: []
 }>()
+
+const { t } = useI18n()
+// Saving is only blocked by a missing name (decks under 40 cards are drafts).
+const saveTooltip = computed(() =>
+  props.deck.name.trim() ? t('edit.Save deck') : t('help.tooltips.nameToSave'),
+)
 
 const color = computed({
   get: () => props.deck.color,
@@ -50,9 +61,10 @@ function slotStyle(card: Card | undefined) {
   <div>
     <div class="flex">
       <RouterLink
+        v-tooltip="$t('edit.Back to decks')"
         to="/"
         class="w-10 h-10 flex items-center bg-blue-800 duration-200 hover:bg-blue-700"
-        :title="$t('edit.Back')"
+        :aria-label="$t('edit.Back to decks')"
       >
         <FontAwesomeIcon icon="arrow-left" class="mx-auto" />
       </RouterLink>
@@ -65,16 +77,18 @@ function slotStyle(card: Card | undefined) {
         @input="emit('update:name', ($event.target as HTMLInputElement).value)"
       />
       <ColorSelector v-model="color" :title="$t('edit.Change color')" />
-      <button
-        type="button"
-        class="w-10 h-10 bg-blue-800 duration-200 hover:bg-blue-700 disabled:cursor-not-allowed"
-        :disabled="!canSave"
-        :title="$t('edit.Save deck')"
-        :aria-label="$t('edit.Save deck')"
-        @click="emit('save')"
-      >
-        <FontAwesomeIcon :icon="saving ? 'spinner' : 'save'" :spin="saving" />
-      </button>
+      <!-- The wrapper shows the label: disabled buttons get no pointer events. -->
+      <span v-tooltip="saveTooltip" class="flex">
+        <button
+          type="button"
+          class="w-10 h-10 bg-blue-800 duration-200 hover:bg-blue-700 disabled:cursor-not-allowed"
+          :disabled="!canSave"
+          :aria-label="$t('edit.Save deck')"
+          @click="emit('save')"
+        >
+          <FontAwesomeIcon :icon="saving ? 'spinner' : 'save'" :spin="saving" />
+        </button>
+      </span>
     </div>
     <div class="flex relative">
       <div class="flex-1 flex items-center">
@@ -89,15 +103,25 @@ function slotStyle(card: Card | undefined) {
           <span class="mx-auto" data-testid="extra-count">{{ deck.extra.length }}</span>
         </div>
       </div>
+      <InfoPopover :label="$t('help.deckRules.title')">
+        <p class="mb-1 font-semibold">{{ $t('help.deckRules.title') }}</p>
+        <ul class="pl-4 list-disc space-y-1">
+          <li>{{ $t('help.deckRules.main', { min: MAIN_DECK_MIN, max: DECK_LIMITS.main }) }}</li>
+          <li>{{ $t('help.deckRules.extra', { max: DECK_LIMITS.extra }) }}</li>
+          <li>{{ $t('help.deckRules.copies', { copies: DECK_LIMITS.copies }) }}</li>
+        </ul>
+      </InfoPopover>
       <button
+        v-tooltip="$t('help.tooltips.clearDeck')"
         type="button"
         class="w-10 h-10 flex items-center text-white bg-red-500 duration-200 hover:bg-red-600 shadow-lg"
-        :title="$t('edit.Clear deck')"
+        :aria-label="$t('help.tooltips.clearDeck')"
         @click="emit('clear')"
       >
         <FontAwesomeIcon :icon="['far', 'trash-alt']" class="mx-auto" />
       </button>
     </div>
+    <DeckLimits :main="deck.main.length" :extra="deck.extra.length" />
     <div
       v-for="section in sections"
       :key="section.key"
@@ -115,9 +139,9 @@ function slotStyle(card: Card | undefined) {
         >
           <span class="mx-auto">{{ index }}</span>
           <button
+            v-tooltip="$t('edit.Remove {card}', { card: section.cards[index - 1]?.name })"
             type="button"
             class="absolute top-0 right-0 px-1 text-xs bg-red-500 opacity-100 [@media(hover:hover)]:opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-            :title="$t('edit.Remove card')"
             :aria-label="$t('edit.Remove {card}', { card: section.cards[index - 1]?.name })"
             @click.stop="emit('remove', section.cards[index - 1] as Card)"
           >

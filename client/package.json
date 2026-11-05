@@ -42,6 +42,7 @@
     "Timemachine"
   ],
   "dependencies": {
+    "@floating-ui/dom": "^1.8.0",
     "@fortawesome/fontawesome-svg-core": "7.3.1",
     "@fortawesome/free-regular-svg-icons": "7.3.1",
     "@fortawesome/free-solid-svg-icons": "7.3.1",
@@ -79,5 +80,9 @@
   },
   "allowScripts": {
     "vue-demi": false
+  },
+  "overrides": {
+    "minimatch": "11.0.4",
+    "glob": "14.0.3"
   }
 }
