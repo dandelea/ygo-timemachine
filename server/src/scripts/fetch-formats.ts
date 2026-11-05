@@ -2,20 +2,13 @@ import { writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { logger } from '../logger.ts'
 import { dataDir } from '../paths.ts'
+import { BANLIST_API, CARD_API, pacedClient, type GetJson } from './ygoprodeck.ts'
 
 /**
  * Downloads the cards and Forbidden/Limited list of each format from
- * YGOPRODeck into `data/formats.json`. The API is never called at runtime:
- * run this by hand when the lists change, and commit the file.
- *
- * YGOPRODeck limits requests per IP (and blocks clients that exceed it), so
- * this makes one request at a time, with a pause between them: 5 in total.
+ * YGOPRODeck into `data/formats.json` (5 requests, paced; see ygoprodeck.ts).
+ * Run it by hand when the lists change, and commit the file.
  */
-
-const CARD_API = 'https://db.ygoprodeck.com/api/v7/cardinfo.php'
-const BANLIST_API = 'https://ygoprodeck.com/api/banlist'
-const PAUSE_MS = 2000
-const USER_AGENT = 'ygo-timemachine (format data refresh)'
 
 export const FORMATS = [
   { id: 'goat', name: 'GOAT', apiFormat: 'goat', banlist: 'Goat' },
@@ -61,16 +54,8 @@ export function buildFormat(
   }
 }
 
-const pause = () => new Promise((resolve) => setTimeout(resolve, PAUSE_MS))
-
-async function getJson<T>(url: string): Promise<T> {
-  const response = await fetch(url, { headers: { 'User-Agent': USER_AGENT } })
-  if (!response.ok) throw new Error(`${url} answered ${response.status}`)
-  await pause()
-  return (await response.json()) as T
-}
-
-async function main() {
+/** Downloads every format (5 requests) and writes `data/formats.json`. */
+export async function downloadFormats(getJson: GetJson, dir = dataDir): Promise<FormatData[]> {
   const dates = await getJson<{ date: string; type: string }[]>(
     `${BANLIST_API}/getBanListDates.php`,
   )
@@ -84,7 +69,7 @@ async function main() {
       .at(-1)
     if (!banlistDate) throw new Error(`No banlist found for ${format.name}`)
     const cards = await getJson<{ data: { id: number }[] }>(
-      `${CARD_API}?format=${format.apiFormat}`,
+      `${CARD_API}/cardinfo.php?format=${format.apiFormat}`,
     )
     const banlist = await getJson<BanlistEntry[]>(
       `${BANLIST_API}/getBanList.php?list=${format.banlist}&date=${banlistDate}`,
@@ -105,12 +90,13 @@ async function main() {
     downloadedAt: new Date().toISOString().slice(0, 10),
     formats,
   }
-  await writeFile(path.join(dataDir, 'formats.json'), `${JSON.stringify(file, null, 2)}\n`)
+  await writeFile(path.join(dir, 'formats.json'), `${JSON.stringify(file, null, 2)}\n`)
+  return formats
 }
 
 if (import.meta.main) {
   try {
-    await main()
+    await downloadFormats(pacedClient())
   } catch (error) {
     logger.fatal({ err: error }, 'Format download failed')
     process.exitCode = 1
