@@ -6,6 +6,7 @@ import { sequelize } from '../db/sequelize.ts'
 import { logger } from '../logger.ts'
 import { dataDir } from '../paths.ts'
 import {
+  syncCards,
   seedCardDetails,
   seedCards,
   seedDecks,
@@ -21,8 +22,20 @@ async function readJson<T>(file: string): Promise<T> {
 
 // Idempotent: each dataset is only loaded into empty tables, so the script can
 // run on every start (the original seeder failed on the second run).
+// `--sync` (npm run seed:sync) applies newer data files to a database that
+// already has cards; see scripts/refresh-data.ts.
+const sync = process.argv.includes('--sync')
+
 try {
   await migrateDatabase()
+  if (sync && (await Card.count()) > 0) {
+    const [cards, sets, { formats }] = await Promise.all([
+      readJson<SourceCard[]>('cards.json'),
+      readJson<SourceSet[]>('sets.json'),
+      readJson<{ formats: SourceFormat[] }>('formats.json'),
+    ])
+    logger.info(await syncCards(cards, sets, formats), 'Synced cards with the data files')
+  }
   const needsCards = (await Card.count()) === 0
   const needsDetails = (await CardPrinting.count()) === 0
   if (needsCards || needsDetails) {
