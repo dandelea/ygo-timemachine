@@ -20,6 +20,9 @@ const cardKeys = [
   'level',
   'attribute',
   'first_release',
+  'link_value',
+  'link_markers',
+  'pendulum_scale',
   'archetype_id',
   'images',
 ] as const satisfies Exact<Card, readonly (keyof Card)[]>
@@ -31,6 +34,7 @@ const deckDetailKeys = [
   'id',
   'name',
   'color',
+  'format',
   'createdAt',
   'updatedAt',
   'main',
@@ -40,14 +44,19 @@ const deckSummaryKeys = [
   'id',
   'name',
   'color',
+  'format',
   'createdAt',
   'updatedAt',
   'cards',
 ] as const satisfies Exact<DeckSummary, readonly (keyof DeckSummary)[]>
-const savedDeckKeys = ['id', 'name', 'color', 'createdAt', 'updatedAt'] as const satisfies Exact<
-  SavedDeck,
-  readonly (keyof SavedDeck)[]
->
+const savedDeckKeys = [
+  'id',
+  'name',
+  'color',
+  'format',
+  'createdAt',
+  'updatedAt',
+] as const satisfies Exact<SavedDeck, readonly (keyof SavedDeck)[]>
 
 const keysOf = (value: object) => Object.keys(value).sort()
 const sorted = (keys: readonly string[]) => [...keys].sort()
@@ -85,7 +94,7 @@ describe('API fixtures match the client types', () => {
 
   it('saved deck, stats and archetypes', () => {
     expect(keysOf(fixtures.savedDeck())).toEqual(sorted(savedDeckKeys))
-    expect(keysOf(fixtures.stats())).toEqual(['cards', 'pageSize'])
+    expect(keysOf(fixtures.stats())).toEqual(['cards', 'latestRelease', 'pageSize'])
     expect(fixtures.archetypes().every((name) => typeof name === 'string')).toBe(true)
   })
 })

@@ -13,6 +13,10 @@ const props = defineProps<{
   stats: DbStats
   status: LoadStatus
   blockReason: (card: Card) => AddBlockReason | null
+  /** Copies the deck's format allows of a card (0 = forbidden), or null if unrestricted. */
+  limitOf?: (card: Card) => number | null
+  /** Name of the deck's format, when it has one. */
+  formatName?: string | null
 }>()
 const emit = defineEmits<{
   add: [card: Card]
@@ -22,14 +26,34 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-const blockMessage = (reason: AddBlockReason) =>
+const limitOf = (card: Card) => props.limitOf?.(card) ?? null
+const format = computed(() => props.formatName ?? '')
+
+const blockMessage = (card: Card, reason: AddBlockReason) =>
   ({
     copies: t('help.blocked.copies', { copies: DECK_LIMITS.copies }),
     'main-full': t('help.blocked.mainFull', { max: DECK_LIMITS.main }),
     'extra-full': t('help.blocked.extraFull', { max: DECK_LIMITS.extra }),
+    forbidden: t('formats.forbiddenIn', { format: format.value }),
+    'format-copies': t(
+      'formats.copiesIn',
+      { format: format.value, count: limitOf(card) ?? 0 },
+      limitOf(card) ?? 0,
+    ),
   })[reason]
-const blockLabel = (reason: AddBlockReason) =>
-  reason === 'copies' ? `${DECK_LIMITS.copies}/${DECK_LIMITS.copies}` : t('help.blocked.full')
+function blockLabel(card: Card, reason: AddBlockReason) {
+  if (reason === 'copies') return `${DECK_LIMITS.copies}/${DECK_LIMITS.copies}`
+  if (reason === 'format-copies') return `${limitOf(card) ?? 0}/${limitOf(card) ?? 0}`
+  if (reason === 'forbidden') return t('formats.forbidden')
+  return t('help.blocked.full')
+}
+
+// Literal class names so Tailwind can detect them.
+const badgeClass = ['bg-red-700', 'bg-orange-600', 'bg-yellow-500 text-gray-900']
+const badgeMessage = (limit: number) =>
+  limit === 0
+    ? t('formats.forbiddenIn', { format: format.value })
+    : t('formats.limitedIn', { format: format.value, count: limit }, limit)
 
 // Shown count is bounded by the page size; the total is the number of matches.
 const shown = computed(() => Math.min(props.stats.pageSize, props.results.total))
@@ -71,6 +95,16 @@ const shown = computed(() => Math.min(props.stats.pageSize, props.results.total)
         :title="card.name"
         @click="emit('select', card)"
       >
+        <span
+          v-if="limitOf(card) !== null"
+          v-tooltip="badgeMessage(limitOf(card)!)"
+          class="absolute top-0.5 left-0.5 w-4 h-4 grid place-items-center rounded-full text-[10px] font-extrabold"
+          :class="badgeClass[limitOf(card)!]"
+          data-testid="format-badge"
+        >
+          <span aria-hidden="true">{{ limitOf(card) === 0 ? '✕' : limitOf(card) }}</span>
+          <span class="sr-only">{{ badgeMessage(limitOf(card)!) }}</span>
+        </span>
         <button
           v-if="!blockReason(card)"
           v-tooltip="$t('edit.Add {card}', { card: card.name })"
@@ -83,12 +117,12 @@ const shown = computed(() => Math.min(props.stats.pageSize, props.results.total)
         </button>
         <span
           v-else
-          v-tooltip="blockMessage(blockReason(card)!)"
+          v-tooltip="blockMessage(card, blockReason(card)!)"
           class="absolute bottom-0 inset-x-0 text-[10px] leading-4 text-center bg-gray-700/90"
           data-testid="add-blocked"
         >
-          <span aria-hidden="true">{{ blockLabel(blockReason(card)!) }}</span>
-          <span class="sr-only">{{ blockMessage(blockReason(card)!) }}</span>
+          <span aria-hidden="true">{{ blockLabel(card, blockReason(card)!) }}</span>
+          <span class="sr-only">{{ blockMessage(card, blockReason(card)!) }}</span>
         </span>
       </div>
     </div>

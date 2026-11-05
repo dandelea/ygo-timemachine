@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { fixtures } from '../tests/fixtures/api'
 import { cardsFixture, deckFixture, mockApi, savedDeckFixture } from './support'
 
 const spell = cardsFixture.data.find((card) => card.type === 'SPELL')!
@@ -212,4 +213,89 @@ test('filters by attribute, level and monster type with the keyboard only', asyn
   await expect
     .poll(() => calls.filter((call) => call.path === '/cards').at(-1)?.body)
     .toMatchObject({ attributes: ['WIND'], levels: [4] })
+})
+
+test('stops the time machine at the last day of the data', async ({ page }) => {
+  const calls = await mockApi(page)
+  await openNewDeck(page)
+
+  // Only one search on load, already with the last day of the data.
+  const epochs = () =>
+    calls
+      .filter((call) => call.path === '/cards')
+      .map((call) => (call.body as { epoch: string }).epoch)
+  await expect.poll(epochs).toEqual(['2020-06-02'])
+  await page.getByRole('tab', { name: 'Search', exact: true }).click()
+  await expect(page.locator('#epoch')).toHaveValue('2020-06-02')
+  expect(epochs()).toEqual(['2020-06-02'])
+  await expect(page.getByTestId('data-end-hint')).toHaveText(
+    'The data goes up to June 2nd, 2020, so later dates cannot be chosen.',
+  )
+})
+
+test('shows the deck statistics in their own tab', async ({ page }) => {
+  await mockApi(page)
+  await page.goto(`/decks/${deckFixture.id}`)
+
+  await page.getByRole('tab', { name: 'Statistics' }).click()
+  const stats = page.getByTestId('deck-stats')
+  await expect(stats).toContainText(
+    `Main ${deckFixture.main.length} · Extra ${deckFixture.extra.length}`,
+  )
+  await expect(page.getByTestId('main-deck')).toBeHidden()
+  await page.getByRole('tab', { name: 'Cards' }).click()
+  await expect(page.getByTestId('main-deck')).toBeVisible()
+})
+
+test('builds a deck for a format with its limits', async ({ page }) => {
+  const jarRobber = cardsFixture.data.find((card) => card.name === 'Jar Robber')!
+  const avarice = cardsFixture.data.find((card) => card.name === 'Pot of Avarice')!
+  const [goat, edison] = fixtures.formats()
+  const calls = await mockApi(page, {
+    'GET /formats': (route) =>
+      route.fulfill({
+        json: [{ ...goat, limits: { [jarRobber.id]: 0, [avarice.id]: 1 } }, edison],
+      }),
+  })
+  await openNewDeck(page)
+
+  await page.getByRole('tab', { name: 'Search', exact: true }).click()
+  await page.getByRole('radio', { name: 'GOAT' }).click()
+  await expect(page.getByTestId('format-hint')).toContainText('GOAT format: only its 6 legal cards')
+  await expect(page.locator('#epoch')).toHaveCount(0)
+  await expect
+    .poll(() => calls.filter((call) => call.path === '/cards').at(-1)?.body)
+    .toMatchObject({ format: 'goat' })
+
+  await page.getByRole('tab', { name: 'Result' }).click()
+  await expect(resultCard(page, jarRobber.name).getByTestId('add-blocked')).toContainText(
+    'Forbidden',
+  )
+  await page.getByRole('button', { name: `Add ${avarice.name} to the deck` }).click()
+  await expect(resultCard(page, avarice.name).getByTestId('add-blocked')).toContainText('1/1')
+
+  await page.getByPlaceholder('Deck name').fill('Goat deck')
+  await page.getByRole('button', { name: 'Save deck' }).click()
+  await expect
+    .poll(() => calls.find((call) => call.method === 'POST' && call.path === '/decks')?.body)
+    .toMatchObject({ format: 'goat', cards: [avarice.id] })
+})
+
+test('filters by Link rating and shows the printings of a card', async ({ page }) => {
+  const calls = await mockApi(page)
+  await openNewDeck(page)
+
+  await page.getByRole('tab', { name: 'Search', exact: true }).click()
+  await page.getByRole('group', { name: 'Link rating' }).getByRole('button', { name: '3' }).click()
+  await page.getByRole('button', { name: 'Top-left arrow' }).click()
+  await expect
+    .poll(() => calls.filter((call) => call.path === '/cards').at(-1)?.body)
+    .toMatchObject({ linkValues: [3], linkMarkers: ['Top-Left'] })
+
+  await page.getByRole('tab', { name: 'Result' }).click()
+  await resultCard(page, spell.name).click()
+  const printings = page.getByTestId('card-printings')
+  await expect(printings).toContainText('Legend of Blue Eyes White Dragon')
+  await expect(printings).toContainText('LOB-EN001')
+  expect(calls.some((call) => /^\/cards\/\d+\/printings$/.test(call.path))).toBe(true)
 })

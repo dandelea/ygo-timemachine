@@ -3,6 +3,7 @@
     "id": "98f2c7d0-8f6f-4288-afae-a6235f27db48",
     "name": "Yosenju",
     "color": "red-500",
+    "format": null,
     "createdAt": "2026-10-08T16:52:54.238Z",
     "updatedAt": "2026-10-08T16:52:54.238Z",
     "cards": [
@@ -39,6 +40,7 @@
     "id": "f6a626e3-2ad9-4cbd-be57-25f6e0c1570c",
     "name": "Forbidden Bandit",
     "color": "teal-500",
+    "format": null,
     "createdAt": "2026-10-08T16:52:54.243Z",
     "updatedAt": "2026-10-08T16:52:54.243Z",
     "cards": [

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useDebounceFn, useMediaQuery } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import CardDetail from '@/components/editor/CardDetail.vue'
 import CardHistory from '@/components/editor/CardHistory.vue'
@@ -11,6 +11,7 @@ import SearchFilters from '@/components/editor/SearchFilters.vue'
 import SearchResults from '@/components/editor/SearchResults.vue'
 import StatusMessage from '@/components/ui/StatusMessage.vue'
 import { APP_TITLE } from '@/router'
+import { formatLimitOf } from '@/services/deck'
 import { useEditorStore } from '@/stores/editor'
 import type { Card } from '@/types/api'
 
@@ -27,32 +28,55 @@ const {
   searchStatus,
   stats,
   archetypes,
+  dataEnd,
+  formats,
+  currentFormat,
+  formatLimits,
   history,
   selectedCard,
   activeTab,
   canSave,
 } = storeToRefs(store)
 
+// The first search waits for the deck and stats to load: the stats set the latest
+// date that can be picked, and searching before would use a date out of range.
+let searching = false
+function startSearching() {
+  if (searching) return
+  searching = true
+  void store.search()
+}
+
 // Saving a new deck changes the URL to its id; that deck is already loaded.
 let justSavedId: string | null = null
 watch(
   () => props.id,
-  (id) => {
+  async (id) => {
     if (id === justSavedId) return
-    void store.open(id)
+    await store.open(id)
+    startSearching()
   },
   { immediate: true },
 )
-void store.search()
 
 // Filters change on every keystroke or click; search once the user pauses.
 const debouncedSearch = useDebounceFn(() => store.search(), 250)
-watch(form, () => void debouncedSearch(), { deep: true })
+watch(
+  form,
+  () => {
+    if (searching) void debouncedSearch()
+  },
+  { deep: true },
+)
 
 watch(
   () => deck.value.name,
   (name) => (document.title = `${APP_TITLE} - Deck ${name}`),
 )
+
+const limitOf = (card: Card) => formatLimitOf(card, formatLimits.value)
+// With a format, show the printings up to its Forbidden/Limited list.
+const printingsUntil = computed(() => currentFormat.value?.banlistDate ?? form.value.epoch)
 
 async function save() {
   const id = await store.save()
@@ -110,7 +134,7 @@ function selectCard(card: Card) {
 
   <div v-else class="flex flex-col md:flex-row md:max-h-body">
     <div class="w-full md:w-1/3 md:overflow-y-auto" :class="columnClass('card')">
-      <CardDetail :card="selectedCard" />
+      <CardDetail :card="selectedCard" :until="printingsUntil" />
       <CardHistory :cards="history" @select="selectCard" @clear="store.clearHistory" />
     </div>
     <div class="px-2 w-full md:w-1/3" :class="columnClass('deck')">
@@ -165,6 +189,8 @@ function selectCard(card: Card) {
         :stats="stats"
         :status="searchStatus"
         :block-reason="store.blockReason"
+        :limit-of="limitOf"
+        :format-name="currentFormat?.name ?? null"
         @add="store.addCard"
         @select="selectCard"
         @retry="store.search"
@@ -173,6 +199,8 @@ function selectCard(card: Card) {
         v-else-if="activeTab === 'form'"
         v-model="form"
         :archetypes="archetypes"
+        :data-end="dataEnd"
+        :formats="formats"
         @clear="store.resetFilters"
       />
     </div>

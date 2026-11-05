@@ -30,7 +30,14 @@ const card = (id: number, type: Card['type'], name = `Card ${id}`): Card => ({
   name,
 })
 
-const emptyDeck = (): EditableDeck => ({ id: null, name: '', color: '', main: [], extra: [] })
+const emptyDeck = (): EditableDeck => ({
+  id: null,
+  name: '',
+  color: '',
+  format: null,
+  main: [],
+  extra: [],
+})
 
 describe('deck rules', () => {
   it('adds main deck cards to main and extra deck cards to extra', () => {
@@ -98,6 +105,20 @@ describe('deck rules', () => {
     expect(mainDeckSlots(55)).toBe(60)
   })
 
+  it('applies the limits of the deck format', () => {
+    const limits = { [spell.id]: 1, [monster.id]: 0, [extra.id]: 2 }
+    let deck = emptyDeck()
+    expect(addBlockReason(deck, monster, limits)).toBe('forbidden')
+    expect(addCard(deck, monster, limits)).toBe(deck)
+    deck = addCard(deck, spell, limits)
+    expect(addBlockReason(deck, spell, limits)).toBe('format-copies')
+    deck = addCard(addCard(deck, extra, limits), extra, limits)
+    expect(deck.extra).toHaveLength(2)
+    expect(addBlockReason(deck, extra, limits)).toBe('format-copies')
+    // Without a format only the usual limits apply.
+    expect(addBlockReason(deck, spell)).toBeNull()
+  })
+
   it('builds the API payload with trimmed name and every card id', () => {
     const deck = {
       ...emptyDeck(),
@@ -109,6 +130,7 @@ describe('deck rules', () => {
     expect(toPayload(deck)).toEqual({
       name: 'Kaiba',
       color: 'red-500',
+      format: null,
       cards: [spell.id, spell.id, extra.id],
     })
   })
@@ -139,6 +161,9 @@ describe('search form', () => {
       levels: [],
       attack: { min: 0, max: 5000 },
       defense: { min: 0, max: 5000 },
+      linkValues: [],
+      linkMarkers: [],
+      format: null,
       monsterTypes: [],
       archetypes: [],
       spellFamilies: [],
@@ -146,6 +171,22 @@ describe('search form', () => {
       order: { field: 'name', inverse: false },
     })
     vi.useRealTimers()
+  })
+
+  it('sends the Link and Pendulum filters, the scale only when narrowed, and the format', () => {
+    const form = createSearchForm()
+    expect(toSearchRequest(form)).not.toHaveProperty('scale')
+    form.linkValues[3] = true
+    form.linkMarkers.Top = true
+    form.linkMarkers['Bottom-Left'] = true
+    form.scale = { min: 2, max: 13 }
+    form.format = 'goat'
+    expect(toSearchRequest(form)).toMatchObject({
+      linkValues: [3],
+      linkMarkers: ['Top', 'Bottom-Left'],
+      scale: { min: 2, max: 13 },
+      format: 'goat',
+    })
   })
 
   it('sends the selected options with the values the API filters on', () => {

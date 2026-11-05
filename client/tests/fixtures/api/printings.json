@@ -1,0 +1,17 @@
+{
+  "total": 2,
+  "printings": [
+    {
+      "set": "Legend of Blue Eyes White Dragon",
+      "code": "LOB-EN001",
+      "rarity": "Ultra Rare",
+      "date": "2002-03-08"
+    },
+    {
+      "set": "Metal Raiders",
+      "code": "MRD-EN000",
+      "rarity": "Secret Rare",
+      "date": "2002-06-26"
+    }
+  ]
+}

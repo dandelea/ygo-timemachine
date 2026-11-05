@@ -37,6 +37,10 @@ export class Card extends Model<InferAttributes<Card>, InferCreationAttributes<C
   declare level: number | null
   declare attribute: string | null
   declare first_release: string | null
+  declare link_value: number | null
+  /** Link arrows, e.g. ['Top', 'Bottom-Left']; stored as ",Top,Bottom-Left,". */
+  declare link_markers: string[] | null
+  declare pendulum_scale: number | null
   declare archetype_id: ForeignKey<Archetype['id']> | null
   declare images?: NonAttribute<CardImage[]>
   declare prices?: NonAttribute<CardPrice[]>
@@ -68,6 +72,8 @@ export class Deck extends Model<InferAttributes<Deck>, InferCreationAttributes<D
   declare id: CreationOptional<string>
   declare name: string
   declare color: string
+  /** Format the deck is built for (`goat`, `edison`), or null for none. */
+  declare format: CreationOptional<string | null>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
   declare cards?: NonAttribute<Card[]>
@@ -79,6 +85,37 @@ export class DeckCard extends Model<InferAttributes<DeckCard>, InferCreationAttr
   declare card_id: ForeignKey<Card['id']>
   declare deck_id: ForeignKey<Deck['id']>
   declare card?: NonAttribute<Card>
+}
+
+/** A product (booster pack, tin, promotion...) and its TCG release date. */
+export class CardSet extends Model<InferAttributes<CardSet>, InferCreationAttributes<CardSet>> {
+  declare name: string
+  declare code: string | null
+  declare release_date: string | null
+}
+
+/** One printing of a card in a set, with its code and rarity. */
+export class CardPrinting extends Model<
+  InferAttributes<CardPrinting>,
+  InferCreationAttributes<CardPrinting>
+> {
+  declare id: CreationOptional<number>
+  declare set_name: string | null
+  declare set_code: string | null
+  declare rarity: string | null
+  declare card_id: ForeignKey<Card['id']>
+  declare cardSet?: NonAttribute<CardSet | null>
+}
+
+/** A card that is legal in a format, with the copies the format allows (0 = forbidden). */
+export class FormatCard extends Model<
+  InferAttributes<FormatCard>,
+  InferCreationAttributes<FormatCard>
+> {
+  declare id: CreationOptional<number>
+  declare format: string
+  declare max_copies: number
+  declare card_id: ForeignKey<Card['id']>
 }
 
 // Table names match the ones created by the original JavaScript models, so
@@ -113,6 +150,21 @@ Card.init(
     level: DataTypes.INTEGER,
     attribute: DataTypes.STRING,
     first_release: DataTypes.DATEONLY,
+    link_value: DataTypes.INTEGER,
+    link_markers: {
+      type: DataTypes.STRING,
+      get() {
+        const value = this.getDataValue('link_markers') as unknown
+        return typeof value === 'string' ? value.split(',').filter(Boolean) : null
+      },
+      set(markers: string[] | null) {
+        this.setDataValue(
+          'link_markers',
+          (markers?.length ? `,${markers.join(',')},` : null) as unknown as string[],
+        )
+      },
+    },
+    pendulum_scale: DataTypes.INTEGER,
     archetype_id: {
       type: DataTypes.STRING,
       references: { model: 'archetypes', key: 'id' },
@@ -169,10 +221,60 @@ Deck.init(
     id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     color: { type: DataTypes.STRING, allowNull: false, defaultValue: '' },
+    format: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   { sequelize, tableName: 'decks' },
+)
+
+const cardIdColumn = {
+  type: DataTypes.BIGINT,
+  references: { model: 'cards', key: 'id' },
+  onDelete: 'CASCADE',
+  get(this: Model) {
+    return numeric.call(this, 'card_id')
+  },
+}
+
+CardSet.init(
+  {
+    name: { type: DataTypes.STRING, allowNull: false, primaryKey: true },
+    code: DataTypes.STRING,
+    release_date: DataTypes.DATEONLY,
+  },
+  { sequelize, tableName: 'sets', timestamps: false },
+)
+
+CardPrinting.init(
+  {
+    id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
+    set_name: DataTypes.STRING,
+    set_code: DataTypes.STRING,
+    rarity: DataTypes.STRING,
+    card_id: cardIdColumn,
+  },
+  {
+    sequelize,
+    tableName: 'cards_printings',
+    timestamps: false,
+    indexes: [{ name: 'cards_printings_card_id', fields: ['card_id'] }],
+  },
+)
+
+FormatCard.init(
+  {
+    id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
+    format: { type: DataTypes.STRING, allowNull: false },
+    max_copies: { type: DataTypes.INTEGER, allowNull: false },
+    card_id: cardIdColumn,
+  },
+  {
+    sequelize,
+    tableName: 'formats_cards',
+    timestamps: false,
+    indexes: [{ name: 'formats_cards_format_card_id', fields: ['format', 'card_id'] }],
+  },
 )
 
 DeckCard.init(
@@ -222,3 +324,11 @@ DeckCard.belongsTo(Card, { as: 'card', foreignKey: 'card_id' })
 Card.hasMany(DeckCard, { as: 'decks_cards', foreignKey: 'card_id' })
 DeckCard.belongsTo(Deck, { as: 'deck', foreignKey: 'deck_id' })
 Deck.hasMany(DeckCard, { as: 'decks_cards', foreignKey: 'deck_id' })
+
+CardPrinting.belongsTo(Card, { as: 'card', foreignKey: 'card_id' })
+Card.hasMany(CardPrinting, { as: 'printings', foreignKey: 'card_id' })
+// Printings of sets missing from the set list keep their name, so no constraint.
+CardPrinting.belongsTo(CardSet, { as: 'cardSet', foreignKey: 'set_name', constraints: false })
+
+FormatCard.belongsTo(Card, { as: 'card', foreignKey: 'card_id' })
+Card.hasMany(FormatCard, { as: 'formats', foreignKey: 'card_id' })

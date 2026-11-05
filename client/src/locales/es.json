@@ -83,6 +83,7 @@
     },
     "hints": {
       "card": "Pulsa cualquier carta del mazo o de los resultados para verla aquí.",
+      "dataEnd": "Los datos llegan hasta el {date}, así que no se puede elegir una fecha posterior.",
       "epoch": "Solo se muestran cartas publicadas hasta el {date}. Cambia la fecha para jugar en otra época.",
       "filters": "Combina filtros para acotar la búsqueda. Las cartas encontradas aparecen en la pestaña {tab}.",
       "results": "Pulsa una carta para ver su detalle, o + para añadirla al mazo."
@@ -100,7 +101,8 @@
         },
         "travel": {
           "text": "Elige la fecha en el editor de mazos.",
-          "title": "Viaja"
+          "title": "Viaja",
+          "until": "Elige en el editor de mazos una fecha hasta el {date}."
         }
       },
       "title": "Monta mazos como se jugaban en otra época"
@@ -118,5 +120,67 @@
   },
   "header": {
     "credits": "Créditos"
+  },
+  "stats": {
+    "archetypes": "Arquetipos",
+    "attributes": "Atributos",
+    "composition": "Composición",
+    "empty": "Añade cartas para ver las estadísticas del mazo.",
+    "kinds": {
+      "extra": "Extra",
+      "monsters": "Monstruos",
+      "spells": "Magias",
+      "traps": "Trampas"
+    },
+    "levelCount": "Nivel {level}: {count}",
+    "levels": "Niveles y rangos",
+    "monsters": "{count} monstruo | {count} monstruos",
+    "sizes": "Main {main} · Extra {extra}",
+    "tabs": {
+      "cards": "Cartas",
+      "stats": "Estadísticas"
+    },
+    "topArchetypes": "los 4 con más cartas",
+    "view": "Vista del mazo"
+  },
+  "card": {
+    "link": "LINK-{value}",
+    "linkMarkers": "Punteros Link: {markers}",
+    "printings": "Ediciones",
+    "printingsError": "No se han podido cargar las ediciones de esta carta.",
+    "printingsTotal": "{total} en total | {total} en total",
+    "printingsUntil": "{count} hasta el {date} · {total} en total",
+    "scale": "Escala Péndulo {value}",
+    "showAll": "Ver las {count} ediciones",
+    "showFewer": "Ver menos"
+  },
+  "filters": {
+    "anyMarker": "Cartas con cualquiera de los punteros marcados",
+    "linkMarkers": "Punteros Link",
+    "linkValue": "Valor Link",
+    "markers": {
+      "Top-Left": "Flecha arriba a la izquierda",
+      "Top": "Flecha arriba",
+      "Top-Right": "Flecha arriba a la derecha",
+      "Left": "Flecha izquierda",
+      "Right": "Flecha derecha",
+      "Bottom-Left": "Flecha abajo a la izquierda",
+      "Bottom": "Flecha abajo",
+      "Bottom-Right": "Flecha abajo a la derecha"
+    },
+    "scale": "Escala Péndulo"
+  },
+  "formats": {
+    "copiesIn": "Ya tienes la copia que permite el formato {format} | Ya tienes las {count} copias que permite el formato {format}",
+    "forbidden": "Prohibida",
+    "forbiddenIn": "Prohibida en el formato {format}",
+    "free": "Libre",
+    "hint": "Formato {format}: solo sus {cards} cartas legales, con su lista de prohibidas y limitadas. La fecha no se aplica.",
+    "instead": "— formato {format} —",
+    "label": "Formato del mazo",
+    "legend": "Limitaciones del formato",
+    "limited": "Limitada",
+    "limitedIn": "Limitada a 1 copia en el formato {format} | Semilimitada a {count} copias en el formato {format}",
+    "semiLimited": "Semilimitada"
   }
 }

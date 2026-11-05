@@ -4,10 +4,14 @@ Yu-Gi-Oh! card explorer and deck builder filtered by era: pick a date and only t
 cards released up to that day are available, so you can build decks as they could
 have been played at that time.
 
-- Search cards by name or text, type, attribute, level, ATK/DEF, monster type,
-  archetype and spell/trap family, as of any date.
+- Search cards by name or text, type, attribute, level, ATK/DEF, Link rating and
+  arrows, Pendulum scale, monster type, archetype and spell/trap family, as of
+  any date up to the last day the card data covers.
+- See each card's printings (set, code and rarity) up to the chosen date.
 - Build decks with the add/remove buttons, respecting the copy and
-  deck size limits.
+  deck size limits, and see their statistics.
+- Build for the GOAT or Edison retro formats: only their legal cards, with
+  their Forbidden and Limited lists.
 - English and Spanish interface. Works on desktop and mobile.
 
 Card images are linked from [YGOPRODeck](https://ygoprodeck.com/).
@@ -88,7 +92,8 @@ Pushes to `develop` are not deployed.
    DATABASE_URL='postgresql://…?sslmode=require' npm run seed
    ```
 
-   Run it again after adding a migration.
+   Run it again after adding a migration. After updating the card data (see
+   [Card data](#card-data)), apply it with `npm run seed:sync` the same way.
 3. Import the repository in Vercel (it is detected as a multi-service project
    and configured from `vercel.json`) and add `DATABASE_URL` as an environment
    variable for Production.
@@ -104,6 +109,48 @@ recording them in the `SequelizeMeta` table. To change the schema, add a file to
 `server/src/db/migrations/` and append it to the list in
 `server/src/db/migrate.ts`; never edit a migration that has already been released.
 A test checks that the migrations create the same schema as the models.
+
+## Card data
+
+The cards come from the [YGOPRODeck API](https://ygoprodeck.com/api-guide/) and
+are stored in `server/data`; the app never calls the API at runtime. Card images
+are linked from YGOPRODeck.
+
+| File              | Contents                                                                  |
+| ----------------- | ------------------------------------------------------------------------- |
+| `cards.json`      | Every card, with its printings, images and Link/Pendulum values          |
+| `sets.json`       | Every set with its TCG release date (used for each card's first release) |
+| `formats.json`    | Legal cards and Forbidden/Limited list of the GOAT and Edison formats    |
+| `card-types.json` | Subtypes grouped as Monster, Spell, Trap and Extra                        |
+| `version.json`    | YGOPRODeck database version the files were downloaded from               |
+| `decks.json`      | Sample decks loaded into an empty database                                |
+
+Commands, run in `server/`:
+
+```sh
+npm run seed           # empty database: load everything; existing one: only what is missing
+npm run data:refresh   # download newer data from YGOPRODeck into server/data
+npm run seed:sync      # apply the data files to a database that already has cards
+npm run data:formats   # download only the GOAT and Edison formats
+```
+
+To update the data by hand:
+
+1. `npm run data:refresh`. It checks the YGOPRODeck database version first and
+   downloads nothing when it matches `version.json` (add `-- --force` to download
+   anyway). Otherwise it makes 8 requests: the version, all cards, all sets and
+   the formats.
+2. If it warns about subtypes missing from `card-types.json`, add them to the
+   right group. Cards with an unknown subtype match no type filter.
+3. Review and commit the files in `server/data`.
+4. Run `npm run seed:sync` against each database: locally, and with
+   `DATABASE_URL` for production. It updates cards by id and adds new ones.
+   It removes cards that are no longer in the data unless a deck uses them, and
+   replaces sets, printings and formats. Saved decks are kept.
+
+YGOPRODeck allows 20 requests per second and blocks an IP for one hour above
+that. The scripts make one request at a time with a 2 s pause between them,
+and they stop at the first error instead of retrying.
 
 ## Configuration
 

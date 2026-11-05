@@ -1,6 +1,6 @@
 import { isAxiosError, isCancel } from 'axios'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import * as api from '@/services/api'
 import {
   addBlockReason,
@@ -11,8 +11,13 @@ import {
   type EditableDeck,
 } from '@/services/deck'
 import { pushHistory } from '@/services/history'
-import { createSearchForm, toSearchRequest, type SearchForm } from '@/services/search-form'
-import type { Card, CardSearchResult, DbStats } from '@/types/api'
+import {
+  createSearchForm,
+  latestPickableDate,
+  toSearchRequest,
+  type SearchForm,
+} from '@/services/search-form'
+import type { Card, CardSearchResult, DbStats, Format } from '@/types/api'
 import type { LoadStatus } from './decks'
 
 export type EditorTab = 'form' | 'cards'
@@ -26,6 +31,7 @@ const emptyDeck = (): EditableDeck => ({
   id: null,
   name: '',
   color: randomColor(),
+  format: null,
   main: [],
   extra: [],
 })
@@ -41,10 +47,25 @@ export const useEditorStore = defineStore('editor', () => {
   const searchStatus = ref<LoadStatus>('idle')
   const stats = ref<DbStats | null>(null)
   const archetypes = ref<string[]>([])
+  /** Last day the card data covers (null until the stats load). */
+  const dataEnd = computed(() => stats.value?.latestRelease ?? null)
 
   const history = ref<Card[]>([])
   const selectedCard = ref<Card | null>(null)
   const activeTab = ref<EditorTab>('cards')
+
+  const formats = ref<Format[]>([])
+  /** Format of the deck, chosen in the search panel. */
+  const currentFormat = computed(
+    () => formats.value.find((format) => format.id === deck.value.format) ?? null,
+  )
+  const formatLimits = computed(() => currentFormat.value?.limits ?? {})
+  watch(
+    () => form.value.format,
+    (format) => {
+      deck.value.format = format
+    },
+  )
 
   let searchController: AbortController | null = null
   let openRequest = 0
@@ -57,19 +78,25 @@ export const useEditorStore = defineStore('editor', () => {
     deckStatus.value = 'loading'
     deckError.value = null
     try {
-      const [loadedStats, loadedArchetypes, loadedDeck] = await Promise.all([
+      const [loadedStats, loadedArchetypes, loadedFormats, loadedDeck] = await Promise.all([
         api.getStats(),
         api.getArchetypes(),
+        // Without formats the editor still works, only without the format selector.
+        api.getFormats().catch(() => [] as Format[]),
         id === 'new' ? Promise.resolve(null) : api.getDeck(id),
       ])
       // Ignore responses for a deck the user already navigated away from.
       if (request !== openRequest) return
       stats.value = loadedStats
+      const latest = latestPickableDate(dataEnd.value)
+      if (!form.value.epoch || form.value.epoch > latest) form.value.epoch = latest
       archetypes.value = loadedArchetypes
+      formats.value = loadedFormats
       if (loadedDeck) {
-        const { id: deckId, name, color, main, extra } = loadedDeck
-        deck.value = { id: deckId, name, color, main, extra }
+        const { id: deckId, name, color, format, main, extra } = loadedDeck
+        deck.value = { id: deckId, name, color, format: format ?? null, main, extra }
       }
+      form.value.format = deck.value.format
       deckStatus.value = 'ready'
     } catch (error) {
       if (request !== openRequest) return
@@ -94,7 +121,8 @@ export const useEditorStore = defineStore('editor', () => {
   }
 
   function resetFilters() {
-    form.value = createSearchForm()
+    // The format belongs to the deck, not to the filters.
+    form.value = { ...createSearchForm(dataEnd.value), format: form.value.format }
   }
 
   function selectCard(card: Card) {
@@ -106,10 +134,10 @@ export const useEditorStore = defineStore('editor', () => {
     history.value = []
   }
 
-  const blockReason = (card: Card) => addBlockReason(deck.value, card)
+  const blockReason = (card: Card) => addBlockReason(deck.value, card, formatLimits.value)
 
   function addCard(card: Card) {
-    deck.value = addToDeck(deck.value, card)
+    deck.value = addToDeck(deck.value, card, formatLimits.value)
   }
 
   function removeCard(card: Card) {
@@ -149,6 +177,7 @@ export const useEditorStore = defineStore('editor', () => {
     results,
     searchStatus,
     stats,
+    dataEnd,
     archetypes,
     history,
     selectedCard,
@@ -160,6 +189,9 @@ export const useEditorStore = defineStore('editor', () => {
     selectCard,
     clearHistory,
     blockReason,
+    formats,
+    currentFormat,
+    formatLimits,
     addCard,
     removeCard,
     clearDeck,

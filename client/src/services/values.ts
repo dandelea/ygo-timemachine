@@ -82,7 +82,7 @@ export const monsterTypes: MonsterTypeOption[] = [
   monsterType('aqua', 'Aqua'),
   monsterType('beast', 'Beast'),
   monsterType('beast-warrior', 'Beast-Warrior'),
-  monsterType('creator-god', 'Creator-God', null),
+  monsterType('creator-god', 'Creator God', null),
   monsterType('cyberse', 'Cyberse', null),
   monsterType('dinosaur', 'Dinosaur'),
   monsterType('divine-beast', 'Divine-Beast'),
@@ -90,6 +90,7 @@ export const monsterTypes: MonsterTypeOption[] = [
   monsterType('fairy', 'Fairy'),
   monsterType('fiend', 'Fiend'),
   monsterType('fish', 'Fish'),
+  monsterType('illusion', 'Illusion', null),
   monsterType('insect', 'Insect'),
   monsterType('machine', 'Machine'),
   monsterType('plant', 'Plant'),
@@ -107,6 +108,9 @@ export const monsterTypes: MonsterTypeOption[] = [
 ]
 
 export const attackDefense = { min: 0, max: 5000 } as const
+
+export const linkValues = [1, 2, 3, 4, 5, 6] as const
+export const pendulumScale = { min: 0, max: 13 } as const
 
 export interface FamilyOption {
   id: string
@@ -138,4 +142,6 @@ export const orderOptions: { id: OrderField; label: string }[] = [
   { id: 'attribute', label: 'Attribute' },
   { id: 'atk', label: 'ATK' },
   { id: 'def', label: 'DEF' },
+  { id: 'link', label: 'Link' },
+  { id: 'scale', label: 'Pendulum scale' },
 ]

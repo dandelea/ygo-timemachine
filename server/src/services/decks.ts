@@ -3,6 +3,8 @@ import { sequelize } from '../db/sequelize.ts'
 import { cardTypeOf, isExtraDeckType, type CardType } from '../domain/card-types.ts'
 import { badRequest } from '../http/errors.ts'
 import type { DeckPayload } from '../http/schemas.ts'
+import type { FormatId } from '../domain/formats.ts'
+import { formatAllowances } from './formats.ts'
 
 export const DECK_LIMITS = { copies: 3, main: 60, extra: 15 } as const
 
@@ -10,6 +12,7 @@ export interface DeckDetail {
   id: string
   name: string
   color: string
+  format: string | null
   createdAt: Date
   updatedAt: Date
   main: Card[]
@@ -53,6 +56,7 @@ export async function getDeck(id: string): Promise<DeckDetail | null> {
     id: deck.id,
     name: deck.name,
     color: deck.color,
+    format: deck.format ?? null,
     createdAt: deck.createdAt,
     updatedAt: deck.updatedAt,
     main: cards
@@ -63,7 +67,7 @@ export async function getDeck(id: string): Promise<DeckDetail | null> {
 }
 
 /** Rejects unknown cards and decks that break the Yu-Gi-Oh! deck-building limits. */
-async function validateCards(cardIds: number[]): Promise<void> {
+async function validateCards(cardIds: number[], format: FormatId | null): Promise<void> {
   const uniqueIds = [...new Set(cardIds)]
   const cards = await Card.findAll({ where: { id: uniqueIds }, attributes: ['id', 'subtype'] })
   if (cards.length !== uniqueIds.length) throw badRequest('One or more cards do not exist')
@@ -72,6 +76,14 @@ async function validateCards(cardIds: number[]): Promise<void> {
   for (const id of cardIds) copies.set(id, (copies.get(id) ?? 0) + 1)
   if ([...copies.values()].some((count) => count > DECK_LIMITS.copies)) {
     throw badRequest(`A deck cannot contain more than ${DECK_LIMITS.copies} copies of a card`)
+  }
+  if (format) {
+    const allowed = await formatAllowances(format, uniqueIds)
+    for (const [id, count] of copies) {
+      const max = allowed.get(id)
+      if (max === undefined) throw badRequest(`Card ${id} is not legal in the ${format} format`)
+      if (count > max) throw badRequest(`The ${format} format allows ${max} copies of card ${id}`)
+    }
   }
 
   const extraIds = new Set(
@@ -92,12 +104,18 @@ async function validateCards(cardIds: number[]): Promise<void> {
  * without its cards.
  */
 export async function saveDeck(id: string | null, payload: DeckPayload): Promise<Deck> {
-  await validateCards(payload.cards)
+  await validateCards(payload.cards, payload.format)
   return sequelize.transaction(async (transaction) => {
     const existing = id ? await Deck.findByPk(id, { transaction }) : null
     const deck = existing
-      ? await existing.update({ name: payload.name, color: payload.color }, { transaction })
-      : await Deck.create({ name: payload.name, color: payload.color }, { transaction })
+      ? await existing.update(
+          { name: payload.name, color: payload.color, format: payload.format },
+          { transaction },
+        )
+      : await Deck.create(
+          { name: payload.name, color: payload.color, format: payload.format },
+          { transaction },
+        )
     await DeckCard.destroy({ where: { deck_id: deck.id }, transaction })
     await DeckCard.bulkCreate(
       payload.cards.map((cardId) => ({ deck_id: deck.id, card_id: cardId })),

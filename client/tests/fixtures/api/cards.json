@@ -13,6 +13,9 @@
       "level": 8,
       "attribute": "LIGHT",
       "first_release": "2016-07-21",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Blue-Eyes",
       "images": [
         {
@@ -35,6 +38,9 @@
       "level": 8,
       "attribute": "DARK",
       "first_release": "2018-09-27",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Blue-Eyes",
       "images": [
         {
@@ -57,6 +63,9 @@
       "level": 8,
       "attribute": "DARK",
       "first_release": "2016-07-21",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Blue-Eyes",
       "images": [
         {
@@ -79,6 +88,9 @@
       "level": null,
       "attribute": null,
       "first_release": "2003-10-10",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -101,6 +113,9 @@
       "level": null,
       "attribute": null,
       "first_release": "2016-11-03",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Greed",
       "images": [
         {
@@ -123,6 +138,9 @@
       "level": null,
       "attribute": null,
       "first_release": "2005-11-16",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Greed",
       "images": [
         {
@@ -145,6 +163,9 @@
       "level": null,
       "attribute": null,
       "first_release": "2012-05-08",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -167,6 +188,9 @@
       "level": null,
       "attribute": null,
       "first_release": "2012-05-25",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Gishki",
       "images": [
         {
@@ -189,6 +213,9 @@
       "level": null,
       "attribute": null,
       "first_release": "2011-09-29",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Gishki",
       "images": [
         {
@@ -211,6 +238,9 @@
       "level": 10,
       "attribute": "LIGHT",
       "first_release": "2016-10-20",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "ABC",
       "images": [
         {
@@ -233,6 +263,9 @@
       "level": 8,
       "attribute": "LIGHT",
       "first_release": "2016-10-20",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "ABC",
       "images": [
         {
@@ -255,6 +288,9 @@
       "level": null,
       "attribute": "EARTH",
       "first_release": "2018-10-18",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {

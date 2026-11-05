@@ -83,6 +83,7 @@
     },
     "hints": {
       "card": "Click any card in your deck or in the results to see it here.",
+      "dataEnd": "The data goes up to {date}, so later dates cannot be chosen.",
       "epoch": "Only cards released up to {date} are shown. Change the date to play in another era.",
       "filters": "Combine filters to narrow the search. Matching cards appear in the {tab} tab.",
       "results": "Click a card to see its details, or + to add it to your deck."
@@ -100,7 +101,8 @@
         },
         "travel": {
           "text": "Choose the date in the deck editor.",
-          "title": "Travel"
+          "title": "Travel",
+          "until": "Choose a date up to {date} in the deck editor."
         }
       },
       "title": "Build decks as they were played in another era"
@@ -118,5 +120,67 @@
   },
   "header": {
     "credits": "Credits"
+  },
+  "stats": {
+    "archetypes": "Archetypes",
+    "attributes": "Attributes",
+    "composition": "Composition",
+    "empty": "Add cards to see the deck statistics.",
+    "kinds": {
+      "extra": "Extra",
+      "monsters": "Monsters",
+      "spells": "Spells",
+      "traps": "Traps"
+    },
+    "levelCount": "Level {level}: {count}",
+    "levels": "Levels and ranks",
+    "monsters": "{count} monster | {count} monsters",
+    "sizes": "Main {main} · Extra {extra}",
+    "tabs": {
+      "cards": "Cards",
+      "stats": "Statistics"
+    },
+    "topArchetypes": "the 4 with most cards",
+    "view": "Deck view"
+  },
+  "card": {
+    "link": "LINK-{value}",
+    "linkMarkers": "Link arrows: {markers}",
+    "printings": "Printings",
+    "printingsError": "Could not load the printings of this card.",
+    "printingsTotal": "{total} in total | {total} in total",
+    "printingsUntil": "{count} up to {date} · {total} in total",
+    "scale": "Pendulum scale {value}",
+    "showAll": "Show the {count} printings",
+    "showFewer": "Show fewer"
+  },
+  "filters": {
+    "anyMarker": "Cards with any of the marked arrows",
+    "linkMarkers": "Link arrows",
+    "linkValue": "Link rating",
+    "markers": {
+      "Top-Left": "Top-left arrow",
+      "Top": "Top arrow",
+      "Top-Right": "Top-right arrow",
+      "Left": "Left arrow",
+      "Right": "Right arrow",
+      "Bottom-Left": "Bottom-left arrow",
+      "Bottom": "Bottom arrow",
+      "Bottom-Right": "Bottom-right arrow"
+    },
+    "scale": "Pendulum scale"
+  },
+  "formats": {
+    "copiesIn": "You already have the copy the {format} format allows | You already have the {count} copies the {format} format allows",
+    "forbidden": "Forbidden",
+    "forbiddenIn": "Forbidden in the {format} format",
+    "free": "Free",
+    "hint": "{format} format: only its {cards} legal cards, with its Forbidden and Limited list. The date does not apply.",
+    "instead": "— {format} format —",
+    "label": "Deck format",
+    "legend": "Format limits",
+    "limited": "Limited",
+    "limitedIn": "Limited to 1 copy in the {format} format | Semi-limited to {count} copies in the {format} format",
+    "semiLimited": "Semi-limited"
   }
 }

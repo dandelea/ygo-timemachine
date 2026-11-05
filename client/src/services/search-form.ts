@@ -1,6 +1,23 @@
 import { format } from 'date-fns'
-import type { CardSearchRequest, CardType, OrderField, PointsRange } from '@/types/api'
-import { attackDefense, attributes, levels, monsterTypes, spellTypes, trapTypes } from './values'
+import {
+  LINK_MARKERS,
+  type CardSearchRequest,
+  type CardType,
+  type FormatId,
+  type LinkMarker,
+  type OrderField,
+  type PointsRange,
+} from '@/types/api'
+import {
+  attackDefense,
+  attributes,
+  levels,
+  linkValues,
+  monsterTypes,
+  pendulumScale,
+  spellTypes,
+  trapTypes,
+} from './values'
 
 /** State of the search filters panel; every toggle is keyed by option id. */
 export interface SearchForm {
@@ -11,6 +28,11 @@ export interface SearchForm {
   levels: Record<number, boolean>
   attack: PointsRange
   defense: PointsRange
+  linkValues: Record<number, boolean>
+  linkMarkers: Record<LinkMarker, boolean>
+  scale: PointsRange
+  /** Format of the deck being edited; it replaces the date as the card pool. */
+  format: FormatId | null
   monsterTypes: Record<string, boolean>
   archetypes: string[]
   spellFamilies: Record<string, boolean>
@@ -23,15 +45,25 @@ const allOff = <K extends string | number>(keys: readonly K[]) =>
 
 export const today = () => format(new Date(), 'yyyy-MM-dd')
 
-export function createSearchForm(): SearchForm {
+/** Latest date that can be picked: today, or the last day the card data covers. */
+export const latestPickableDate = (dataEnd: string | null) => {
+  const now = today()
+  return dataEnd && dataEnd < now ? dataEnd : now
+}
+
+export function createSearchForm(dataEnd: string | null = null): SearchForm {
   return {
-    epoch: today(),
+    epoch: latestPickableDate(dataEnd),
     search: '',
     checks: allOff(['MONSTER', 'SPELL', 'TRAP', 'EXTRA'] as const),
     attributes: allOff(attributes.map((attribute) => attribute.id)),
     levels: allOff(levels.map((level) => level.value)),
     attack: { ...attackDefense },
     defense: { ...attackDefense },
+    linkValues: allOff(linkValues),
+    linkMarkers: allOff(LINK_MARKERS),
+    scale: { ...pendulumScale },
+    format: null,
     monsterTypes: allOff(monsterTypes.map((type) => type.id)),
     archetypes: [],
     spellFamilies: allOff(spellTypes.map((family) => family.id)),
@@ -55,6 +87,12 @@ export function toSearchRequest(form: SearchForm): CardSearchRequest {
     levels: selected(form.levels).map(Number),
     attack: form.attack,
     defense: form.defense,
+    linkValues: selected(form.linkValues).map(Number),
+    linkMarkers: selected(form.linkMarkers),
+    ...(form.scale.min > pendulumScale.min || form.scale.max < pendulumScale.max
+      ? { scale: form.scale }
+      : {}),
+    format: form.format,
     monsterTypes: selected(form.monsterTypes).map(
       (id) => monsterTypes.find((type) => type.id === id)?.name ?? id,
     ),
