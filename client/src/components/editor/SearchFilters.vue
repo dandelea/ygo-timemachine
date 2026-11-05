@@ -11,7 +11,7 @@ import SquareCheckbox from '@/components/form/SquareCheckbox.vue'
 import ToggleSwitch from '@/components/form/ToggleSwitch.vue'
 import SectionHint from '@/components/help/SectionHint.vue'
 import { vTooltip } from '@/directives/tooltip'
-import { today, type SearchForm } from '@/services/search-form'
+import { latestPickableDate, today, type SearchForm } from '@/services/search-form'
 import {
   attackDefense,
   attributes,
@@ -24,7 +24,7 @@ import {
 } from '@/services/values'
 import { dateLocale, formatLongDate } from '@/utils/date'
 
-defineProps<{ archetypes: string[] }>()
+const props = defineProps<{ archetypes: string[]; dataEnd?: string | null }>()
 defineEmits<{ clear: [] }>()
 const form = defineModel<SearchForm>({ required: true })
 const { t, locale } = useI18n()
@@ -35,7 +35,11 @@ const showMonsters = computed(
 )
 const showSpells = computed(() => form.value.checks.SPELL || noTypeSelected.value)
 const showTraps = computed(() => form.value.checks.TRAP || noTypeSelected.value)
-const maxDate = today()
+const maxDate = computed(() => latestPickableDate(props.dataEnd ?? null))
+// Shown only while the data stops before today.
+const dataEndLabel = computed(() =>
+  props.dataEnd && props.dataEnd < today() ? formatLongDate(props.dataEnd, locale.value) : null,
+)
 const orderLabel = computed(() =>
   form.value.order.inverse ? t('help.tooltips.descending') : t('help.tooltips.ascending'),
 )
@@ -67,6 +71,9 @@ const epochLabel = computed(() => formatLongDate(form.value.epoch, locale.value)
           <strong class="text-white">{{ epochLabel }}</strong>
         </template>
       </i18n-t>
+    </SectionHint>
+    <SectionHint v-if="dataEndLabel" data-testid="data-end-hint">
+      {{ t('help.hints.dataEnd', { date: dataEndLabel }) }}
     </SectionHint>
     <div class="flex flex-wrap items-center px-2">
       <label class="flex-1 p-2" for="order">{{ t('edit.Order') }}:</label>
@@ -237,5 +244,11 @@ const epochLabel = computed(() => formatLongDate(form.value.epoch, locale.value)
 
 .epoch-picker :deep(.dp--menu) {
   --dp-background-color: var(--color-gray-900);
+  /* Days after the end of the data: dimmed and struck through, as in the mockups. */
+  --dp-secondary-color: var(--color-gray-600);
+}
+
+.epoch-picker :deep(.dp--cell-disabled) {
+  text-decoration: line-through;
 }
 </style>

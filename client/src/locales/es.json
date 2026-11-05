@@ -83,6 +83,7 @@
     },
     "hints": {
       "card": "Pulsa cualquier carta del mazo o de los resultados para verla aquí.",
+      "dataEnd": "Los datos llegan hasta el {date}, así que no se puede elegir una fecha posterior.",
       "epoch": "Solo se muestran cartas publicadas hasta el {date}. Cambia la fecha para jugar en otra época.",
       "filters": "Combina filtros para acotar la búsqueda. Las cartas encontradas aparecen en la pestaña {tab}.",
       "results": "Pulsa una carta para ver su detalle, o + para añadirla al mazo."
@@ -100,7 +101,8 @@
         },
         "travel": {
           "text": "Elige la fecha en el editor de mazos.",
-          "title": "Viaja"
+          "title": "Viaja",
+          "until": "Elige en el editor de mazos una fecha hasta el {date}."
         }
       },
       "title": "Monta mazos como se jugaban en otra época"
@@ -118,5 +120,27 @@
   },
   "header": {
     "credits": "Créditos"
+  },
+  "stats": {
+    "archetypes": "Arquetipos",
+    "attributes": "Atributos",
+    "composition": "Composición",
+    "empty": "Añade cartas para ver las estadísticas del mazo.",
+    "kinds": {
+      "extra": "Extra",
+      "monsters": "Monstruos",
+      "spells": "Magias",
+      "traps": "Trampas"
+    },
+    "levelCount": "Nivel {level}: {count}",
+    "levels": "Niveles y rangos",
+    "monsters": "{count} monstruo | {count} monstruos",
+    "sizes": "Main {main} · Extra {extra}",
+    "tabs": {
+      "cards": "Cartas",
+      "stats": "Estadísticas"
+    },
+    "topArchetypes": "los 4 con más cartas",
+    "view": "Vista del mazo"
   }
 }

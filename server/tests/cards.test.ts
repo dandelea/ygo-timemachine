@@ -22,9 +22,9 @@ async function search(body: object): Promise<{ total: number; names: string[] }>
 beforeAll(resetDatabase)
 
 describe('GET /stats and /archetypes', () => {
-  it('returns the page size and the number of seeded cards', async () => {
+  it('returns the page size, the number of seeded cards and the newest release date', async () => {
     const res = await request(app).get('/stats').expect(200)
-    expect(res.body).toEqual({ pageSize: 36, cards: SEEDED_CARDS })
+    expect(res.body).toEqual({ pageSize: 36, cards: SEEDED_CARDS, latestRelease: '2018-08-03' })
   })
 
   it('lists archetype names sorted', async () => {

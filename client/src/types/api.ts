@@ -69,6 +69,8 @@ export interface CardSearchResult {
 export interface DbStats {
   pageSize: number
   cards: number
+  /** Release date of the newest card (YYYY-MM-DD): the data covers up to that day. */
+  latestRelease: string | null
 }
 
 export type OrderField =

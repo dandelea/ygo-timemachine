@@ -3,7 +3,7 @@ import type { Cache } from '../cache.ts'
 import { notFound } from '../http/errors.ts'
 import { cardIdSchema, cardSearchSchema, deckIdSchema, deckPayloadSchema } from '../http/schemas.ts'
 import { listArchetypeIds } from '../services/archetypes.ts'
-import { PAGE_SIZE, countCards, findCard, searchCards } from '../services/cards.ts'
+import { PAGE_SIZE, countCards, findCard, latestRelease, searchCards } from '../services/cards.ts'
 import { getDeck, listDecks, saveDeck } from '../services/decks.ts'
 import { appVersion } from '../paths.ts'
 
@@ -22,7 +22,8 @@ export function createRouter(cache: Cache): Router {
   })
 
   router.get('/stats', async (_req, res) => {
-    res.json({ pageSize: PAGE_SIZE, cards: await countCards() })
+    const [cards, latest] = await Promise.all([countCards(), latestRelease()])
+    res.json({ pageSize: PAGE_SIZE, cards, latestRelease: latest })
   })
 
   router.get('/archetypes', async (_req, res) => {

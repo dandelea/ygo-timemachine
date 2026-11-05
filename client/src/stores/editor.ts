@@ -11,7 +11,12 @@ import {
   type EditableDeck,
 } from '@/services/deck'
 import { pushHistory } from '@/services/history'
-import { createSearchForm, toSearchRequest, type SearchForm } from '@/services/search-form'
+import {
+  createSearchForm,
+  latestPickableDate,
+  toSearchRequest,
+  type SearchForm,
+} from '@/services/search-form'
 import type { Card, CardSearchResult, DbStats } from '@/types/api'
 import type { LoadStatus } from './decks'
 
@@ -41,6 +46,8 @@ export const useEditorStore = defineStore('editor', () => {
   const searchStatus = ref<LoadStatus>('idle')
   const stats = ref<DbStats | null>(null)
   const archetypes = ref<string[]>([])
+  /** Last day the card data covers (null until the stats load). */
+  const dataEnd = computed(() => stats.value?.latestRelease ?? null)
 
   const history = ref<Card[]>([])
   const selectedCard = ref<Card | null>(null)
@@ -65,6 +72,8 @@ export const useEditorStore = defineStore('editor', () => {
       // Ignore responses for a deck the user already navigated away from.
       if (request !== openRequest) return
       stats.value = loadedStats
+      const latest = latestPickableDate(dataEnd.value)
+      if (!form.value.epoch || form.value.epoch > latest) form.value.epoch = latest
       archetypes.value = loadedArchetypes
       if (loadedDeck) {
         const { id: deckId, name, color, main, extra } = loadedDeck
@@ -94,7 +103,7 @@ export const useEditorStore = defineStore('editor', () => {
   }
 
   function resetFilters() {
-    form.value = createSearchForm()
+    form.value = createSearchForm(dataEnd.value)
   }
 
   function selectCard(card: Card) {
@@ -149,6 +158,7 @@ export const useEditorStore = defineStore('editor', () => {
     results,
     searchStatus,
     stats,
+    dataEnd,
     archetypes,
     history,
     selectedCard,

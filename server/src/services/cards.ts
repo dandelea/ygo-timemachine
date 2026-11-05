@@ -115,3 +115,10 @@ export function findCard(id: number): Promise<Card | null> {
 export function countCards(): Promise<number> {
   return Card.count()
 }
+
+/** Release date (YYYY-MM-DD) of the newest card: the data covers up to that day. */
+export async function latestRelease(): Promise<string | null> {
+  const latest = await Card.max<string | Date | null, Card>('first_release')
+  if (!latest) return null
+  return latest instanceof Date ? latest.toISOString().slice(0, 10) : latest.slice(0, 10)
+}

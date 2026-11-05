@@ -27,27 +27,43 @@ const {
   searchStatus,
   stats,
   archetypes,
+  dataEnd,
   history,
   selectedCard,
   activeTab,
   canSave,
 } = storeToRefs(store)
 
+// The first search waits for the deck and stats to load: the stats set the latest
+// date that can be picked, and searching before would use a date out of range.
+let searching = false
+function startSearching() {
+  if (searching) return
+  searching = true
+  void store.search()
+}
+
 // Saving a new deck changes the URL to its id; that deck is already loaded.
 let justSavedId: string | null = null
 watch(
   () => props.id,
-  (id) => {
+  async (id) => {
     if (id === justSavedId) return
-    void store.open(id)
+    await store.open(id)
+    startSearching()
   },
   { immediate: true },
 )
-void store.search()
 
 // Filters change on every keystroke or click; search once the user pauses.
 const debouncedSearch = useDebounceFn(() => store.search(), 250)
-watch(form, () => void debouncedSearch(), { deep: true })
+watch(
+  form,
+  () => {
+    if (searching) void debouncedSearch()
+  },
+  { deep: true },
+)
 
 watch(
   () => deck.value.name,
@@ -173,6 +189,7 @@ function selectCard(card: Card) {
         v-else-if="activeTab === 'form'"
         v-model="form"
         :archetypes="archetypes"
+        :data-end="dataEnd"
         @clear="store.resetFilters"
       />
     </div>

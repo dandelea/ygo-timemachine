@@ -52,6 +52,30 @@ describe('decks store', () => {
 })
 
 describe('editor store', () => {
+  it('moves the date back to the last day the data covers', async () => {
+    const store = useEditorStore()
+    store.form.epoch = '2026-11-05'
+    await store.open('new')
+    expect(store.dataEnd).toBe('2020-06-02')
+    expect(store.form.epoch).toBe('2020-06-02')
+    store.form.epoch = '2004-03-01'
+    await store.open('new')
+    expect(store.form.epoch).toBe('2004-03-01')
+    store.resetFilters()
+    expect(store.form.epoch).toBe('2020-06-02')
+  })
+
+  it('loads the data end date for the home page and ignores errors', async () => {
+    const store = useDecksStore()
+    await store.loadDataEnd()
+    expect(store.dataEnd).toBe('2020-06-02')
+    mocked.getStats.mockRejectedValue(httpError(500))
+    const failing = useDecksStore()
+    failing.dataEnd = null
+    await failing.loadDataEnd()
+    expect(failing.dataEnd).toBeNull()
+  })
+
   it('opens an existing deck with stats and archetypes', async () => {
     const store = useEditorStore()
     await store.open('deck-id')

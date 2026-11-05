@@ -3,7 +3,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import CardDetail from '@/components/editor/CardDetail.vue'
 import DeckPanel from '@/components/editor/DeckPanel.vue'
 import SaveFeedback from '@/components/editor/SaveFeedback.vue'
+import DeckStats from '@/components/editor/DeckStats.vue'
 import SearchResults from '@/components/editor/SearchResults.vue'
+import HomeIntro from '@/components/help/HomeIntro.vue'
 import AttributeToggle from '@/components/form/AttributeToggle.vue'
 import LevelToggle from '@/components/form/LevelToggle.vue'
 import DeckLimits from '@/components/help/DeckLimits.vue'
@@ -157,6 +159,19 @@ describe('DeckPanel', () => {
     wrapper.unmount()
   })
 
+  it('switches between the cards and the statistics', async () => {
+    const wrapper = mountWithApp(DeckPanel, { props: { deck: deck(), canSave: true } })
+    const tabs = wrapper.findAll('[role="tab"]')
+    expect(tabs.map((tab) => tab.text())).toEqual(['Cards', 'Statistics'])
+    expect(wrapper.find('[data-testid="deck-stats"]').exists()).toBe(false)
+    await tabs[1]!.trigger('click')
+    expect(tabs[1]!.attributes('aria-selected')).toBe('true')
+    expect(wrapper.find('[data-testid="deck-stats"]').exists()).toBe(true)
+    expect(wrapper.find('[data-testid="main-deck"]').exists()).toBe(false)
+    await tabs[0]!.trigger('click')
+    expect(wrapper.find('[data-testid="main-deck"]').exists()).toBe(true)
+  })
+
   it('disables saving when not allowed', () => {
     const wrapper = mountWithApp(DeckPanel, { props: { deck: deck(), canSave: false } })
     expect(wrapper.get('[aria-label="Save deck"]').attributes('disabled')).toBeDefined()
@@ -172,6 +187,36 @@ describe('DeckLimits', () => {
   ])('with %i Main deck cards says "%s"', (main, message) => {
     const wrapper = mountWithApp(DeckLimits, { props: { main, extra: 0 } })
     expect(wrapper.text()).toContain(message)
+  })
+})
+
+describe('HomeIntro', () => {
+  it('says up to which day dates can be chosen', () => {
+    const wrapper = mountWithApp(HomeIntro, { props: { dataEnd: '2020-06-02' } })
+    expect(wrapper.text()).toContain('Choose a date up to June 2nd, 2020 in the deck editor.')
+  })
+
+  it('falls back to the plain step while the date is unknown', () => {
+    const wrapper = mountWithApp(HomeIntro, { props: { dataEnd: null } })
+    expect(wrapper.text()).toContain('Choose the date in the deck editor.')
+  })
+})
+
+describe('DeckStats', () => {
+  it('shows the composition, attributes, levels and archetypes of the deck', () => {
+    const { main, extra } = fixtures.deck()
+    const wrapper = mountWithApp(DeckStats, { props: { deck: { main, extra } } })
+    const text = wrapper.text()
+    expect(text).toContain(`Main ${main.length} · Extra ${extra.length}`)
+    for (const label of ['Composition', 'Monsters:', 'Spells:', 'Traps:', 'Extra:', 'Attributes']) {
+      expect(text).toContain(label)
+    }
+    expect(wrapper.findAll('[aria-label^="Level "]')).toHaveLength(12)
+  })
+
+  it('invites to add cards when the deck is empty', () => {
+    const wrapper = mountWithApp(DeckStats, { props: { deck: { main: [], extra: [] } } })
+    expect(wrapper.text()).toContain('Add cards to see the deck statistics.')
   })
 })
 
