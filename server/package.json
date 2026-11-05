@@ -24,6 +24,7 @@
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/scripts/seed.js && node dist/index.js",
     "seed": "node --env-file-if-exists=.env src/scripts/seed.ts",
+    "data:formats": "node src/scripts/fetch-formats.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",

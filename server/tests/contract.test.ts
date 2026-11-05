@@ -37,6 +37,8 @@ beforeAll(resetDatabase)
 describe('client API fixtures', () => {
   it.each([
     ['stats', () => request(app).get('/stats')],
+    ['formats', () => request(app).get('/formats')],
+    ['printings', () => request(app).get(`/cards/${IDS.blueEyes}/printings`)],
     ['archetypes', () => request(app).get('/archetypes')],
     ['decks', () => request(app).get('/decks')],
     ['cards', () => request(app).post('/cards').send({})],

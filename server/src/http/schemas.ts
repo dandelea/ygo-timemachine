@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { CARD_TYPES } from '../domain/card-types.ts'
+import { FORMAT_IDS, LINK_MARKERS } from '../domain/formats.ts'
 
 const MAX_LIST = 200
 const label = z.string().trim().min(1).max(100)
@@ -22,6 +23,8 @@ export const ORDER_FIELDS = [
   'attribute',
   'atk',
   'def',
+  'link',
+  'scale',
 ] as const
 
 /**
@@ -36,6 +39,21 @@ export const cardSearchSchema = z.object({
   levels: z.array(z.coerce.number().int().min(0).max(13)).max(MAX_LIST).default([]),
   attack: pointsRange.optional(),
   defense: pointsRange.optional(),
+  linkValues: z.array(z.coerce.number().int().min(1).max(8)).max(8).default([]),
+  /** Cards with any of these arrows. */
+  linkMarkers: z.array(z.enum(LINK_MARKERS)).max(LINK_MARKERS.length).default([]),
+  /** Only sent when narrowed: restricts the search to Pendulum monsters. */
+  scale: z
+    .object({
+      min: z.coerce.number().int().min(0).max(13),
+      max: z.coerce.number().int().min(0).max(13),
+    })
+    .refine((range) => range.min <= range.max, {
+      message: 'min must be lower than or equal to max',
+    })
+    .optional(),
+  /** Restricts the search to the cards legal in the format; the date is then ignored. */
+  format: z.enum(FORMAT_IDS).nullable().optional(),
   monsterTypes: labels,
   archetypes: labels,
   spellFamilies: labels,
@@ -55,8 +73,11 @@ export const cardIdSchema = z.coerce.number().int().positive().max(Number.MAX_SA
 export const deckPayloadSchema = z.object({
   name: z.string().trim().min(1).max(100),
   color: z.string().trim().max(50).default(''),
+  format: z.enum(FORMAT_IDS).nullable().default(null),
   cards: z.array(cardIdSchema).max(100),
 })
 export type DeckPayload = z.infer<typeof deckPayloadSchema>
 
 export const deckIdSchema = z.uuid()
+
+export const printingsQuerySchema = z.object({ until: z.iso.date().optional() })

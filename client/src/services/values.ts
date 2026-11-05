@@ -108,6 +108,9 @@ export const monsterTypes: MonsterTypeOption[] = [
 
 export const attackDefense = { min: 0, max: 5000 } as const
 
+export const linkValues = [1, 2, 3, 4, 5, 6] as const
+export const pendulumScale = { min: 0, max: 13 } as const
+
 export interface FamilyOption {
   id: string
   /** Value stored in the card's `race` column. */
@@ -138,4 +141,6 @@ export const orderOptions: { id: OrderField; label: string }[] = [
   { id: 'attribute', label: 'Attribute' },
   { id: 'atk', label: 'ATK' },
   { id: 'def', label: 'DEF' },
+  { id: 'link', label: 'Link' },
+  { id: 'scale', label: 'Pendulum scale' },
 ]

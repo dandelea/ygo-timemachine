@@ -1,10 +1,18 @@
 import { Router } from 'express'
 import type { Cache } from '../cache.ts'
 import { notFound } from '../http/errors.ts'
-import { cardIdSchema, cardSearchSchema, deckIdSchema, deckPayloadSchema } from '../http/schemas.ts'
+import {
+  cardIdSchema,
+  cardSearchSchema,
+  deckIdSchema,
+  deckPayloadSchema,
+  printingsQuerySchema,
+} from '../http/schemas.ts'
 import { listArchetypeIds } from '../services/archetypes.ts'
 import { PAGE_SIZE, countCards, findCard, latestRelease, searchCards } from '../services/cards.ts'
 import { getDeck, listDecks, saveDeck } from '../services/decks.ts'
+import { listFormats } from '../services/formats.ts'
+import { getPrintings } from '../services/printings.ts'
 import { appVersion } from '../paths.ts'
 
 // The original client posts new decks to `/decks/null`; `new` is accepted too.
@@ -40,6 +48,18 @@ export function createRouter(cache: Cache): Router {
     const card = id.success ? await findCard(id.data) : null
     if (!card) throw notFound('Card not found')
     res.json(card)
+  })
+
+  router.get('/cards/:id/printings', async (req, res) => {
+    const id = cardIdSchema.safeParse(req.params.id)
+    const card = id.success ? await findCard(id.data) : null
+    if (!card) throw notFound('Card not found')
+    const { until } = printingsQuerySchema.parse(req.query)
+    res.json(await getPrintings(card.id, until))
+  })
+
+  router.get('/formats', async (_req, res) => {
+    res.json(await listFormats())
   })
 
   router.get('/decks', async (_req, res) => {

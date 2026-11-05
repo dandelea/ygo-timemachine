@@ -1,6 +1,8 @@
 import axios from 'axios'
 import type {
   Card,
+  CardPrintings,
+  Format,
   CardSearchRequest,
   CardSearchResult,
   DbStats,
@@ -22,6 +24,16 @@ export async function getArchetypes(): Promise<string[]> {
 
 export async function getCard(id: number): Promise<Card> {
   return (await http.get<Card>(`/cards/${id}`)).data
+}
+
+export async function getFormats(): Promise<Format[]> {
+  return (await http.get<Format[]>('/formats')).data
+}
+
+/** Printings of a card; with `until`, only those released up to that date. */
+export async function getPrintings(id: number, until: string | null): Promise<CardPrintings> {
+  const params = until ? { until } : {}
+  return (await http.get<CardPrintings>(`/cards/${id}/printings`, { params })).data
 }
 
 export async function searchCards(

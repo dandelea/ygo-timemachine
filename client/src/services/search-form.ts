@@ -1,6 +1,23 @@
 import { format } from 'date-fns'
-import type { CardSearchRequest, CardType, OrderField, PointsRange } from '@/types/api'
-import { attackDefense, attributes, levels, monsterTypes, spellTypes, trapTypes } from './values'
+import {
+  LINK_MARKERS,
+  type CardSearchRequest,
+  type CardType,
+  type FormatId,
+  type LinkMarker,
+  type OrderField,
+  type PointsRange,
+} from '@/types/api'
+import {
+  attackDefense,
+  attributes,
+  levels,
+  linkValues,
+  monsterTypes,
+  pendulumScale,
+  spellTypes,
+  trapTypes,
+} from './values'
 
 /** State of the search filters panel; every toggle is keyed by option id. */
 export interface SearchForm {
@@ -11,6 +28,11 @@ export interface SearchForm {
   levels: Record<number, boolean>
   attack: PointsRange
   defense: PointsRange
+  linkValues: Record<number, boolean>
+  linkMarkers: Record<LinkMarker, boolean>
+  scale: PointsRange
+  /** Format of the deck being edited; it replaces the date as the card pool. */
+  format: FormatId | null
   monsterTypes: Record<string, boolean>
   archetypes: string[]
   spellFamilies: Record<string, boolean>
@@ -38,6 +60,10 @@ export function createSearchForm(dataEnd: string | null = null): SearchForm {
     levels: allOff(levels.map((level) => level.value)),
     attack: { ...attackDefense },
     defense: { ...attackDefense },
+    linkValues: allOff(linkValues),
+    linkMarkers: allOff(LINK_MARKERS),
+    scale: { ...pendulumScale },
+    format: null,
     monsterTypes: allOff(monsterTypes.map((type) => type.id)),
     archetypes: [],
     spellFamilies: allOff(spellTypes.map((family) => family.id)),
@@ -61,6 +87,12 @@ export function toSearchRequest(form: SearchForm): CardSearchRequest {
     levels: selected(form.levels).map(Number),
     attack: form.attack,
     defense: form.defense,
+    linkValues: selected(form.linkValues).map(Number),
+    linkMarkers: selected(form.linkMarkers),
+    ...(form.scale.min > pendulumScale.min || form.scale.max < pendulumScale.max
+      ? { scale: form.scale }
+      : {}),
+    format: form.format,
     monsterTypes: selected(form.monsterTypes).map(
       (id) => monsterTypes.find((type) => type.id === id)?.name ?? id,
     ),

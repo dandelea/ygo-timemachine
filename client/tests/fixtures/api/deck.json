@@ -2,6 +2,7 @@
   "id": "f6a626e3-2ad9-4cbd-be57-25f6e0c1570c",
   "name": "Forbidden Bandit",
   "color": "teal-500",
+  "format": null,
   "createdAt": "2026-10-08T16:52:54.243Z",
   "updatedAt": "2026-10-08T16:52:54.243Z",
   "main": [
@@ -17,6 +18,9 @@
       "level": 4,
       "attribute": "EARTH",
       "first_release": "2002-03-29",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -39,6 +43,9 @@
       "level": 4,
       "attribute": "EARTH",
       "first_release": "2002-03-29",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -61,6 +68,9 @@
       "level": 4,
       "attribute": "EARTH",
       "first_release": "2002-03-29",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -83,6 +93,9 @@
       "level": 4,
       "attribute": "WIND",
       "first_release": "2002-06-26",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Harpie",
       "images": [
         {
@@ -105,6 +118,9 @@
       "level": 4,
       "attribute": "WIND",
       "first_release": "2002-06-26",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Harpie",
       "images": [
         {
@@ -127,6 +143,9 @@
       "level": 4,
       "attribute": "WIND",
       "first_release": "2002-06-26",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Harpie",
       "images": [
         {
@@ -149,6 +168,9 @@
       "level": 8,
       "attribute": "DARK",
       "first_release": "2003-11-04",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -171,6 +193,9 @@
       "level": 7,
       "attribute": "DARK",
       "first_release": "2003-11-04",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -193,6 +218,9 @@
       "level": 7,
       "attribute": "DARK",
       "first_release": "2003-11-04",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -215,6 +243,9 @@
       "level": 4,
       "attribute": "EARTH",
       "first_release": "2003-03-01",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -243,6 +274,9 @@
       "level": 4,
       "attribute": "EARTH",
       "first_release": "2003-03-01",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -271,6 +305,9 @@
       "level": 4,
       "attribute": "EARTH",
       "first_release": "2003-03-01",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -299,6 +336,9 @@
       "level": 6,
       "attribute": "EARTH",
       "first_release": "2005-11-01",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -321,6 +361,9 @@
       "level": null,
       "attribute": null,
       "first_release": "2002-11-25",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -349,6 +392,9 @@
       "level": null,
       "attribute": null,
       "first_release": "2002-11-25",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -379,6 +425,9 @@
       "level": 6,
       "attribute": "FIRE",
       "first_release": "2013-01-25",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": null,
       "images": [
         {
@@ -401,6 +450,9 @@
       "level": 7,
       "attribute": "LIGHT",
       "first_release": "2002-06-26",
+      "link_value": null,
+      "link_markers": null,
+      "pendulum_scale": null,
       "archetype_id": "Thunder Dragon",
       "images": [
         {

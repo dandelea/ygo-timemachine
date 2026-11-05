@@ -1,6 +1,7 @@
 import { AxiosError, CanceledError, type AxiosResponse } from 'axios'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import * as api from '@/services/api'
 import { useDecksStore } from '@/stores/decks'
 import { useEditorStore } from '@/stores/editor'
@@ -27,6 +28,7 @@ beforeEach(() => {
   vi.resetAllMocks()
   mocked.getStats.mockResolvedValue(fixtures.stats())
   mocked.getArchetypes.mockResolvedValue(fixtures.archetypes())
+  mocked.getFormats.mockResolvedValue(fixtures.formats())
   mocked.getDeck.mockResolvedValue(fixtures.deck())
   mocked.searchCards.mockResolvedValue(fixtures.cards())
   mocked.saveDeck.mockResolvedValue(fixtures.savedDeck())
@@ -63,6 +65,35 @@ describe('editor store', () => {
     expect(store.form.epoch).toBe('2004-03-01')
     store.resetFilters()
     expect(store.form.epoch).toBe('2020-06-02')
+  })
+
+  it('keeps the deck format in the filters and applies its limits', async () => {
+    const goat = fixtures.formats()[0]!
+    const card = fixtures.cards().data[0]!
+    mocked.getFormats.mockResolvedValue([{ ...goat, limits: { [card.id]: 0 } }])
+    mocked.getDeck.mockResolvedValue({ ...fixtures.deck(), format: 'goat' })
+    const store = useEditorStore()
+    await store.open('deck-id')
+    expect(store.form.format).toBe('goat')
+    expect(store.currentFormat?.name).toBe('GOAT')
+    expect(store.blockReason(card)).toBe('forbidden')
+
+    store.form.format = null
+    await nextTick()
+    expect(store.deck.format).toBeNull()
+    expect(store.blockReason(card)).not.toBe('forbidden')
+
+    store.form.format = 'edison'
+    store.resetFilters()
+    expect(store.form.format).toBe('edison')
+  })
+
+  it('opens the editor without formats when they fail to load', async () => {
+    mocked.getFormats.mockRejectedValue(httpError(500))
+    const store = useEditorStore()
+    await store.open('new')
+    expect(store.deckStatus).toBe('ready')
+    expect(store.formats).toEqual([])
   })
 
   it('loads the data end date for the home page and ignores errors', async () => {
@@ -154,6 +185,7 @@ describe('editor store', () => {
     expect(mocked.saveDeck).toHaveBeenCalledWith(null, {
       name: 'Fixture deck',
       color: store.deck.color,
+      format: null,
       cards: [fixtures.cards().data[0]!.id],
     })
     expect(store.deck.id).toBe(fixtures.savedDeck().id)

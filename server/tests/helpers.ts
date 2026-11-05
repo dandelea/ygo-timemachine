@@ -3,7 +3,14 @@ import { createApp } from '../src/app.ts'
 import { noopCache, type Cache } from '../src/cache.ts'
 import { migrateDatabase } from '../src/db/migrate.ts'
 import { sequelize } from '../src/db/sequelize.ts'
-import { seedCards, seedDecks, type SourceCard, type SourceSet } from '../src/seed/seed.ts'
+import {
+  seedCardDetails,
+  seedCards,
+  seedDecks,
+  type SourceCard,
+  type SourceFormat,
+  type SourceSet,
+} from '../src/seed/seed.ts'
 
 // Importing the models registers them on the shared Sequelize instance.
 import '../src/db/models.ts'
@@ -31,6 +38,7 @@ export const IDS = {
   mirrorForce: 44095762,
   firewall: 5043010,
   thousandDragon: 41462083,
+  oddEyes: 16178681,
   skill: 300000001,
   unreleased: 300000002,
 } as const
@@ -53,7 +61,20 @@ export const CARDS: SourceCard[] = [
     level: 8,
     attribute: 'LIGHT',
     archetype: 'Blue-Eyes',
-    card_sets: [{ set_name: 'Metal Raiders' }, { set_name: 'Legend of Blue Eyes White Dragon' }],
+    card_sets: [
+      { set_name: 'Metal Raiders', set_code: 'MRD-EN000', set_rarity: 'Secret Rare' },
+      // Language variants of one printing: shown as a single row.
+      {
+        set_name: 'Legend of Blue Eyes White Dragon',
+        set_code: 'LOB-001',
+        set_rarity: 'Ultra Rare',
+      },
+      {
+        set_name: 'Legend of Blue Eyes White Dragon',
+        set_code: 'LOB-EN001',
+        set_rarity: 'Ultra Rare',
+      },
+    ],
   }),
   source({
     id: IDS.darkMagician,
@@ -107,6 +128,21 @@ export const CARDS: SourceCard[] = [
     race: 'Cyberse',
     atk: 2500,
     attribute: 'LIGHT',
+    linkval: 4,
+    linkmarkers: ['Top', 'Left', 'Right', 'Bottom'],
+    card_sets: [{ set_name: 'Code of the Duelist' }],
+  }),
+  source({
+    id: IDS.oddEyes,
+    name: 'Odd-Eyes Pendulum Dragon',
+    type: 'Pendulum Effect Monster',
+    desc: 'Pendulum monster with scale 4.',
+    race: 'Dragon',
+    atk: 2500,
+    def: 2000,
+    level: 7,
+    attribute: 'DARK',
+    scale: 4,
     card_sets: [{ set_name: 'Code of the Duelist' }],
   }),
   source({
@@ -126,11 +162,32 @@ export const CARDS: SourceCard[] = [
 
 export const SEEDED_CARDS = CARDS.length - 2
 
+/** A GOAT-like format: Pot of Greed forbidden, Monster Reborn limited, Mirror Force semi-limited. */
+export const FORMATS: SourceFormat[] = [
+  {
+    id: 'goat',
+    cards: [
+      IDS.blueEyes,
+      IDS.darkMagician,
+      IDS.kuriboh,
+      IDS.potOfGreed,
+      IDS.monsterReborn,
+      IDS.mirrorForce,
+    ],
+    limits: {
+      [IDS.potOfGreed]: 0,
+      [IDS.monsterReborn]: 1,
+      [IDS.mirrorForce]: 2,
+    },
+  },
+]
+
 /** Recreates the schema and loads the fixtures into the in-memory database. */
 export async function resetDatabase(): Promise<void> {
   await sequelize.getQueryInterface().dropAllTables()
   await migrateDatabase()
   await seedCards(CARDS, SETS, new Date('2026-01-01T00:00:00Z'))
+  await seedCardDetails(CARDS, SETS, FORMATS)
   await seedDecks([
     {
       name: 'Kaiba',
