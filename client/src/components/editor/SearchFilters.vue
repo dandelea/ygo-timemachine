@@ -9,6 +9,8 @@ import LevelToggle from '@/components/form/LevelToggle.vue'
 import PointsSelector from '@/components/form/PointsSelector.vue'
 import SquareCheckbox from '@/components/form/SquareCheckbox.vue'
 import ToggleSwitch from '@/components/form/ToggleSwitch.vue'
+import SectionHint from '@/components/help/SectionHint.vue'
+import { vTooltip } from '@/directives/tooltip'
 import { today, type SearchForm } from '@/services/search-form'
 import {
   attackDefense,
@@ -20,7 +22,7 @@ import {
   spellTypes,
   trapTypes,
 } from '@/services/values'
-import { dateLocale } from '@/utils/date'
+import { dateLocale, formatLongDate } from '@/utils/date'
 
 defineProps<{ archetypes: string[] }>()
 defineEmits<{ clear: [] }>()
@@ -34,6 +36,10 @@ const showMonsters = computed(
 const showSpells = computed(() => form.value.checks.SPELL || noTypeSelected.value)
 const showTraps = computed(() => form.value.checks.TRAP || noTypeSelected.value)
 const maxDate = today()
+const orderLabel = computed(() =>
+  form.value.order.inverse ? t('help.tooltips.descending') : t('help.tooltips.ascending'),
+)
+const epochLabel = computed(() => formatLongDate(form.value.epoch, locale.value))
 </script>
 
 <template>
@@ -55,6 +61,13 @@ const maxDate = today()
         />
       </div>
     </div>
+    <SectionHint highlight data-testid="epoch-hint">
+      <i18n-t keypath="help.hints.epoch" scope="global">
+        <template #date>
+          <strong class="text-white">{{ epochLabel }}</strong>
+        </template>
+      </i18n-t>
+    </SectionHint>
     <div class="flex flex-wrap items-center px-2">
       <label class="flex-1 p-2" for="order">{{ t('edit.Order') }}:</label>
       <select
@@ -72,9 +85,10 @@ const maxDate = today()
         </option>
       </select>
       <button
+        v-tooltip="orderLabel"
         type="button"
         class="flex-1 p-2 m-2 bg-blue-800 duration-200 hover:bg-blue-700"
-        :title="form.order.inverse ? 'DESC' : 'ASC'"
+        :aria-label="orderLabel"
         @click="form.order.inverse = !form.order.inverse"
       >
         <FontAwesomeIcon :icon="form.order.inverse ? 'chevron-circle-down' : 'chevron-circle-up'" />
@@ -83,7 +97,6 @@ const maxDate = today()
     <button
       type="button"
       class="flex w-[calc(100%-2rem)] mx-4 my-2 bg-blue-800 text-center items-center text-white uppercase shadow-lg duration-200 hover:bg-blue-700"
-      :title="t('edit.Clear filters')"
       @click="$emit('clear')"
     >
       <span class="mx-auto">{{ t('edit.Clear filters') }}</span>
@@ -110,6 +123,7 @@ const maxDate = today()
         :placeholder="t('edit.Search name or description')"
       />
     </div>
+    <SectionHint>{{ t('help.hints.filters', { tab: t('edit.Result') }) }}</SectionHint>
 
     <div v-show="showMonsters">
       <div class="py-2 px-6 bg-blue-800 text-sm h-6 flex items-center">

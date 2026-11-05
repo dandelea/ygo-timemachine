@@ -5,8 +5,10 @@ const checked = defineModel<boolean>({ default: false })
 
 <template>
   <label :id="id" class="flex cursor-pointer">
-    <div class="bg-blue-700 w-6 h-6 p-1 flex justify-center items-center">
-      <input v-model="checked" type="checkbox" class="peer hidden" />
+    <div
+      class="bg-blue-700 w-6 h-6 p-1 flex justify-center items-center has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-orange-400"
+    >
+      <input v-model="checked" type="checkbox" class="peer sr-only" />
       <svg
         class="hidden peer-checked:block w-4 h-4 bg-white text-blue-500 pointer-events-none"
         viewBox="0 0 172 172"

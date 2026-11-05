@@ -2,6 +2,7 @@
 import { onClickOutside } from '@vueuse/core'
 import { ref, useTemplateRef } from 'vue'
 import { DECK_COLORS } from '@/services/deck'
+import { vTooltip } from '@/directives/tooltip'
 
 defineProps<{ title?: string }>()
 const color = defineModel<string>({ required: true })
@@ -22,8 +23,8 @@ function pick(value: string) {
 <template>
   <div ref="root">
     <button
+      v-tooltip="title"
       type="button"
-      :title="title"
       :aria-label="title"
       :aria-expanded="isOpen"
       class="w-10 h-10 text-white focus:outline-none focus:shadow-outline inline-flex p-2 shadow-lg"

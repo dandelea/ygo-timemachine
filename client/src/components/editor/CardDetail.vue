@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import SectionHint from '@/components/help/SectionHint.vue'
+import { vTooltip } from '@/directives/tooltip'
 import { attributes, cardBackImage, levelStarImage } from '@/services/values'
 import type { Card } from '@/types/api'
 import { formatCalendarDate } from '@/utils/date'
@@ -24,10 +26,11 @@ const firstRelease = computed(() =>
   <div class="p-2 flex flex-row md:flex-col w-full">
     <div v-if="card" class="flex">
       <button
+        v-tooltip="t('edit.Previous image')"
         type="button"
         class="p-2 bg-blue-800 duration-200 hover:bg-blue-700"
         :class="{ invisible: imageIndex <= 0 }"
-        :title="t('edit.Previous image')"
+        :aria-label="t('edit.Previous image')"
         @click="imageIndex--"
       >
         <FontAwesomeIcon icon="chevron-left" />
@@ -42,10 +45,11 @@ const firstRelease = computed(() =>
         :title="card.name"
       />
       <button
+        v-tooltip="t('edit.Next image')"
         type="button"
         class="p-2 bg-blue-800 duration-200 hover:bg-blue-700"
         :class="{ invisible: imageIndex >= card.images.length - 1 }"
-        :title="t('edit.Next image')"
+        :aria-label="t('edit.Next image')"
         @click="imageIndex++"
       >
         <FontAwesomeIcon icon="chevron-right" />
@@ -58,6 +62,9 @@ const firstRelease = computed(() =>
       :alt="t('edit.No card')"
       :title="t('edit.No card')"
     />
+    <SectionHint v-if="!card" class="self-center md:mt-2 md:text-center">
+      {{ t('help.hints.card') }}
+    </SectionHint>
     <div v-if="card" class="px-6 py-4">
       <div class="bg-blue-800 p-2 text-center text-sm lg:text-lg mb-2 flex flex-wrap">
         <h2 class="w-full font-bold">{{ card.name }}</h2>

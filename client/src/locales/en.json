@@ -20,13 +20,10 @@
   },
   "edit": {
     "Add {card}": "Add {card} to the deck",
-    "Add card": "Add card",
     "Attribute": "Attribute",
-    "Back": "Back",
     "Back to decks": "Back to decks",
     "Card history": "Card history",
     "Change color": "Change color",
-    "Clear deck": "Clear deck",
     "Clear filters": "Clear filters",
     "Clear history": "Clear history",
     "Deck name": "Deck name",
@@ -45,7 +42,6 @@
     "Order": "Order",
     "Previous image": "Previous image",
     "Remove {card}": "Remove {card} from the deck",
-    "Remove card": "Remove card",
     "Result": "Result",
     "Save deck": "Save deck",
     "Save error": "Could not save the deck. Try again.",
@@ -53,6 +49,7 @@
     "Saving": "Saving deck...",
     "Search": "Search",
     "Search error": "Could not search cards.",
+    "Searching": "Searching cards...",
     "Search name or description": "Search name or description",
     "sections": {
       "card": "Card",
@@ -69,6 +66,54 @@
     "archetype-selector": {
       "Remove archetype": "Remove archetype",
       "Select an archetype": "Select an archetype"
+    }
+  },
+  "help": {
+    "blocked": {
+      "copies": "You already have {copies} copies of this card",
+      "extraFull": "The Extra deck is full ({max} cards)",
+      "full": "Full",
+      "mainFull": "The Main deck is full ({max} cards)"
+    },
+    "deckRules": {
+      "copies": "Up to {copies} copies of each card.",
+      "extra": "Extra deck: up to {max} cards (Fusion, Synchro, Xyz…).",
+      "main": "Main deck: {min}–{max} cards.",
+      "title": "Deck rules"
+    },
+    "hints": {
+      "card": "Click any card in your deck or in the results to see it here.",
+      "epoch": "Only cards released up to {date} are shown. Change the date to play in another era.",
+      "filters": "Combine filters to narrow the search. Matching cards appear in the {tab} tab.",
+      "results": "Click a card to see its details, or + to add it to your deck."
+    },
+    "intro": {
+      "body": "Pick a date and only the cards that existed on that day are available. Build your deck with them and save it to come back later.",
+      "steps": {
+        "build": {
+          "text": "Add {min} to {max} cards, up to {copies} copies of each.",
+          "title": "Build"
+        },
+        "search": {
+          "text": "Filter by type, attribute, level or archetype.",
+          "title": "Search"
+        },
+        "travel": {
+          "text": "Choose the date in the deck editor.",
+          "title": "Travel"
+        }
+      },
+      "title": "Build decks as they were played in another era"
+    },
+    "limits": {
+      "draft": "Draft: {missing} card missing for a legal Main deck. You can still save it. | Draft: {missing} cards missing for a legal Main deck. You can still save it.",
+      "legal": "Legal Main deck ({min}–{max} cards)."
+    },
+    "tooltips": {
+      "ascending": "Ascending order",
+      "clearDeck": "Empty the deck (removes every card)",
+      "descending": "Descending order",
+      "nameToSave": "Give the deck a name to save it"
     }
   },
   "header": {

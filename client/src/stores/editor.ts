@@ -3,8 +3,8 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import * as api from '@/services/api'
 import {
+  addBlockReason,
   addCard as addToDeck,
-  canAddCard,
   DECK_COLORS,
   removeCard as removeFromDeck,
   toPayload,
@@ -106,7 +106,7 @@ export const useEditorStore = defineStore('editor', () => {
     history.value = []
   }
 
-  const canAdd = (card: Card) => canAddCard(deck.value, card)
+  const blockReason = (card: Card) => addBlockReason(deck.value, card)
 
   function addCard(card: Card) {
     deck.value = addToDeck(deck.value, card)
@@ -159,7 +159,7 @@ export const useEditorStore = defineStore('editor', () => {
     resetFilters,
     selectCard,
     clearHistory,
-    canAdd,
+    blockReason,
     addCard,
     removeCard,
     clearDeck,

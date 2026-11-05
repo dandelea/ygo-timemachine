@@ -11,7 +11,9 @@ const trackColor = computed(() => (props.color ? `bg-${props.color}-200` : 'bg-b
 
 <template>
   <label :for="id" class="inline-flex items-center cursor-pointer">
-    <span class="relative">
+    <span
+      class="relative rounded-full has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-orange-400"
+    >
       <span
         class="block w-10 h-6 rounded-full shadow-inner"
         :class="checked ? trackColor : 'bg-blue-800'"

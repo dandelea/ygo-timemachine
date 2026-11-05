@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vTooltip } from '@/directives/tooltip'
 import { onBeforeUnmount, watch } from 'vue'
 import type { SaveStatus } from '@/stores/editor'
 
@@ -51,9 +52,9 @@ onBeforeUnmount(() => {
         <span v-else>{{ $t('edit.Save error') }}</span>
         <button
           v-if="status === 'error'"
+          v-tooltip="$t('common.Dismiss')"
           type="button"
           class="ml-2"
-          :title="$t('common.Dismiss')"
           :aria-label="$t('common.Dismiss')"
           @click="emit('dismiss')"
         >

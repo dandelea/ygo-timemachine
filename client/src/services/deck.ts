@@ -25,14 +25,17 @@ export const isExtraDeckCard = (card: Pick<Card, 'type'>) => card.type === 'EXTR
 
 const copiesOf = (cards: Card[], card: Card) => cards.filter((item) => item.id === card.id).length
 
-/** Whether `card` can be added without breaking the copy or deck-size limits. */
-export function canAddCard(deck: EditableDeck, card: Card): boolean {
-  const all = [...deck.main, ...deck.extra]
-  if (copiesOf(all, card) >= DECK_LIMITS.copies) return false
-  return isExtraDeckCard(card)
-    ? deck.extra.length < DECK_LIMITS.extra
-    : deck.main.length < DECK_LIMITS.main
+export type AddBlockReason = 'copies' | 'main-full' | 'extra-full'
+
+/** Why `card` cannot be added to the deck, or null when it can. */
+export function addBlockReason(deck: EditableDeck, card: Card): AddBlockReason | null {
+  if (copiesOf([...deck.main, ...deck.extra], card) >= DECK_LIMITS.copies) return 'copies'
+  if (isExtraDeckCard(card)) return deck.extra.length < DECK_LIMITS.extra ? null : 'extra-full'
+  return deck.main.length < DECK_LIMITS.main ? null : 'main-full'
 }
+
+/** Whether `card` can be added without breaking the copy or deck-size limits. */
+export const canAddCard = (deck: EditableDeck, card: Card) => addBlockReason(deck, card) === null
 
 /** Returns a new deck with the card added to the right section, or the same deck. */
 export function addCard(deck: EditableDeck, card: Card): EditableDeck {
@@ -64,9 +67,12 @@ export const sortMainDeck = (cards: Card[]) =>
 
 export const sortExtraDeck = (cards: Card[]) => cards.toSorted(byName)
 
+/** Smallest legal Main deck. */
+export const MAIN_DECK_MIN = 40
+
 /** Number of slots to draw: 40 minimum, growing in rows of 10 as the deck grows. */
 export function mainDeckSlots(size: number): number {
-  return size >= 40 ? Math.floor(size / 10) * 10 + 10 : 40
+  return size >= MAIN_DECK_MIN ? Math.floor(size / 10) * 10 + 10 : MAIN_DECK_MIN
 }
 
 export const EXTRA_DECK_SLOTS = DECK_LIMITS.extra
