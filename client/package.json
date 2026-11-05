@@ -80,5 +80,9 @@
   },
   "allowScripts": {
     "vue-demi": false
+  },
+  "overrides": {
+    "minimatch": "11.0.4",
+    "glob": "14.0.3"
   }
 }
