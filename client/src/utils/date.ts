@@ -1,4 +1,4 @@
-import { formatRelative, isValid, parseISO, type Locale } from 'date-fns'
+import { format, formatRelative, isValid, parseISO, type Locale } from 'date-fns'
 import { enUS, es } from 'date-fns/locale'
 
 const locales: Record<string, Locale> = { en: enUS, es }
@@ -15,4 +15,11 @@ export function formatCalendarDate(value: string | null, language: string): stri
   if (!value) return ''
   const date = parseISO(value)
   return isValid(date) ? formatRelative(date, new Date(), { locale: dateLocale(language) }) : value
+}
+
+/** Long localized date, e.g. "March 1st, 2004" or "1 de marzo de 2004". */
+export function formatLongDate(value: string | null, language: string): string {
+  if (!value) return ''
+  const date = parseISO(value)
+  return isValid(date) ? format(date, 'PPP', { locale: dateLocale(language) }) : value
 }

@@ -9,6 +9,7 @@ import LevelToggle from '@/components/form/LevelToggle.vue'
 import PointsSelector from '@/components/form/PointsSelector.vue'
 import SquareCheckbox from '@/components/form/SquareCheckbox.vue'
 import ToggleSwitch from '@/components/form/ToggleSwitch.vue'
+import SectionHint from '@/components/help/SectionHint.vue'
 import { today, type SearchForm } from '@/services/search-form'
 import {
   attackDefense,
@@ -20,7 +21,7 @@ import {
   spellTypes,
   trapTypes,
 } from '@/services/values'
-import { dateLocale } from '@/utils/date'
+import { dateLocale, formatLongDate } from '@/utils/date'
 
 defineProps<{ archetypes: string[] }>()
 defineEmits<{ clear: [] }>()
@@ -34,6 +35,7 @@ const showMonsters = computed(
 const showSpells = computed(() => form.value.checks.SPELL || noTypeSelected.value)
 const showTraps = computed(() => form.value.checks.TRAP || noTypeSelected.value)
 const maxDate = today()
+const epochLabel = computed(() => formatLongDate(form.value.epoch, locale.value))
 </script>
 
 <template>
@@ -55,6 +57,13 @@ const maxDate = today()
         />
       </div>
     </div>
+    <SectionHint highlight data-testid="epoch-hint">
+      <i18n-t keypath="help.hints.epoch" scope="global">
+        <template #date>
+          <strong class="text-white">{{ epochLabel }}</strong>
+        </template>
+      </i18n-t>
+    </SectionHint>
     <div class="flex flex-wrap items-center px-2">
       <label class="flex-1 p-2" for="order">{{ t('edit.Order') }}:</label>
       <select
@@ -110,6 +119,7 @@ const maxDate = today()
         :placeholder="t('edit.Search name or description')"
       />
     </div>
+    <SectionHint>{{ t('help.hints.filters', { tab: t('edit.Result') }) }}</SectionHint>
 
     <div v-show="showMonsters">
       <div class="py-2 px-6 bg-blue-800 text-sm h-6 flex items-center">

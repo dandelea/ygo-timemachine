@@ -64,9 +64,12 @@ export const sortMainDeck = (cards: Card[]) =>
 
 export const sortExtraDeck = (cards: Card[]) => cards.toSorted(byName)
 
+/** Smallest legal Main deck. */
+export const MAIN_DECK_MIN = 40
+
 /** Number of slots to draw: 40 minimum, growing in rows of 10 as the deck grows. */
 export function mainDeckSlots(size: number): number {
-  return size >= 40 ? Math.floor(size / 10) * 10 + 10 : 40
+  return size >= MAIN_DECK_MIN ? Math.floor(size / 10) * 10 + 10 : MAIN_DECK_MIN
 }
 
 export const EXTRA_DECK_SLOTS = DECK_LIMITS.extra

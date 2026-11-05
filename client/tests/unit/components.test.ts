@@ -36,6 +36,17 @@ describe('Decks view', () => {
     expect(wrapper.text()).toContain(message)
   })
 
+  it('explains the app even when there are decks', async () => {
+    const wrapper = mountWithApp(DecksView, {}, { stubActions: true })
+    const store = useDecksStore()
+    store.decks = fixtures.decks()
+    store.status = 'ready'
+    await flushPromises()
+    const intro = wrapper.get('[data-testid="home-intro"]')
+    expect(intro.text()).toContain('Build decks as they were played in another era')
+    expect(intro.text()).toContain('Add 40 to 60 cards, up to 3 copies of each.')
+  })
+
   it('retries after an error', async () => {
     const wrapper = mountWithApp(DecksView, {}, { stubActions: true })
     const store = useDecksStore()
@@ -66,7 +77,9 @@ describe('SearchResults', () => {
   })
 
   it('hides the add button for cards that cannot be added', () => {
-    const wrapper = mountWithApp(SearchResults, { props: { ...props(), canAdd: () => false } })
+    const wrapper = mountWithApp(SearchResults, {
+      props: { ...props(), canAdd: () => false },
+    })
     expect(wrapper.find('[aria-label^="Add "]').exists()).toBe(false)
   })
 
@@ -107,6 +120,27 @@ describe('DeckPanel', () => {
     expect(wrapper.emitted('save')).toHaveLength(1)
   })
 
+  it('shows the deck rules from the info button and hides them with Escape', async () => {
+    const wrapper = mountWithApp(DeckPanel, {
+      props: { deck: deck(), canSave: true },
+      attachTo: document.body,
+    })
+    const button = wrapper.get('[aria-label="Deck rules"]')
+    const panel = wrapper.get(`#${button.attributes('aria-controls')}`)
+    expect(panel.isVisible()).toBe(false)
+
+    await button.trigger('click')
+    expect(button.attributes('aria-expanded')).toBe('true')
+    expect(panel.isVisible()).toBe(true)
+    expect(panel.text()).toContain('Main deck: 40–60 cards.')
+    expect(panel.text()).toContain('Extra deck: up to 15 cards')
+    expect(panel.text()).toContain('Up to 3 copies of each card.')
+
+    await button.trigger('keydown', { key: 'Escape' })
+    expect(panel.isVisible()).toBe(false)
+    wrapper.unmount()
+  })
+
   it('disables saving when not allowed', () => {
     const wrapper = mountWithApp(DeckPanel, { props: { deck: deck(), canSave: false } })
     expect(wrapper.get('[aria-label="Save deck"]').attributes('disabled')).toBeDefined()
@@ -139,12 +173,14 @@ describe('CardDetail', () => {
   it('shows the card back when nothing is selected', () => {
     const wrapper = mountWithApp(CardDetail, { props: { card: null } })
     expect(wrapper.get('img').attributes('alt')).toBe('No card')
+    expect(wrapper.text()).toContain('Click any card in your deck or in the results')
   })
 
   it('shows card details with its release date', () => {
     const card = fixtures.deck().main[0]!
     const wrapper = mountWithApp(CardDetail, { props: { card } })
     expect(wrapper.get('h2').text()).toBe(card.name)
+    expect(wrapper.text()).not.toContain('Click any card')
     expect(wrapper.text()).toContain('First release:')
     if (card.atk !== null) expect(wrapper.text()).toContain(`ATK ${card.atk}`)
   })

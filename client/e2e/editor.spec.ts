@@ -131,3 +131,34 @@ test('explains when a deck does not exist', async ({ page }) => {
   await alert.getByRole('link', { name: 'Back to decks' }).click()
   await expect(page).toHaveURL('/')
 })
+
+test('explains the date and the deck rules', async ({ page }) => {
+  await mockApi(page)
+  await openNewDeck(page)
+
+  await page.getByRole('tab', { name: 'Search', exact: true }).click()
+  await expect(page.getByTestId('epoch-hint')).toContainText('Only cards released up to')
+
+  const rules = page.getByRole('button', { name: 'Deck rules' })
+  await rules.click()
+  await expect(page.getByText('Main deck: 40–60 cards.')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByText('Main deck: 40–60 cards.')).toBeHidden()
+  await expect(rules).toBeFocused()
+})
+
+test('shows the result count on the Result tab while filtering', async ({ page }) => {
+  await mockApi(page, {
+    'POST /cards': (route, useDefault) =>
+      route.request().postDataJSON()?.search === 'nothing'
+        ? route.fulfill({ json: { total: 0, data: [] } })
+        : useDefault(),
+  })
+  await openNewDeck(page)
+
+  const count = page.getByTestId('result-count')
+  await expect(count).toHaveText(`· ${cardsFixture.total}`)
+  await page.getByRole('tab', { name: 'Search', exact: true }).click()
+  await page.getByPlaceholder('Search name or description').fill('nothing')
+  await expect(count).toHaveText('· 0')
+})

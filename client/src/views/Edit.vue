@@ -142,7 +142,21 @@ function selectCard(card: Card) {
           "
           @click="activeTab = tab"
         >
-          {{ tab === 'form' ? $t('edit.Search') : $t('edit.Result') }}
+          <template v-if="tab === 'form'">{{ $t('edit.Search') }}</template>
+          <template v-else>
+            {{ $t('edit.Result') }}
+            <!-- Visible from the Search tab, so filter changes show their effect. -->
+            <FontAwesomeIcon
+              v-if="searchStatus === 'loading'"
+              icon="spinner"
+              spin
+              class="ml-1"
+              :aria-label="$t('edit.Searching')"
+            />
+            <span v-else-if="searchStatus === 'ready'" data-testid="result-count">
+              · {{ results.total }}
+            </span>
+          </template>
         </button>
       </div>
       <SearchResults

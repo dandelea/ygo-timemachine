@@ -53,6 +53,7 @@
     "Saving": "Guardando mazo...",
     "Search": "Búsqueda",
     "Search error": "No se han podido buscar cartas.",
+    "Searching": "Buscando cartas...",
     "Search name or description": "Buscar por nombre o descripción",
     "sections": {
       "card": "Carta",
@@ -69,6 +70,38 @@
     "archetype-selector": {
       "Remove archetype": "Eliminar arquetipo",
       "Select an archetype": "Seleccionar un arquetipo"
+    }
+  },
+  "help": {
+    "deckRules": {
+      "copies": "Máximo {copies} copias de cada carta.",
+      "extra": "Extra deck: hasta {max} cartas (Fusión, Sincronía, Xyz…).",
+      "main": "Main deck: {min}–{max} cartas.",
+      "title": "Reglas del mazo"
+    },
+    "hints": {
+      "card": "Pulsa cualquier carta del mazo o de los resultados para verla aquí.",
+      "epoch": "Solo se muestran cartas publicadas hasta el {date}. Cambia la fecha para jugar en otra época.",
+      "filters": "Combina filtros para acotar la búsqueda. Las cartas encontradas aparecen en la pestaña {tab}.",
+      "results": "Pulsa una carta para ver su detalle, o + para añadirla al mazo."
+    },
+    "intro": {
+      "body": "Elige una fecha y solo tendrás disponibles las cartas que existían ese día. Construye tu mazo con ellas y guárdalo para volver más tarde.",
+      "steps": {
+        "build": {
+          "text": "Añade de {min} a {max} cartas, hasta {copies} copias de cada una.",
+          "title": "Construye"
+        },
+        "search": {
+          "text": "Filtra por tipo, atributo, nivel o arquetipo.",
+          "title": "Busca"
+        },
+        "travel": {
+          "text": "Elige la fecha en el editor de mazos.",
+          "title": "Viaja"
+        }
+      },
+      "title": "Monta mazos como se jugaban en otra época"
     }
   },
   "header": {

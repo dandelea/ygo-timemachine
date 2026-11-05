@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import SectionHint from '@/components/help/SectionHint.vue'
 import { attributes, cardBackImage, levelStarImage } from '@/services/values'
 import type { Card } from '@/types/api'
 import { formatCalendarDate } from '@/utils/date'
@@ -58,6 +59,9 @@ const firstRelease = computed(() =>
       :alt="t('edit.No card')"
       :title="t('edit.No card')"
     />
+    <SectionHint v-if="!card" class="self-center md:mt-2 md:text-center">
+      {{ t('help.hints.card') }}
+    </SectionHint>
     <div v-if="card" class="px-6 py-4">
       <div class="bg-blue-800 p-2 text-center text-sm lg:text-lg mb-2 flex flex-wrap">
         <h2 class="w-full font-bold">{{ card.name }}</h2>

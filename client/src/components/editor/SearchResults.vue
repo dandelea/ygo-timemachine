@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import SectionHint from '@/components/help/SectionHint.vue'
 import StatusMessage from '@/components/ui/StatusMessage.vue'
 import type { LoadStatus } from '@/stores/decks'
 import type { Card, CardSearchResult, DbStats } from '@/types/api'
@@ -26,6 +27,9 @@ const shown = computed(() => Math.min(props.stats.pageSize, props.results.total)
       <FontAwesomeIcon v-if="status === 'loading'" icon="spinner" spin class="mr-2" />
       {{ $t('edit.Showing {0} of {1} results', [shown, results.total]) }}
     </div>
+    <SectionHint v-if="results.data.length" class="mb-2">{{
+      $t('help.hints.results')
+    }}</SectionHint>
     <StatusMessage
       v-if="status === 'error'"
       kind="error"

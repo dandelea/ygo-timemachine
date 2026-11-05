@@ -13,7 +13,7 @@ import { HISTORY_SIZE, pushHistory } from '@/services/history'
 import { createSearchForm, toSearchRequest } from '@/services/search-form'
 import { attributes, levels, monsterTypes } from '@/services/values'
 import type { Card } from '@/types/api'
-import { formatCalendarDate } from '@/utils/date'
+import { formatCalendarDate, formatLongDate } from '@/utils/date'
 import { fixtures } from './helpers'
 
 const cards = fixtures.cards().data
@@ -185,5 +185,17 @@ describe('formatCalendarDate', () => {
   it('handles missing and invalid values', () => {
     expect(formatCalendarDate(null, 'en')).toBe('')
     expect(formatCalendarDate('not a date', 'en')).toBe('not a date')
+  })
+})
+
+describe('formatLongDate', () => {
+  it('writes the date out in the given language', () => {
+    expect(formatLongDate('2004-03-01', 'en')).toBe('March 1st, 2004')
+    expect(formatLongDate('2004-03-01', 'es')).toBe('1 de marzo de 2004')
+  })
+
+  it('handles missing and invalid dates', () => {
+    expect(formatLongDate(null, 'en')).toBe('')
+    expect(formatLongDate('not a date', 'en')).toBe('not a date')
   })
 })

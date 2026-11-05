@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import ColorSelector from '@/components/form/ColorSelector.vue'
+import InfoPopover from '@/components/help/InfoPopover.vue'
 import {
   EXTRA_DECK_SLOTS,
+  MAIN_DECK_MIN,
   mainDeckSlots,
   sortExtraDeck,
   sortMainDeck,
   type EditableDeck,
 } from '@/services/deck'
 import { cardBackImage } from '@/services/values'
-import type { Card } from '@/types/api'
+import { DECK_LIMITS, type Card } from '@/types/api'
 
 const props = defineProps<{ deck: EditableDeck; canSave: boolean; saving?: boolean }>()
 const emit = defineEmits<{
@@ -89,6 +91,14 @@ function slotStyle(card: Card | undefined) {
           <span class="mx-auto" data-testid="extra-count">{{ deck.extra.length }}</span>
         </div>
       </div>
+      <InfoPopover :label="$t('help.deckRules.title')">
+        <p class="mb-1 font-semibold">{{ $t('help.deckRules.title') }}</p>
+        <ul class="pl-4 list-disc space-y-1">
+          <li>{{ $t('help.deckRules.main', { min: MAIN_DECK_MIN, max: DECK_LIMITS.main }) }}</li>
+          <li>{{ $t('help.deckRules.extra', { max: DECK_LIMITS.extra }) }}</li>
+          <li>{{ $t('help.deckRules.copies', { copies: DECK_LIMITS.copies }) }}</li>
+        </ul>
+      </InfoPopover>
       <button
         type="button"
         class="w-10 h-10 flex items-center text-white bg-red-500 duration-200 hover:bg-red-600 shadow-lg"
