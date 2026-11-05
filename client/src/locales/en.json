@@ -20,13 +20,10 @@
   },
   "edit": {
     "Add {card}": "Add {card} to the deck",
-    "Add card": "Add card",
     "Attribute": "Attribute",
-    "Back": "Back",
     "Back to decks": "Back to decks",
     "Card history": "Card history",
     "Change color": "Change color",
-    "Clear deck": "Clear deck",
     "Clear filters": "Clear filters",
     "Clear history": "Clear history",
     "Deck name": "Deck name",
@@ -45,7 +42,6 @@
     "Order": "Order",
     "Previous image": "Previous image",
     "Remove {card}": "Remove {card} from the deck",
-    "Remove card": "Remove card",
     "Result": "Result",
     "Save deck": "Save deck",
     "Save error": "Could not save the deck. Try again.",
@@ -112,6 +108,12 @@
     "limits": {
       "draft": "Draft: {missing} card missing for a legal Main deck. You can still save it. | Draft: {missing} cards missing for a legal Main deck. You can still save it.",
       "legal": "Legal Main deck ({min}–{max} cards)."
+    },
+    "tooltips": {
+      "ascending": "Ascending order",
+      "clearDeck": "Empty the deck (removes every card)",
+      "descending": "Descending order",
+      "nameToSave": "Give the deck a name to save it"
     }
   },
   "header": {

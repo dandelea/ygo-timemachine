@@ -163,7 +163,7 @@ test('shows the result count on the Result tab while filtering', async ({ page }
   await expect(count).toHaveText('· 0')
 })
 
-test('explains deck size and blocked cards', async ({ page }) => {
+test('explains deck size, blocked cards and icon buttons', async ({ page }) => {
   await mockApi(page)
   await openNewDeck(page)
 
@@ -171,10 +171,45 @@ test('explains deck size and blocked cards', async ({ page }) => {
     'Draft: 40 cards missing for a legal Main deck. You can still save it.',
   )
 
+  const save = page.getByRole('button', { name: 'Save deck' })
+  await save.locator('..').hover()
+  await expect(page.getByRole('tooltip')).toHaveText('Give the deck a name to save it')
+  await page.getByPlaceholder('Deck name').fill('Draft deck')
+  await save.hover()
+  await expect(page.getByRole('tooltip')).toHaveText('Save deck')
+
   const add = page.getByRole('button', { name: `Add ${spell.name} to the deck` })
   for (let i = 0; i < 3; i++) await add.click()
   await expect(page.getByTestId('deck-draft')).toContainText('37 cards missing')
   const blocked = resultCard(page, spell.name).getByTestId('add-blocked')
   await expect(blocked).toContainText('3/3')
-  await expect(blocked).toHaveAttribute('title', 'You already have 3 copies of this card')
+  await blocked.hover()
+  await expect(page.getByRole('tooltip')).toHaveText('You already have 3 copies of this card')
+})
+
+test('filters by attribute, level and monster type with the keyboard only', async ({ page }) => {
+  const calls = await mockApi(page)
+  await openNewDeck(page)
+  await page.getByRole('tab', { name: 'Search', exact: true }).click()
+
+  await page.getByRole('button', { name: 'Earth', exact: true }).focus()
+  await page.keyboard.press('Tab')
+  await expect(page.getByRole('button', { name: 'Wind', exact: true })).toBeFocused()
+  await page.keyboard.press('Space')
+  await expect(page.getByRole('button', { name: 'Wind', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
+
+  await page.getByRole('button', { name: 'Level 4', exact: true }).focus()
+  await page.keyboard.press('Enter')
+
+  const dragon = page.getByRole('checkbox', { name: /Dragon/ }).first()
+  await dragon.focus()
+  await page.keyboard.press('Space')
+  await expect(dragon).toBeChecked()
+
+  await expect
+    .poll(() => calls.filter((call) => call.path === '/cards').at(-1)?.body)
+    .toMatchObject({ attributes: ['WIND'], levels: [4] })
 })

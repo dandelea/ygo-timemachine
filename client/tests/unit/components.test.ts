@@ -4,6 +4,8 @@ import CardDetail from '@/components/editor/CardDetail.vue'
 import DeckPanel from '@/components/editor/DeckPanel.vue'
 import SaveFeedback from '@/components/editor/SaveFeedback.vue'
 import SearchResults from '@/components/editor/SearchResults.vue'
+import AttributeToggle from '@/components/form/AttributeToggle.vue'
+import LevelToggle from '@/components/form/LevelToggle.vue'
 import DeckLimits from '@/components/help/DeckLimits.vue'
 import type { EditableDeck } from '@/services/deck'
 import { useDecksStore } from '@/stores/decks'
@@ -209,5 +211,25 @@ describe('CardDetail', () => {
     expect(wrapper.text()).not.toContain('Click any card')
     expect(wrapper.text()).toContain('First release:')
     if (card.atk !== null) expect(wrapper.text()).toContain(`ATK ${card.atk}`)
+  })
+})
+
+describe('filter toggles', () => {
+  it.each([
+    ['AttributeToggle', AttributeToggle, { id: 'DARK', label: 'Dark', image: 'dark.png' }],
+    [
+      'LevelToggle',
+      LevelToggle,
+      { id: 'level_4', label: 'Level 4', images: { active: 'on.svg', inactive: 'off.svg' } },
+    ],
+  ] as const)('%s is a toggle button', async (_, component, props) => {
+    const wrapper = mountWithApp(component, { props: { ...props, modelValue: false } })
+    const button = wrapper.get('button')
+    expect(button.attributes('aria-label')).toBe(props.label)
+    expect(button.attributes('aria-pressed')).toBe('false')
+    await button.trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toEqual([[true]])
+    await wrapper.setProps({ modelValue: true })
+    expect(button.attributes('aria-pressed')).toBe('true')
   })
 })

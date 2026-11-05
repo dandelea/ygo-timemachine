@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SectionHint from '@/components/help/SectionHint.vue'
 import StatusMessage from '@/components/ui/StatusMessage.vue'
+import { vTooltip } from '@/directives/tooltip'
 import type { AddBlockReason } from '@/services/deck'
 import type { LoadStatus } from '@/stores/decks'
 import { DECK_LIMITS, type Card, type CardSearchResult, type DbStats } from '@/types/api'
@@ -72,9 +73,9 @@ const shown = computed(() => Math.min(props.stats.pageSize, props.results.total)
       >
         <button
           v-if="!blockReason(card)"
+          v-tooltip="$t('edit.Add {card}', { card: card.name })"
           type="button"
           class="absolute bottom-0 inset-x-0 text-xs bg-green-600 opacity-100 [@media(hover:hover)]:opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-          :title="$t('edit.Add card')"
           :aria-label="$t('edit.Add {card}', { card: card.name })"
           @click.stop="emit('add', card)"
         >
@@ -82,7 +83,7 @@ const shown = computed(() => Math.min(props.stats.pageSize, props.results.total)
         </button>
         <span
           v-else
-          :title="blockMessage(blockReason(card)!)"
+          v-tooltip="blockMessage(blockReason(card)!)"
           class="absolute bottom-0 inset-x-0 text-[10px] leading-4 text-center bg-gray-700/90"
           data-testid="add-blocked"
         >

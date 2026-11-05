@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 import HomeIntro from '@/components/help/HomeIntro.vue'
 import StatusMessage from '@/components/ui/StatusMessage.vue'
+import { vTooltip } from '@/directives/tooltip'
 import { useDecksStore } from '@/stores/decks'
 import type { DeckSummary } from '@/types/api'
 
@@ -24,8 +25,8 @@ function background(deck: DeckSummary) {
     <HomeIntro />
     <section class="flex flex-wrap">
       <RouterLink
+        v-tooltip="$t('decks.New deck')"
         to="/decks/new"
-        :title="$t('decks.New deck')"
         :aria-label="$t('decks.New deck')"
         class="w-full m-4 p-4 text-center bg-blue-800 duration-200 hover:bg-blue-700 cursor-pointer"
       >

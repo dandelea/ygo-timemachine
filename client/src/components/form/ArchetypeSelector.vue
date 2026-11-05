@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { vTooltip } from '@/directives/tooltip'
 import AutocompleteSearch from './AutocompleteSearch.vue'
 
 defineProps<{ archetypes: string[] }>()
@@ -28,8 +29,9 @@ function remove(item: string) {
       >
         {{ item }}
         <button
+          v-tooltip="$t('form.archetype-selector.Remove archetype')"
           type="button"
-          :title="$t('form.archetype-selector.Remove archetype')"
+          :aria-label="`${$t('form.archetype-selector.Remove archetype')}: ${item}`"
           @click="remove(item)"
         >
           <FontAwesomeIcon :icon="['far', 'times-circle']" />
